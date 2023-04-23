@@ -1,2 +1,2 @@
 # znxcr
-experimental retro cpu written in verilog for xilinix vivado 
+experimental retro 16 bit cpu written in verilog xilinix vivado intended for fpga
