@@ -1,8 +1,8 @@
 module top(
-input switch,
-output led
-    );
+    input switch,
+    output led
+);
     
-assign led=switch;
+assign led = switch;
 
 endmodule

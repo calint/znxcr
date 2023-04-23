@@ -15,7 +15,7 @@ always @(posedge clk) begin
   rd1 <= regs[ra1];
   rd2 <= regs[ra2];
   if (inca)
-    regs[ra1] = regs[ra1] + 1;
+    regs[ra1] <= regs[ra1] + 1;
   if (wrt)
     regs[ra1] <= wd;
 end
