@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module RegisterFile_2r1w(
     input clk,
     input [3:0] ra1,

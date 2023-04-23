@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module RAM (
   input [7:0] address,
   input [15:0] data_input,

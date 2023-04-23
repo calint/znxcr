@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module ROM (
   input [7:0] address,
   output [15:0] data_out
