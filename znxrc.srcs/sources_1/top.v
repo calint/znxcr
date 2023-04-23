@@ -1,8 +1,9 @@
 module top(
-    input switch,
-    output led
+    input wire clk,
+    input sw,
+    output ld
 );
     
-assign led = switch;
+assign ld = clk;
 
 endmodule

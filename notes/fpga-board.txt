@@ -1,3 +1,7 @@
 https://www.xilinx.com/products/boards-and-kits/1-ulj76y.html
 
+Arty S7-25 (xc7s25csga324-1)
+
 FPGA part: XC7S25-CSGA324
+
+https://digilent.com/reference/programmable-logic/arty-s7/reference-manual
