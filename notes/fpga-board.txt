@@ -1,0 +1,3 @@
+https://www.xilinx.com/products/boards-and-kits/1-ulj76y.html
+
+FPGA part: XC7S25-CSGA324
