@@ -6,7 +6,7 @@ module RAM (
   output [15:0] data_output
 );
 
-reg [15:0] memory [255:0];
+reg [15:0] memory [0:255];
 
 assign data_output = memory[address];
 

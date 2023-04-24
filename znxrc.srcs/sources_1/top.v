@@ -1,5 +1,5 @@
 module top(
-    input wire clk,
+    input clk,
     input sw,
     output ld
 );

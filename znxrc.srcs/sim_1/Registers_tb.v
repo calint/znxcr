@@ -1,10 +1,10 @@
 `timescale 1ns / 1ps
 
-module RegisterFile_2r1w_tb;
+module Registers_tb;
     // Inputs
     reg [3:0] ra1_tb;
     reg [3:0] ra2_tb;
-    reg wrt_tb;
+    reg we_tb;
     reg signed [15:0] wd_tb;
     reg inca_tb;
 
@@ -16,11 +16,11 @@ module RegisterFile_2r1w_tb;
     reg clk_tb = 0;
     always #5 clk_tb = ~clk_tb;
 
-    RegisterFile_2r1w dut (
+    Registers dut (
         .clk(clk_tb),
         .ra1(ra1_tb),
         .ra2(ra2_tb),
-        .wrt(wrt_tb), // write 'wd' to address 'ra1'
+        .we(we_tb), // write 'wd' to address 'ra1'
         .wd(wd_tb),
         .inca(inca_tb), // if true increases value of ra1
         .rd1(rd1_tb),
@@ -28,7 +28,7 @@ module RegisterFile_2r1w_tb;
     );
 
     initial begin
-        wrt_tb = 1;
+        we_tb = 1;
         // write reg[0]=1
         ra1_tb = 0;
         wd_tb = 1;
@@ -39,7 +39,7 @@ module RegisterFile_2r1w_tb;
         wd_tb = 2;
         #10;
         
-        wrt_tb = 0;
+        we_tb = 0;
 
         // read reg[0] and reg[1]
         ra1_tb = 0;
@@ -88,6 +88,8 @@ module RegisterFile_2r1w_tb;
             $display("case 4 passed");
         end
 
+        $stop;
+
     end
-    
+
 endmodule

@@ -22,8 +22,8 @@ begin
     default: result = 0;
   endcase
   
-  assign zf = (result == 0);
-  assign nf = result[15];
+  zf <= (result == 0);
+  nf <= result[15];
 
 end
 endmodule
