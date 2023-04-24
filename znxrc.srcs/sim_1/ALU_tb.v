@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module alu_tb;
+module ALU_tb;
     reg clk_tb = 0;
     parameter clk_tk = 10;
     always #(clk_tk/2) clk_tb = ~clk_tb;
