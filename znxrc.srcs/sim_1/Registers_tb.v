@@ -1,6 +1,10 @@
 `timescale 1ns / 1ps
 
 module Registers_tb;
+    reg clk_tb = 0;
+    parameter clk_tk = 10;
+    always #(clk_tk/2) clk_tb = ~clk_tb;
+
     // Inputs
     reg [3:0] ra1_tb;
     reg [3:0] ra2_tb;
@@ -11,10 +15,6 @@ module Registers_tb;
     // Outputs
     wire signed [15:0] rd1_tb;
     wire signed [15:0] rd2_tb;
-
-    // Clock
-    reg clk_tb = 0;
-    always #5 clk_tb = ~clk_tb;
 
     Registers dut (
         .clk(clk_tb),
@@ -32,19 +32,19 @@ module Registers_tb;
         // write reg[0]=1
         ra1_tb = 0;
         wd_tb = 1;
-        #10;
+        #clk_tk;
         
         // write reg[1]=2
         ra1_tb = 1;
         wd_tb = 2;
-        #10;
+        #clk_tk;
         
         we_tb = 0;
 
         // read reg[0] and reg[1]
         ra1_tb = 0;
         ra2_tb = 1;
-        #10;
+        #clk_tk;
 
         if (rd1_tb !== 1 || rd2_tb !== 2) begin
             $display("case 1 failed - Expected 1 and 2, got %d and %d", rd1_tb, rd2_tb);
@@ -56,7 +56,7 @@ module Registers_tb;
         ra1_tb = 0;
         inca_tb = 1;
         ra2_tb = 1;
-        #10;
+        #clk_tk;
 
         if (rd1_tb !== 1 || rd2_tb !== 2) begin
             $display("case 2 failed - Expected 1 and 2, got %d and %d", rd1_tb, rd2_tb);
@@ -68,7 +68,7 @@ module Registers_tb;
         ra1_tb = 0;
         inca_tb = 1;
         ra2_tb = 1;
-        #10;
+        #clk_tk;
 
         if (rd1_tb !== 2 || rd2_tb !== 2) begin
             $display("case 3 failed - Expected 2 and 2, got %d and %d", rd1_tb, rd2_tb);
@@ -80,7 +80,7 @@ module Registers_tb;
         ra1_tb = 0;
         inca_tb = 0;
         ra2_tb = 1;
-        #10;
+        #clk_tk;
 
         if (rd1_tb !== 3 || rd2_tb !== 2) begin
             $display("case 4 failed - Expected 3 and 2, got %d and %d", rd1_tb, rd2_tb);
