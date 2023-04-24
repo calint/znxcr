@@ -17,9 +17,9 @@ module LoopStack_tb;
         .rst(rst_tb),
         .clk(clk_tb),
         .new_loop(new_loop_tb),
-        .next(next_tb),
         .count(count_tb),
         .loop_address(loop_address_tb),
+        .next(next_tb),
         .loop_finished(loop_finished_tb),
         .jmp_address(jmp_address_tb)
     );
