@@ -28,10 +28,10 @@ module LoopStack(
                 stack_loop_counter[stack_idx] = stack_loop_counter[stack_idx] - 1;
                 if (stack_loop_counter[stack_idx] === 0) begin
                     loop_finished <= 1;
-                    stack_idx = stack_idx - 1;
-                    jmp_address <= stack_loop_address[stack_idx];
+                    stack_idx <= stack_idx - 1;
                 end else begin
                     loop_finished <= 0;
+                    jmp_address <= stack_loop_address[stack_idx];
                 end
             end
         end
