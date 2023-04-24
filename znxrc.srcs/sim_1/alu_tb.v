@@ -66,6 +66,8 @@ module alu_tb;
             $display("case 4 passed");
         end
 
+        $stop;
+        
     end
     
 endmodule
