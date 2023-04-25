@@ -1,4 +1,4 @@
-module top(
+module Top(
     input clk,
     input sw,
     output ld

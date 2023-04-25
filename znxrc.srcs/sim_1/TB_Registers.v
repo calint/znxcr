@@ -46,11 +46,8 @@ module TB_Registers;
         ra2_tb = 1;
         #clk_tk;
 
-        if (rd1_tb !== 1 || rd2_tb !== 2) begin
-            $display("case 1 failed - Expected 1 and 2, got %d and %d", rd1_tb, rd2_tb);
-        end else begin
-            $display("case 1 passed");
-        end
+        if (rd1_tb == 1 && rd2_tb == 2) $display("case 1 passed");
+        else $display("case 1 failed - Expected 1 and 2, got %d and %d", rd1_tb, rd2_tb);
 
         // read reg[0] and reg[1] then increment reg[0]
         ra1_tb = 0;
@@ -58,11 +55,8 @@ module TB_Registers;
         ra2_tb = 1;
         #clk_tk;
 
-        if (rd1_tb !== 1 || rd2_tb !== 2) begin
-            $display("case 2 failed - Expected 1 and 2, got %d and %d", rd1_tb, rd2_tb);
-        end else begin
-            $display("case 2 passed");
-        end
+        if (rd1_tb == 1 && rd2_tb == 2) $display("case 2 passed");
+        else $display("case 2 failed - Expected 1 and 2, got %d and %d", rd1_tb, rd2_tb);
 
         // read reg[0] and reg[1] then increment reg[0]
         ra1_tb = 0;
@@ -70,11 +64,8 @@ module TB_Registers;
         ra2_tb = 1;
         #clk_tk;
 
-        if (rd1_tb !== 2 || rd2_tb !== 2) begin
-            $display("case 3 failed - Expected 2 and 2, got %d and %d", rd1_tb, rd2_tb);
-        end else begin
-            $display("case 3 passed");
-        end
+        if (rd1_tb == 2 && rd2_tb == 2) $display("case 3 passed");
+        else $display("case 3 failed - Expected 2 and 2, got %d and %d", rd1_tb, rd2_tb);
 
         // read reg[0] and reg[1]
         ra1_tb = 0;
@@ -82,11 +73,8 @@ module TB_Registers;
         ra2_tb = 1;
         #clk_tk;
 
-        if (rd1_tb !== 3 || rd2_tb !== 2) begin
-            $display("case 4 failed - Expected 3 and 2, got %d and %d", rd1_tb, rd2_tb);
-        end else begin
-            $display("case 4 passed");
-        end
+        if (rd1_tb == 3 && rd2_tb == 2) $display("case 4 passed");
+        else $display("case 4 failed - Expected 3 and 2, got %d and %d", rd1_tb, rd2_tb);
 
         $finish;
 

@@ -50,15 +50,15 @@ module TB_CallStack;
         pop_tb = 1;
         #clk_tk;
         
-        if (program_counter_out_tb !== 2 || zero_flag_out_tb !== 0 || negative_flag_out_tb !== 0) $display("case 1 failed - Expected 2, 0, 0, got %d, %d, %d", program_counter_out_tb, zero_flag_out_tb, negative_flag_out_tb);
-        else $display("case 1 passed");
+        if (program_counter_out_tb == 2 && zero_flag_out_tb == 0 && negative_flag_out_tb == 0) $display("case 1 passed");
+        else  $display("case 1 failed - Expected 2, 0, 0, got %d, %d, %d", program_counter_out_tb, zero_flag_out_tb, negative_flag_out_tb);
 
         push_tb = 0;        
         pop_tb = 1;
         #clk_tk;
         
-        if (program_counter_out_tb !== 1 || zero_flag_out_tb !== 1  || negative_flag_out_tb !== 1) $display("case 2 failed - Expected 1, 1, 1, got %d, %d, %d", program_counter_out_tb, zero_flag_out_tb, negative_flag_out_tb);
-        else $display("case 2 passed");
+        if (program_counter_out_tb == 1 && zero_flag_out_tb == 1 && negative_flag_out_tb == 1) $display("case 2 passed");
+        else $display("case 2 failed - Expected 1, 1, 1, got %d, %d, %d", program_counter_out_tb, zero_flag_out_tb, negative_flag_out_tb);
 
         $finish;
     end

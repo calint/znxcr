@@ -31,44 +31,32 @@ module TB_ALU;
         op_tb = 4'b0000; // Add operation
         #clk_tk;
         
-        if (result_tb !== 8) begin
-            $display("case 1 failed - Expected 8, got %d", result_tb);
-        end else begin
-            $display("case 1 passed");
-        end
+        if (result_tb == 8) $display("case 1 passed");
+        else $display("case 1 failed - Expected 8, got %d", result_tb);
 
         a_tb = 1;
         b_tb = -1;
         op_tb = 4'b0011; // shift
         #clk_tk;
 
-        if (result_tb !== 2) begin
-            $display("case 2 failed - Expected 2, got %d", result_tb);
-        end else begin
-            $display("case 2 passed");
-        end
-        
+        if (result_tb == 2) $display("case 2 passed");
+        else $display("case 2 failed - Expected 2, got %d", result_tb);
+                
         a_tb = 2;
         b_tb = 1;
         op_tb = 4'b0011; // shift
         #clk_tk;
 
-        if (result_tb !== 1) begin
-            $display("case 3 failed - Expected 1, got %d", result_tb);
-        end else begin
-            $display("case 3 passed");
-        end
-
+        if (result_tb == 1) $display("case 3 passed");
+        else $display("case 3 failed - Expected 1, got %d", result_tb);
+        
         a_tb = -1;
         b_tb = 1;
         op_tb = 4'b0011; // shift
         #clk_tk;
 
-        if (result_tb !== -1) begin
-            $display("case 4 failed - Expected -1, got %d", result_tb);
-        end else begin
-            $display("case 4 passed");
-        end
+        if (result_tb == -1) $display("case 4 passed");
+        else $display("case 4 failed - Expected -1, got %d", result_tb);
 
         $finish;
         
