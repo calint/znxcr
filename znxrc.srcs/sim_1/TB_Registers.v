@@ -77,7 +77,6 @@ module TB_Registers;
         else $display("case 4 failed - Expected 3 and 2, got %d and %d", rd1_tb, rd2_tb);
 
         $finish;
-
     end
 
 endmodule
