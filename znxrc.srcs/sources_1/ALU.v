@@ -15,10 +15,9 @@ begin
     4'b0010: result = a + 1;
     4'b0011: 
         if (b < 0) 
-            result = a << -b;
+            result = a <<< -b;
         else
             result = a >>> b;
-            
     default: result = 0;
   endcase
   
