@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module LoopStack_tb;
+module TB_LoopStack;
     reg clk_tb = 0;
     parameter clk_tk = 10;
     always #(clk_tk/2) clk_tb = ~clk_tb;
@@ -68,6 +68,6 @@ module LoopStack_tb;
         if (loop_finished_tb !== 1) $display("case 4 failed - Expected 1, got %d", loop_finished_tb);
         else $display("case 4 passed");
 
-        $stop;
+        $finish;
     end 
 endmodule

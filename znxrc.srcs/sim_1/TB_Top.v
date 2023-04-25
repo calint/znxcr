@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-module top_tb;
+module TB_Top;
 reg sw_tb;
 wire ld_tb;
 

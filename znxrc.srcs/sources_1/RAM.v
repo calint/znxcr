@@ -1,19 +1,16 @@
 module RAM (
-  input clock,
-  input [7:0] address,
+  input clk,
+  input [7:0] addr,
   input we,
-  input [15:0] data_input,
-  output [15:0] data_output
+  input [15:0] dat_in,
+  output [15:0] dat_out
 );
 
 reg [15:0] memory [0:255];
 
-assign data_output = memory[address];
-
-always @(posedge clock) begin
-  if (we == 1) begin
-    memory[address] <= data_input;
-  end
+always @(posedge clk) begin
+  if (we) memory[addr] <= dat_in;
+  dat_out <= memory[addr];
 end
 
 endmodule

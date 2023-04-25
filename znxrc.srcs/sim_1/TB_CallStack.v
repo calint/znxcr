@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module CallStack_tb;
+module TB_CallStack;
     reg clk_tb = 0;
     parameter clk_tk = 10;
     always #(clk_tk/2) clk_tb = ~clk_tb;
@@ -60,7 +60,7 @@ module CallStack_tb;
         if (program_counter_out_tb !== 1 || zero_flag_out_tb !== 1  || negative_flag_out_tb !== 1) $display("case 2 failed - Expected 1, 1, 1, got %d, %d, %d", program_counter_out_tb, zero_flag_out_tb, negative_flag_out_tb);
         else $display("case 2 passed");
 
-        $stop;
+        $finish;
     end
     
 endmodule
