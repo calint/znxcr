@@ -23,12 +23,12 @@ module CallStack(
         end else begin
             if (push) begin
                 memory[memory_idx] = {zero_flag_in, negative_flag_in, program_counter_in};
-                memory_idx <= memory_idx + 1;
+                memory_idx = memory_idx + 1;
             end else if (pop) begin
                 memory_idx = memory_idx - 1;
-                zero_flag_out <= memory[memory_idx][17];
-                negative_flag_out <= memory[memory_idx][16];
-                program_counter_out <= memory[memory_idx][15:0];
+                zero_flag_out = memory[memory_idx][17];
+                negative_flag_out = memory[memory_idx][16];
+                program_counter_out = memory[memory_idx][15:0];
             end
         end
     end

@@ -12,12 +12,14 @@ module Registers(
 reg [15:0] regs [0:15];
 
 always @(posedge clk) begin
-  if (we) regs[ra1] = wd;
+  if (we)
+    regs[ra1] = wd;
   else begin
     rd1 = regs[ra1];
     rd2 = regs[ra2];
   end
-  if (inca) regs[ra1] = regs[ra1] + 1;
+  if (inca)
+    regs[ra1] = regs[ra1] + 1;
 end
 
 endmodule
