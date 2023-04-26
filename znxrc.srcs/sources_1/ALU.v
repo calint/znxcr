@@ -1,4 +1,5 @@
 module ALU(
+//  input clk,
   input [2:0] op,
   input signed [15:0] a,
   input signed [15:0] b,
@@ -7,6 +8,7 @@ module ALU(
   output reg nf
 );
 
+//always @(posedge clk) begin
 always @(*) begin
   case(op)
     3'b101: result = a + b;

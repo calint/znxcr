@@ -5,7 +5,7 @@ module Control(
     input clk,
     input [15:0] instruction, // [reg2] [reg1] [op]ic rxnz
     output reg [15:0] program_counter_nxt,
-    output [15:0] alu_res
+    output reg [15:0] debug
     );
 
 reg [15:0] program_counter;
@@ -15,6 +15,7 @@ reg [3:0] state = 0;
 wire cs_zf,cs_nf,alu_zf,alu_nf,cs_push,cs_pop,ls_next,ifz,ifn;
 wire [3:0] op;
 wire [2:0] alu_op;
+wire [15:0] alu_res;
 wire [9:0] imm10;
 wire [15:0] reg1_val;
 wire [15:0] reg2_val;
@@ -25,7 +26,8 @@ wire [3:0] reg1;
 wire [3:0] reg2;
 wire regs_we;
 wire [15:0] regs_wd;
-wire regs_inca = 0;
+wire regs_inca;
+wire [15:0] alu_operand_2;
 
 assign ifz = state == 0 ? instruction[0] : 0;
 assign ifn = state == 0 ? instruction[1] : 0;
@@ -33,18 +35,17 @@ assign ls_next = state == 0 ? instruction[2] : 0;
 assign cs_pop = state == 0 ? instruction[3] : 0;
 assign cs_push = state == 0 ? instruction[4] : 0;
 assign op = state == 0 ? instruction[7:4] : 0;
-//assign alu_op = state == 2 ? alu_op_to_do : 0;
-assign alu_op = alu_op_to_do;
-assign reg1 = state == 0 ? instruction[11:8] : reg_to_load;
-assign reg2 = state == 0 ? instruction[15:12] : 0;
+assign reg1 = state == 1 || state == 2 ? reg_to_write : instruction[11:8];
+assign reg2 = instruction[15:12];
+assign alu_op = instruction[7:5] == 3'b011 && reg2 == 0 ? 3'b111 : instruction[7:5];
+//assign alu_operand_2 = instruction[7:5] == 3'b011 && reg2 != 0 ? {12'b0,reg2} : reg2_val;
+assign alu_operand_2 = reg2_val;
 assign imm10 = state == 0 ? instruction[15:6] : 0;
-assign regs_we = state == 1 ? 1 : 0;
-assign regs_wd = state == 1 ? instruction : 0;
+assign regs_we = state == 1 || state == 2 ? 1 : 0;
+assign regs_wd = state == 1 ? instruction : state == 2 ? reg_to_write_data : 0;
 
-reg [3:0] reg_to_load = 0;
-reg [2:0] alu_op_to_do = 0;
-reg [15:0] alu_operand_a = 0;
-reg [15:0] alu_operand_b = 0;
+reg [3:0] reg_to_write = 0;
+reg [15:0] reg_to_write_data = 0;
 
 always @(posedge clk) begin
     if (rst) begin
@@ -60,43 +61,24 @@ always @(posedge clk) begin
                 case(op)
                 4'b0000: begin // 'ld': load register with data from the next instruction 
                     state = 1;
-                    reg_to_load = reg2;
+                    reg_to_write = reg2;
                 end
-                4'b1010: begin // 'add':
+                4'b1010,4'b0010,4'b0110: begin // 'add','inc','shf' or 'not':
                     state = 2;
-                    alu_op_to_do = 3'b101;
-                    alu_operand_a = reg1_val;
-                    alu_operand_b = reg2_val;
+                    reg_to_write = reg1;
+                    reg_to_write_data = alu_res;
                 end
-                4'b0010: begin // 'inc':
-                    state = 2;
-                    alu_op_to_do = 3'b001;
-                    alu_operand_a = reg1_val;
-                    alu_operand_b = reg2_val;
-                end
-                4'b0110: begin // 'shf' or 'not':
-                    state = 2;
-                    if (reg2 == 0) begin // shift 0 bits is operation 'not'
-                        alu_op_to_do = 3'b111;
-                        alu_operand_a = reg1_val;
-                        alu_operand_b = 0; // ? ignored by alu
-                    end else begin // shift
-                        alu_op_to_do = 3'b110;
-                        alu_operand_a = reg1_val;
-                        alu_operand_b = reg2;
-                    end
-                end
-
                 default: state=0;
                 endcase
             end
         end
-        4'd1: // state 1: load next instruction as data into register 'reg_to_load'
+        4'd1: // state 1: write 'reg_to_write' with current 'instruction'
         begin
             state = 0;            
         end
-        4'd2: // state 2: alu op
+        4'd2: // state 2: write 'reg_to_write' with 'reg_to_write_data'
         begin
+            debug = reg_to_write_data;
             state = 0;            
         end
         endcase
@@ -139,9 +121,10 @@ Registers regs(
     );
 
 ALU alu(
+//    .clk(clk),
     .op(alu_op),
     .a(reg1_val),
-    .b(reg2_val),
+    .b(alu_operand_2),
     .result(alu_res),
     .zf(alu_zf),
     .nf(alu_nf)
