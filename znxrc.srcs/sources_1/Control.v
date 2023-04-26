@@ -5,7 +5,8 @@ module Control(
     input clk,
     input [15:0] instruction, // [reg2] [reg1] [op]ic rxnz
     output reg [15:0] program_counter_nxt,
-    output [15:0] debug
+    output [15:0] debug1,
+    output [15:0] debug2
     );
 
 reg [15:0] program_counter;
@@ -47,7 +48,8 @@ assign regs_wd = state == 1 ? instruction :
                  is_alu_op ? alu_res :
                  0;
                  
-assign debug = regs.regs[1];
+assign debug1 = regs.regs[1];
+assign debug2 = regs.regs[2];
 
 reg [3:0] reg_to_write = 0;
 reg [15:0] reg_to_write_data = 0;
