@@ -38,8 +38,8 @@ assign op = state == 0 ? instruction[7:4] : 0;
 assign reg1 = state == 1 || state == 2 ? reg_to_write : instruction[11:8];
 assign reg2 = instruction[15:12];
 assign alu_op = instruction[7:5] == 3'b011 && reg2 == 0 ? 3'b111 : instruction[7:5];
-//assign alu_operand_2 = instruction[7:5] == 3'b011 && reg2 != 0 ? {12'b0,reg2} : reg2_val;
-assign alu_operand_2 = reg2_val;
+assign alu_operand_2 = alu_op == 3'b011 && reg2 != 0 ? {{12{reg2[3]}}, reg2} : reg2_val;
+//assign alu_operand_2 = reg2_val;
 assign imm10 = state == 0 ? instruction[15:6] : 0;
 assign regs_we = state == 1 || state == 2 ? 1 : 0;
 assign regs_wd = state == 1 ? instruction : state == 2 ? reg_to_write_data : 0;
@@ -61,7 +61,7 @@ always @(posedge clk) begin
                 case(op)
                 4'b0000: begin // 'ld': load register with data from the next instruction 
                     state = 1;
-                    reg_to_write = reg2;
+                    reg_to_write = reg1;
                 end
                 4'b1010,4'b0010,4'b0110: begin // 'add','inc','shf' or 'not':
                     state = 2;
