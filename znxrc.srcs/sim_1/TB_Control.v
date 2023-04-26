@@ -22,14 +22,24 @@ module TB_Control;
         #clk_tk;
         rst = 0;
 
-        instruction = 16'h0030; // znxr C imm:1
+        instruction = 16'h0100; // znxr c [load register] 1 with data
+        #clk_tk;
+        instruction = 16'h1234; // data
         #clk_tk;
 
-        instruction = 16'h2120; // znxr c op:1 reg1:1 reg2:2
+        instruction = 16'h0200; // znxr c [load register] 2 with data
         #clk_tk;
+        instruction = 16'h4241; // data
+        #clk_tk;
+
+//        instruction = 16'h0030; // znxr C imm:1
+//        #clk_tk;
+
+//        instruction = 16'h2120; // znxr c op:1 reg1:1 reg2:2
+//        #clk_tk;
         
-        instruction = 16'h3230;
-        #clk_tk;
+//        instruction = 16'h3230;
+//        #clk_tk;
 
         $finish;
     end

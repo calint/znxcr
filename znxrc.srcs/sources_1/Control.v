@@ -9,40 +9,64 @@ module Control(
     );
 
 reg [15:0] program_counter;
-//wire [15:0] program_counter_nxt;
+
+reg [3:0] state = 0;
 
 wire cs_zf,cs_nf,alu_zf,alu_nf,cs_push,cs_pop,ls_next,ifz,ifn;
-wire [3:0] alu_op;
-wire [3:0] reg1;
-wire [3:0] reg2;
-wire regs_we,regs_inca;
-wire [15:0] regs_wd;
+wire [3:0] op;
+wire [2:0] alu_op;
+wire [9:0] imm10;
 wire [15:0] reg1_val;
 wire [15:0] reg2_val;
 wire ls_loop_finished;
 wire [15:0] ls_jmp_address;
 wire [15:0] cs_program_counter_nxt;
+wire [3:0] reg1;
+wire [3:0] reg2;
+wire regs_we;
+wire [15:0] regs_wd;
+wire regs_inca = 0;
 
-assign ifz = instruction[0];
-assign ifn = instruction[1];
-assign ls_next = instruction[2];
-assign cs_pop = instruction[3];
-assign cs_push = instruction[4];
-assign alu_op = instruction[7:5];
-assign reg1 = instruction[11:8];
-assign reg2 = instruction[15:12];
-assign regs_wd = alu_res;
+assign ifz = state == 0 ? instruction[0] : 0;
+assign ifn = state == 0 ? instruction[1] : 0;
+assign ls_next = state == 0 ? instruction[2] : 0;
+assign cs_pop = state == 0 ? instruction[3] : 0;
+assign cs_push = state == 0 ? instruction[4] : 0;
+assign op = state == 0 ? instruction[7:4] : 0;
+assign alu_op = state == 0 ? instruction[7:5] : 0;
+assign reg1 = state == 0 ? instruction[11:8] : reg_to_load;
+assign reg2 = state == 0 ? instruction[15:12] : 0;
+assign imm10 = state == 0 ? instruction[15:6] : 0;
+assign regs_we = state == 1 ? 1 : 0;
+assign regs_wd = state == 1 ? instruction : 0;
 
-reg [3:0] state;
+reg [3:0] reg_to_load = 0;
 
 always @(posedge clk) begin
     if (rst) begin
         program_counter <= 0;
         state <= 0;
     end else begin
-        if (cs_push) begin // call
-            program_counter_nxt = {5'b00000,instruction[15:5]};            
+        case(state)
+        4'd0: // state 0: decode instruction
+        begin
+            if (cs_push) begin // command 'call'
+                program_counter_nxt = {6'b000000,instruction[15:6]};            
+            end else begin // operation
+                case(op)
+                4'b0000: begin // load register with data from the next instruction 
+                    state = 1;
+                    reg_to_load = reg1;
+                end
+                default: state=0;
+                endcase
+            end
         end
+        4'd1: // state 1: load next instruction as data into register 'reg_to_load'
+        begin
+            state = 0;            
+        end
+        endcase
     end
 end
 
