@@ -7,8 +7,7 @@ module ALU(
   output reg nf
 );
 
-always @*
-begin
+always @(*) begin
   case(op)
     4'b0000: result = a + b;
     4'b0001: result = ~a;
@@ -23,6 +22,6 @@ begin
   
   zf <= (result == 0);
   nf <= result[15];
-
 end
+
 endmodule

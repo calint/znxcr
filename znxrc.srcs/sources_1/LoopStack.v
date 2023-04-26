@@ -21,17 +21,17 @@ module LoopStack(
         end else begin
             if (new_loop) begin
                 stack_idx = stack_idx + 1;
-                stack_loop_address[stack_idx] <= loop_address;
-                stack_loop_counter[stack_idx] <= count;
-                loop_finished <= 0;
+                stack_loop_address[stack_idx] = loop_address;
+                stack_loop_counter[stack_idx] = count;
+                loop_finished = 0;
             end else if (next) begin
                 stack_loop_counter[stack_idx] = stack_loop_counter[stack_idx] - 1;
                 if (stack_loop_counter[stack_idx] === 0) begin
-                    loop_finished <= 1;
-                    stack_idx <= stack_idx - 1;
+                    loop_finished = 1;
+                    stack_idx = stack_idx - 1;
                 end else begin
-                    loop_finished <= 0;
-                    jmp_address <= stack_loop_address[stack_idx];
+                    loop_finished = 0;
+                    jmp_address = stack_loop_address[stack_idx];
                 end
             end
         end

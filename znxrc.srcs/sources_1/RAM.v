@@ -9,8 +9,9 @@ module RAM (
 reg [15:0] memory [0:255];
 
 always @(posedge clk) begin
-  if (we) memory[addr] <= dat_in;
-  dat_out <= memory[addr];
+  if (we) memory[addr] = dat_in;
 end
+
+assign dat_out = memory[addr];
 
 endmodule
