@@ -1,5 +1,5 @@
 module ALU(
-  input [3:0] op,
+  input [2:0] op,
   input signed [15:0] a,
   input signed [15:0] b,
   output reg [15:0] result,
@@ -9,10 +9,10 @@ module ALU(
 
 always @(*) begin
   case(op)
-    4'b0000: result = a + b;
-    4'b0001: result = ~a;
-    4'b0010: result = a + 1;
-    4'b0011: 
+    3'b101: result = a + b;
+    3'b111: result = ~a;
+    3'b001: result = a + 1;
+    3'b011: 
         if (b < 0) 
             result = a <<< -b;
         else

@@ -12,6 +12,8 @@ module Registers(
 reg [15:0] regs [0:15];
 
 always @(posedge clk) begin
+//  assign rd1 = regs[ra1];
+//  assign rd2 = regs[ra2];
   if (we)
     regs[ra1] = wd;
   else begin

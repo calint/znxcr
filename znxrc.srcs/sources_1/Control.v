@@ -33,7 +33,8 @@ assign ls_next = state == 0 ? instruction[2] : 0;
 assign cs_pop = state == 0 ? instruction[3] : 0;
 assign cs_push = state == 0 ? instruction[4] : 0;
 assign op = state == 0 ? instruction[7:4] : 0;
-assign alu_op = state == 0 ? instruction[7:5] : 0;
+//assign alu_op = state == 2 ? alu_op_to_do : 0;
+assign alu_op = alu_op_to_do;
 assign reg1 = state == 0 ? instruction[11:8] : reg_to_load;
 assign reg2 = state == 0 ? instruction[15:12] : 0;
 assign imm10 = state == 0 ? instruction[15:6] : 0;
@@ -41,6 +42,9 @@ assign regs_we = state == 1 ? 1 : 0;
 assign regs_wd = state == 1 ? instruction : 0;
 
 reg [3:0] reg_to_load = 0;
+reg [2:0] alu_op_to_do = 0;
+reg [15:0] alu_operand_a = 0;
+reg [15:0] alu_operand_b = 0;
 
 always @(posedge clk) begin
     if (rst) begin
@@ -50,19 +54,48 @@ always @(posedge clk) begin
         case(state)
         4'd0: // state 0: decode instruction
         begin
-            if (cs_push) begin // command 'call'
-                program_counter_nxt = {6'b000000,instruction[15:6]};            
+            if (cs_push) begin // 'call': calls immediate imm10
+                program_counter_nxt = {6'b000000,imm10};            
             end else begin // operation
                 case(op)
-                4'b0000: begin // load register with data from the next instruction 
+                4'b0000: begin // 'ld': load register with data from the next instruction 
                     state = 1;
-                    reg_to_load = reg1;
+                    reg_to_load = reg2;
                 end
+                4'b1010: begin // 'add':
+                    state = 2;
+                    alu_op_to_do = 3'b101;
+                    alu_operand_a = reg1_val;
+                    alu_operand_b = reg2_val;
+                end
+                4'b0010: begin // 'inc':
+                    state = 2;
+                    alu_op_to_do = 3'b001;
+                    alu_operand_a = reg1_val;
+                    alu_operand_b = reg2_val;
+                end
+                4'b0110: begin // 'shf' or 'not':
+                    state = 2;
+                    if (reg2 == 0) begin // shift 0 bits is operation 'not'
+                        alu_op_to_do = 3'b111;
+                        alu_operand_a = reg1_val;
+                        alu_operand_b = 0; // ? ignored by alu
+                    end else begin // shift
+                        alu_op_to_do = 3'b110;
+                        alu_operand_a = reg1_val;
+                        alu_operand_b = reg2;
+                    end
+                end
+
                 default: state=0;
                 endcase
             end
         end
         4'd1: // state 1: load next instruction as data into register 'reg_to_load'
+        begin
+            state = 0;            
+        end
+        4'd2: // state 2: alu op
         begin
             state = 0;            
         end

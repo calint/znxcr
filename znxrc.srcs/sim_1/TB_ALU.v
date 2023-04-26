@@ -8,7 +8,7 @@ module TB_ALU;
     // Inputs
     reg signed [15:0] a;
     reg signed [15:0] b;
-    reg [3:0] op;
+    reg [2:0] op;
 
     // Outputs
     wire signed [15:0] result;
@@ -28,7 +28,7 @@ module TB_ALU;
         // Test case 1 - Add
         a = 5;
         b = 3;
-        op = 4'b0000; // Add operation
+        op = 3'b101; // Add operation
         #clk_tk;
         
         if (result == 8) $display("case 1 passed");
@@ -36,7 +36,7 @@ module TB_ALU;
 
         a = 1;
         b = -1;
-        op = 4'b0011; // shift
+        op = 3'b011; // shift
         #clk_tk;
 
         if (result == 2) $display("case 2 passed");
@@ -44,7 +44,7 @@ module TB_ALU;
                 
         a = 2;
         b = 1;
-        op = 4'b0011; // shift
+        op = 3'b011; // shift
         #clk_tk;
 
         if (result == 1) $display("case 3 passed");
@@ -52,7 +52,7 @@ module TB_ALU;
         
         a = -1;
         b = 1;
-        op = 4'b0011; // shift
+        op = 3'b011; // shift
         #clk_tk;
 
         if (result == -1) $display("case 4 passed");
