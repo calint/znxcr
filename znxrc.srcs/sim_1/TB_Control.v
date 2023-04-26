@@ -34,10 +34,8 @@ module TB_Control;
 
         instruction = 16'h21a0; // znxr c [add] register 1 to register 2
         #clk_tk;
-        #clk_tk;
 
         instruction = 16'h21a0; // znxr c [add] register 1 to register 2
-        #clk_tk;
         #clk_tk;
 
         instruction = 16'h0100; // znxr c [load register] 2 with data
@@ -47,12 +45,10 @@ module TB_Control;
 
         instruction = 16'h2160; // znxr c [right shift] register 1 by 2
         #clk_tk;
-        #clk_tk;        
-
+ 
         instruction = 16'he160; // znxr c [lef shift] register 1 by 2
         #clk_tk;
-        #clk_tk;        
-
+ 
 //       instruction = 16'h12a0; // znxr c [add] register 1 to register 2
 //       #clk_tk;
 //       #clk_tk;
