@@ -12,8 +12,8 @@
        / . / t / . / r / . / 0 1 1 / imm4 / .... /  shift
       / . / i / . / n / . / 1 0 0 / immediate 8 /  skip
      / . / v / . / . / . / 1 0 1 / .... / .... /  add
-    / . / e / . / . / . / 1 1 0 / dest / src  /  load
-   / . / . / . / . / . / 1 1 1 / dest / src  /  store
+    / . / e / . / . / . / 1 1 0 / src  / dest /  load
+   / . / . / . / . / . / 1 1 1 / src  / dest /  store
   / . / . / . / . / 1 / immediate 10 << 4   /  call
 
     op :       :
