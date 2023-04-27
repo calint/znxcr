@@ -50,7 +50,7 @@ always @(posedge clk) begin
         4'd0: // state 0: decode instruction
         begin
             if (cs_push) begin // 'call': calls immediate imm10
-                program_counter = {{6{1'h0}}, imm10};            
+                program_counter = {2'b00, imm10<<4};            
             end else begin // operation
                 case(op)
                 4'b0000: begin // 'ld': load register with data from the next instruction 
