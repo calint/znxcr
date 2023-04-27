@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module ROM (
-    input [7:0] addr,
+    input [15:0] addr,
     output [15:0] data
 );
   

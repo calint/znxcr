@@ -3,14 +3,14 @@
 module Control(
     input rst,
     input clk,
-    input [15:0] program_counter,
-    output reg [15:0] program_counter_nxt,
     output [15:0] debug1,
     output [15:0] debug2
     );
 
 reg [3:0] state = 0;
+reg [15:0] program_counter = 0;
 wire [15:0] instruction;
+reg [3:0] reg_to_write = 0;
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
 wire [15:0] alu_res;
@@ -41,17 +41,16 @@ wire [15:0] regs_wd = state == 1 ? instruction :
 assign debug1 = regs.regs[1];
 assign debug2 = regs.regs[2];
 
-reg [3:0] reg_to_write = 0;
-
 always @(posedge clk) begin
     if (rst) begin
         state <= 0;
+        program_counter <= 0;
     end else begin
         case(state)
         4'd0: // state 0: decode instruction
         begin
             if (cs_push) begin // 'call': calls immediate imm10
-                program_counter_nxt = {{6{0'h0}}, imm10};            
+                program_counter = {{6{1'h0}}, imm10};            
             end else begin // operation
                 case(op)
                 4'b0000: begin // 'ld': load register with data from the next instruction 
@@ -67,6 +66,7 @@ always @(posedge clk) begin
             state = 0;            
         end
         endcase
+        program_counter = program_counter + 1;
     end
 end
 
