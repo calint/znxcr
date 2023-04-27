@@ -28,35 +28,43 @@ module TB_ALU;
         // Test case 1 - Add
         a = 5;
         b = 3;
-        op = 3'b101; // Add operation
+        op = 3'b101; // add a and b
         #clk_tk;
         
         if (result == 8) $display("case 1 passed");
         else $display("case 1 failed - Expected 8, got %d", result);
 
-        a = 1;
-        b = -1;
-        op = 3'b011; // shift
+        a = -1;
+        b = 1;
+        op = 3'b011; // shift b by a
         #clk_tk;
 
         if (result == 2) $display("case 2 passed");
         else $display("case 2 failed - Expected 2, got %d", result);
                 
-        a = 2;
-        b = 1;
-        op = 3'b011; // shift
+        a = 1;
+        b = 2;
+        op = 3'b011; // shift b by a
         #clk_tk;
 
         if (result == 1) $display("case 3 passed");
         else $display("case 3 failed - Expected 1, got %d", result);
         
-        a = -1;
-        b = 1;
-        op = 3'b011; // shift
+        a = 1;
+        b = -1;
+        op = 3'b011; // shift b by a
         #clk_tk;
 
         if (result == -1) $display("case 4 passed");
         else $display("case 4 failed - Expected -1, got %d", result);
+
+        a = 0;
+        b = -1;
+        op = 3'b001; // inc b
+        #clk_tk;
+
+        if (result == 0) $display("case 5 passed");
+        else $display("case 5 failed - Expected 0, got %d", result);
 
         $finish;
         
