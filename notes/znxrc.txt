@@ -20,11 +20,11 @@
    ----:-------:---------------------------------------------------
    000 : loadi : next instruction into register b
    001 : inc   : increment register b
-   010 : loop  : starts loop with counter value of register b
+   010 : loop  : starts loop with counter value set by register b
    011 : not   : register b if immediate value of 'rega' is 0
-   011 : shift : register b by immediate value of 'rega'
+   011 : shift : register b by immediate 4 bit value of 'rega'
    100 : skip  : adds immediate 8 bit value to program counter
-   101 : add   : register a to register begin
+   101 : add   : register a to register b
    110 : load  : loads ram location of register a into register b
    111 : store : stores register b into ram location of register a
 
