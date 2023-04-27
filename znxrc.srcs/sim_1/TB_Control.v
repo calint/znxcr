@@ -24,7 +24,7 @@ module TB_Control;
         #clk_tk;
         rst = 0;
 
-        instruction = 16'h0100; // znxr c [load register] 1 with data
+        instruction = 16'h1000; // znxr c [load register] 1 with data
         #clk_tk;
         instruction = 16'h1234; // data
         #clk_tk;
@@ -32,7 +32,7 @@ module TB_Control;
         if (debug1 == 16'h1234) $display("case 1 passed");
         else $display("case 1 failed - Expected 0x1234, got %d", debug1);
 
-        instruction = 16'h0200; // znxr c [load register] 2 with data
+        instruction = 16'h2000; // znxr c [load register] 2 with data
         #clk_tk;
         instruction = 16'h0001; // data
         #clk_tk;
@@ -40,19 +40,19 @@ module TB_Control;
         if (debug2 == 16'h1) $display("case 2 passed");
         else $display("case 2 failed - Expected 1, got %d", debug2);
 
-        instruction = 16'h21a0; // znxr c [add] register 1 to register 2
+        instruction = 16'h12a0; // znxr c [add] register 2 to register 1
         #clk_tk;
 
         if (debug1 == 16'h1235) $display("case 3 passed");
         else $display("case 3 failed - Expected 0x1235, got %d", debug1);
 
-        instruction = 16'h21a0; // znxr c [add] register 1 to register 2
+        instruction = 16'h12a0; // znxr c [add] register 1 to register 2
         #clk_tk;
 
         if (debug1 == 16'h1236) $display("case 4 passed");
         else $display("case 4 failed - Expected 0x1236, got %d", debug1);
 
-        instruction = 16'h0100; // znxr c [load register] 2 with data
+        instruction = 16'h1000; // znxr c [load register] 1 with data
         #clk_tk;
         instruction = 16'h0004; // data
         #clk_tk;
@@ -60,13 +60,13 @@ module TB_Control;
         if (debug1 == 4) $display("case 5 passed");
         else $display("case 5 failed - Expected 4, got %d", debug1);
 
-        instruction = 16'h2160; // znxr c [right shift] register 1 by 2
+        instruction = 16'h1260; // znxr c [right shift] register 1 by 2
         #clk_tk;
 
         if (debug1 == 1) $display("case 6 passed");
         else $display("case 6 failed - Expected 1, got %d", debug1);
  
-        instruction = 16'he160; // znxr c [lef shift] register 1 by 2
+        instruction = 16'h1e60; // znxr c [lef shift] register 1 by 2
         #clk_tk;
 
         if (debug1 == 4) $display("case 7 passed");

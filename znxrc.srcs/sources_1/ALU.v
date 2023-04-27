@@ -15,10 +15,10 @@ always @(*) begin
     3'b111: result = ~a;
     3'b001: result = a + 1;
     3'b011: 
-        if (b < 0) 
-            result = a <<< -b;
+        if (a < 0) 
+            result = b <<< -a;
         else
-            result = a >>> b;
+            result = b >>> a;
     default: result = 0;
   endcase
   

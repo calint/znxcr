@@ -16,7 +16,7 @@ assign rd2 = regs[ra2];
 
 always @(posedge clk) begin
   if (we)
-    regs[ra1] = wd;
+    regs[ra2] = wd;
     
   if (inca)
     regs[ra1] = regs[ra1] + 1;

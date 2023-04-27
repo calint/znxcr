@@ -30,12 +30,12 @@ module TB_Registers;
     initial begin
         we = 1;
         // write reg[0]=1
-        ra1 = 0;
+        ra2 = 0;
         wd = 1;
         #clk_tk;
         
         // write reg[1]=2
-        ra1 = 1;
+        ra2 = 1;
         wd = 2;
         #clk_tk;
         
