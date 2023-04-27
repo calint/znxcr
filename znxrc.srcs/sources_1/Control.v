@@ -30,7 +30,6 @@ wire [3:0] reg1 = instruction[11:8];
 wire [3:0] reg2 = state == 1 ? reg_to_write : instruction[15:12];
 wire [2:0] alu_op = instruction[7:5] == 3'b011 && reg1 == 0 ? 3'b111 : instruction[7:5];
 wire [15:0] alu_operand_1 = alu_op == 3'b011 && reg1 != 0 ? {{12{reg1[3]}}, reg1} : reg1_dat;
-//wire [15:0] alu_operand_1 = reg1_dat;
 wire [9:0] imm10 = state == 0 ? instruction[15:6] : 0;
 wire is_alu_op = op == 4'b1010 || op == 4'b0010 || op == 4'b0110; // 'add','inc','shf' or 'not':
 wire regs_we = state == 1 || is_alu_op ? 1 : 0;
