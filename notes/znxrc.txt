@@ -2,34 +2,34 @@
            |---|---|---|---|---|-------|------|------|
            | . | . | . | . | . | o p . | rega | regb |
            |---|---|---|---|---|-------|------|------|
-           / Z / N / n / R / C / 0 0 0 / .... / .... /  load
+           / Z / N / n / R / C / 0 0 0 / .... / .... /  loadi
           / e / e / e / e / a / 0 0 1 / .... / .... /  increment
          / r / g / X / t / l / 0 1 0 / .... / .... /  loop
         / o / a / t / u / l / 0 1 1 / 0000 / .... /  not
        /   / t /   / r /   / 0 1 1 / .... / .... /  shift
-      /   / i /   / n /   / 1 0 0 / .... / .... /  skip relative immediate 8b
+      /   / i /   / n /   / 1 0 0 / .... / .... /  skip
      /   / v /   /   /   / 1 0 1 / .... / .... /  add
-    /   / e /   /   /   / 1 1 0 / .... / .... /  load from ram
-   /   /   /   /   /   / 1 1 1 / .... / .... /  store in ram
+    /   / e /   /   /   / 1 1 0 / .... / .... /  load
+   /   /   /   /   /   / 1 1 1 / .... / .... /  store
 
    o p :       :
-   ----:-------:--------------------------------------
-   000 : load  : next instruction into register b
+   ----:-------:---------------------------------------------------
+   000 : loadi : next instruction into register b
    001 : inc   : increment register b
-   010 :       :
+   010 : loop  : starts loop with counter value of register b
    011 : not   : regb if immediate value of rega is 0
    011 : shift : regb by immediate value of rega
-   100 :       :
+   100 : skip  : adds immediate 8 bit value to program counter
    101 : add   : register a to register begin
-   110 :       :
-   111 :       :
+   110 : load  : loads ram location of register a into register b
+   111 : store : stores register b into ram location of register a
 
 
    page cr = 11
 
    o p :       :
    ----:-------:--------------------------------------
-   000 :       : 
+   000 : copy  : copies register a into register b 
    001 :       : 
    010 :       :
    011 :       : 
