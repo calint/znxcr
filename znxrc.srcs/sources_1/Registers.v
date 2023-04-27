@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module Registers(
     input clk,
     input [3:0] ra1,

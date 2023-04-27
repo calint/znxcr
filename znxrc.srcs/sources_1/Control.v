@@ -3,15 +3,14 @@
 module Control(
     input rst,
     input clk,
-    input [15:0] instruction, // [reg2] [reg1] [op]ic rxnz
+    input [15:0] program_counter,
     output reg [15:0] program_counter_nxt,
     output [15:0] debug1,
     output [15:0] debug2
     );
 
-reg [15:0] program_counter;
-
 reg [3:0] state = 0;
+wire [15:0] instruction;
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
 wire [15:0] alu_res;
@@ -46,14 +45,13 @@ reg [3:0] reg_to_write = 0;
 
 always @(posedge clk) begin
     if (rst) begin
-        program_counter <= 0;
         state <= 0;
     end else begin
         case(state)
         4'd0: // state 0: decode instruction
         begin
             if (cs_push) begin // 'call': calls immediate imm10
-                program_counter_nxt = {{6{0}}, imm10};            
+                program_counter_nxt = {{6{0'h0}}, imm10};            
             end else begin // operation
                 case(op)
                 4'b0000: begin // 'ld': load register with data from the next instruction 
@@ -71,6 +69,11 @@ always @(posedge clk) begin
         endcase
     end
 end
+
+ROM rom(
+    .addr(program_counter),
+    .data(instruction)
+    );
 
 CallStack cs(
     .rst(rst),

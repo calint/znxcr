@@ -1,16 +1,16 @@
+`timescale 1ns / 1ps
+
 module ROM (
-  input [7:0] address,
-  output [15:0] data_out
+    input [7:0] addr,
+    output [15:0] data
 );
   
-  reg [15:0] rom_array [0:255];
+  reg [15:0] mem [0:255];
 
   initial begin
-    rom_array[0] = 16'h01;
-    rom_array[1] = 16'h02;
-    rom_array[2] = 16'h03;
+    $readmemh("rom.hex", mem);
   end
 
-  assign data_out = rom_array[address];
+  assign data = mem[addr];
 
 endmodule
