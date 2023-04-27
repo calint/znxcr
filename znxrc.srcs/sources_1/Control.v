@@ -20,7 +20,6 @@ wire [15:0] reg2_val;
 wire ls_loop_finished;
 wire [15:0] ls_jmp_address;
 wire [15:0] cs_program_counter_nxt;
-wire regs_inca;
 
 wire ifz = state == 0 ? instruction[0] : 0;
 wire ifn = state == 0 ? instruction[1] : 0;
@@ -103,7 +102,6 @@ Registers regs(
     .ra2(reg2),
     .we(regs_we), // write 'wd' to address 'ra1'
     .wd(regs_wd), // data to write when 'we' is true
-    .inca(regs_inca), // if true increases value of 'ra1' after the read or write is done
     .rd1(reg1_val),
     .rd2(reg2_val)
     );

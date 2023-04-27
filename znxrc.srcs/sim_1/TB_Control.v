@@ -71,19 +71,12 @@ module TB_Control;
 
         if (debug1 == 4) $display("case 7 passed");
         else $display("case 7 failed - Expected 4, got %d", debug1);
- 
-//       instruction = 16'h12a0; // znxr c [add] register 1 to register 2
-//       #clk_tk;
-//       #clk_tk;
 
-//        instruction = 16'h0030; // znxr C imm:1
-//        #clk_tk;
+        instruction = 16'h1060; // znxr c [not] register 1
+        #clk_tk;
 
-//        instruction = 16'h2120; // znxr c op:1 reg1:1 reg2:2
-//        #clk_tk;
-        
-//        instruction = 16'h3230;
-//        #clk_tk;
+        if (debug1 == -5) $display("case 8 passed");
+        else $display("case 8 failed - Expected -5, got %d", debug1);
 
         $finish;
     end
