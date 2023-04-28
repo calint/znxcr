@@ -30,10 +30,9 @@ wire [3:0] reg2 = state == 1 ? reg_to_write : instr[15:12];
 wire [9:0] imm8 = instr[15:8];
 wire [9:0] imm11 = instr[15:5];
 
-wire ls_loop_finished;
+wire ls_done;
 wire ls_new_loop = state == 0 ? instr[11:0] == 11'b0000_0100_0000 : 0;
-wire [15:0] ls_jmp_address;
-wire [15:0] ls_cnt_out;
+wire [15:0] ls_pc_out;
 
 wire is_cr = instr_c && instr_r;
 wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0;
@@ -100,12 +99,12 @@ always @(posedge clk) begin
                 // if loop 'next' 
                 if (instr_x) begin
                     // check if this was last iteration
-                    if (ls_cnt_out == 1) begin
+                    if (ls_done) begin
                         // loop done
                         pc = pc + 1;
                     end else begin
                         // jump to start of loop
-                        pc = ls_jmp_address;        
+                        pc = ls_pc_out;        
                     end
                 end else begin
                     // next 
@@ -150,9 +149,8 @@ LoopStack ls(
     .cnt_in(reg2_dat), // number of iterations in loop when creating new loop with 'new_loop'
     .pc_in(pc), // the address to which to jump at next
     .nxt(instr_x), // true if current loop is at instruction that is 'next'
-    .pc_out(ls_jmp_address), // the address to jump to if loop is not finished
-    .cnt_out(ls_cnt_out), // current loop counter
-    .done(ls_loop_finished) // true if current loop is finished
+    .pc_out(ls_pc_out), // the address to jump to if loop is not finished
+    .done(ls_done) // true if current loop at last iteration
     );
 
 Registers regs(

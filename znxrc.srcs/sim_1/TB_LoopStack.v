@@ -10,7 +10,6 @@ module TB_LoopStack;
     reg nxt = 0;
     reg [15:0] cnt_in = 0;
     reg [15:0] pc_in = 0;
-    wire [15:0] cnt_out;
     wire [15:0] pc_out;
     wire done;
 
@@ -21,7 +20,6 @@ module TB_LoopStack;
         .cnt_in(cnt_in),
         .pc_in(pc_in),
         .nxt(nxt),
-        .cnt_out(cnt_out),
         .pc_out(pc_out),
         .done(done)
     );
@@ -43,37 +41,40 @@ module TB_LoopStack;
         cnt_in = 2;
         pc_in = 2;
         #clk_tk;
+
+        if (!done && pc_out == 2) $display("case 1 passed");
+        else $display("case 1 failed - Expected 0, 2 got %d, %d", done, pc_out);
         
         // next => counter=1
         new = 0;
         nxt = 1;
         #clk_tk;
 
-        if (!done && pc_out == 3) $display("case 1 passed");
-        else $display("case 1 failed - Expected false, 3 got %d, %d", done, pc_out);
+        if (done) $display("case 2 passed");
+        else $display("case 2 failed - Expected 1 got %d", done);
 
         // next => counter=0
         new = 0;
         nxt = 1;
         #clk_tk;
 
-        if (done) $display("case 2 passed");
-        else $display("case 2 failed - Expected true got %d", done);
+        if (!done && pc_out == 1) $display("case 3 passed");
+        else $display("case 3 failed - Expected 0, 1 got %d, %d", done, pc_out);
 
         new = 0;
         nxt = 1;
         #clk_tk;
 
-        if (!done && pc_out == 2) $display("case 3 passed");
-        else $display("case 3 failed - Expected false, 2 got %d, %d", done, pc_out);
-
-        new = 0;
-        nxt = 1;
-        #clk_tk;
-        
         if (done) $display("case 4 passed");
-        else $display("case 4 failed - Expected true, got %d", done);
+        else $display("case 4 failed - Expected 1, got %d", done);
 
+        new = 0;
+        nxt = 1;
+        #clk_tk;
+
+        if (dut.idx == 4'hf) $display("case 4 passed");
+        else $display("case 4 failed - Expected 0x4, got %d", dut.idx);
+        
         $finish;
     end 
 endmodule

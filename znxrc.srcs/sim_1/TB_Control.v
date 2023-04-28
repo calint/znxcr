@@ -142,28 +142,26 @@ module TB_Control;
         if (dut.ls.pc_out == 26) $display("case 21 passed");
         else $display("case 21 failed - Expected 26, got %d", dut.ls.pc_out);
         if (!dut.ls.done) $display("case 22 passed");
-        else $display("case 22 failed - Expected false, got %d", dut.ls.done);
+        else $display("case 22 failed - Expected 0, got %d", dut.ls.done);
         
         // 6284 // 26: znXr c [addi & next] reg[6]+=2
-        #clk_tk
+        #clk_tk // => cnt==3
         
         if (dut.ls.pc_out == 26) $display("case 22 passed");
         else $display("case 22 failed - Expected 26, got %d", dut.ls.pc_out);
         if (dut.regs.mem[6] == 6) $display("case 23 passed");
         else $display("case 23 failed - Expected 6, got %d", dut.regs.mem[6]);
         if (!dut.ls.done) $display("case 24 passed");
-        else $display("case 24 failed - Expected false, got %d", dut.ls.done);
-        if (dut.ls.cnt_out == 3) $display("case 25 passed");
-        else $display("case 25 failed - Expected 3, got %d", dut.ls.cnt_out);
+        else $display("case 24 failed - Expected 0, got %d", dut.ls.done);
  
-        #clk_tk // cnt==2
-        #clk_tk // cnt==1
-        #clk_tk // cnt==0, done==1
+        #clk_tk // => cnt==2
+        #clk_tk // => cnt==1
+        #clk_tk // => cnt==0, next loop
         
-        if (dut.pc == 27) $display("case 26 passed");
-        else $display("case 26 failed - Expected 27, got %d", dut.pc);
-        if (dut.regs.mem[6] == 12) $display("case 28 passed");
-        else $display("case 28 failed - Expected 12, got %d", dut.regs.mem[6]);
+        if (dut.pc == 27) $display("case 25 passed");
+        else $display("case 25 failed - Expected 27, got %d", dut.pc);
+        if (dut.regs.mem[6] == 12) $display("case 26 passed");
+        else $display("case 26 failed - Expected 12, got %d", dut.regs.mem[6]);
         
         // 0000 // 33: 
 
