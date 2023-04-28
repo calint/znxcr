@@ -32,22 +32,22 @@ under construction
    / . / . / . / 1 / 1 / 0 0 0 / .... / .... /  copy
 
     op :       :
-   ----:-------:------------------------------------------------------------------------
-   000 : loadi : load next instruction into register b
-   001 : addi  : add immediate 4 bit signed value into register b
-   010 : loop  : start loop with counter value set by register b
-   011 : not   : not register b
-   011 : shift : shift register b by immediate 4 bit signed value (negative being left)
-   100 : skip  : adds immediate 8 bit value to program counter
-   101 : add   : add register a to register b
-   110 : load  : load ram location pointed to by register b into register a
-   111 : store : store register a into ram location pointed to by register b
+   ----:-------:-----------------------------------------------------
+   000 : loadi : reg[b]={next instruction}
+   001 : addi  : reg[b]+=imm4
+   010 : loop  : start loop with counter value from reg[b]
+   011 : not   : reg[b]=~reg[b]
+   011 : shift : reg[b]>>=imm4
+   100 : skip  : pc+=imm8
+   101 : add   : reg[b]+=reg[a]
+   110 : load  : reg[b]=ram[a]
+   111 : store : ram[a]=reg[b]
 
    page cr = 11
 
     op :       :
-   ----:-------:--------------------------------------------------------------------------
-   000 : copy  : copies register a into register b 
+   ----:-------:-----------------------------------------------------
+   000 : copy  : reg[b]=reg[a] 
    001 :       : 
    010 :       :
    011 :       : 
