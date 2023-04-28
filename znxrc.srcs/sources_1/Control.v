@@ -19,56 +19,56 @@ localparam ALU_ADD = OP_ADD;
 localparam ALU_SHIFT = OP_SHIFT;
 localparam ALU_NOT = 3'b111;
 
-reg state = 0;
+reg state = 0; // state == 1 => write the instruction to register 'reg_to_write'
 reg [15:0] pc = 0; // program counter
 reg [15:0] cs_pc_in; // program counter to call stack
 wire [15:0] cs_pc_out; // program counter at top of the call stack
-reg [3:0] reg_to_write = 0;
+reg [3:0] reg_to_write = 0; // register to write when doing 'loadi'
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
-wire [15:0] alu_res;
-wire [15:0] reg1_dat;
-wire [15:0] reg2_dat;
+wire [15:0] alu_res; // result from alu
+wire [15:0] reg1_dat; // regs[reg1]
+wire [15:0] reg2_dat; // regs[reg2]
 
 wire [15:0] instr; // instruction
-wire instr_z = instr[0];
-wire instr_n = instr[1];
-wire instr_x = instr[2];
-wire instr_r = instr[3];
-wire instr_c = instr[4];
+wire instr_z = instr[0]; // if enabled execute command if z-flag is on
+wire instr_n = instr[1]; // if enabled execute command if n-flag is on
+wire instr_x = instr[2]; // if enabled execute command and step an iteration in current loop
+wire instr_r = instr[3]; // if enabled execute command and return from current sub-routine
+wire instr_c = instr[4]; // if enabled call a sub-routine (instr_r && instr_c is illegal and instead enables more commands)
 wire [3:0] op = instr[7:5];
 wire [3:0] reg1 = instr[11:8];
 wire [3:0] reg2 = state == 1 ? reg_to_write : instr[15:12];
 wire [9:0] imm8 = instr[15:8];
 wire [9:0] imm11 = instr[15:5];
 
-wire ls_done;
-wire ls_new_loop = state == 0 ? instr[11:0] == 11'b0000_0100_0000 : 0;
-wire [15:0] ls_pc_out;
+wire ls_done; // loop stack enables this if it is the last iteration in current loop
+wire ls_new_loop = state == 0 ? instr[11:0] == 11'b0000_0100_0000 : 0; // creates new loop with counter set from regs[reg2]
+wire [15:0] ls_pc_out; // loop stack jump to if loop is not done
 
-wire is_cr = instr_c && instr_r;
-wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0;
-wire cs_push = is_cs_op ? instr_c : 0;
-wire cs_pop = is_cs_op ? instr_r : 0;
+wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands
+wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0; // enabled if command operates on call stack
+wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
+wire cs_pop = is_cs_op ? instr_r : 0; // enabled if command also does 'return'
 
 wire is_alu_op = op == OP_ADD || op == OP_ADDI || op == OP_SHIFT;
-wire [2:0] alu_op = op == OP_SHIFT && reg1 == 0 ? ALU_NOT :
-                    op == OP_ADDI ? ALU_ADD : // 'addi' is add 
-                    op;
-wire [15:0] alu_operand_1 = op == OP_SHIFT && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // shift imm4
-                            op == OP_ADDI ? {{12{reg1[3]}}, reg1} : // addi imm4
-                            reg1_dat;
+wire [2:0] alu_op = op == OP_SHIFT && reg1 == 0 ? ALU_NOT : // 'shift' with argument 0 is interpreted as a 'not'
+                    op == OP_ADDI ? ALU_ADD : // 'addi' is add with 'reg1' as a signed value instead of regs[reg1]
+                    op; // same as op
+wire [15:0] alu_operand_1 = op == OP_SHIFT && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // 'shift' with argument signed value of 'reg1' argument
+                            op == OP_ADDI ? {{12{reg1[3]}}, reg1} : // 'addi' is add with 'reg1' argument as signed value instead of regs[reg1]
+                            reg1_dat; // otherwise regs[reg1]
 
-wire ram_we = op == OP_STORE;
-wire [15:0] ram_dat_out;
+wire ram_we = op == OP_STORE; // connected to ram write enable input
+wire [15:0] ram_dat_out; // connected to ram data output
 
-// enables write to registers if is 'loadi' alu op or 'load'
+// enables write to registers if 'loadi' or alu op or 'load'
 wire regs_we = state == 1 || is_alu_op || op == OP_LOAD ? 1 : 0;
 // data written to 'reg2' if 'regs_we' is enabled
-wire [15:0] regs_wd = state == 1 ? instr : 
-                      is_alu_op ? alu_res :
-                      op == OP_LOAD ? ram_dat_out :
-                      0;
+wire [15:0] regs_wd = state == 1 ? instr : // write instruction into registers
+                      is_alu_op ? alu_res : // write alu result to registers
+                      op == OP_LOAD ? ram_dat_out : // write ram data output to registers
+                      0; // otherwise don't write to registers
 
 assign debug1 = alu_zf;
 
