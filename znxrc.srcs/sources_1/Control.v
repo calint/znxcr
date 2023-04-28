@@ -59,18 +59,15 @@ wire [15:0] alu_operand_1 = op == OP_SHIFT && reg1 != 0 ? {{12{reg1[3]}}, reg1} 
                             op == OP_ADDI ? {{12{reg1[3]}}, reg1} : // addi imm4
                             reg1_dat;
 
-wire is_ram_read = op == OP_LOAD;
-wire is_ram_write = op == OP_STORE;
-wire [15:0] ram_addr = reg1_dat;
-wire ram_we = is_ram_write;
+wire ram_we = op == OP_STORE;
 wire [15:0] ram_dat_out;
 
 // enables write to registers if is 'loadi' alu op or 'load'
-wire regs_we = state == 1 || is_alu_op || is_ram_read ? 1 : 0;
+wire regs_we = state == 1 || is_alu_op || op == OP_LOAD ? 1 : 0;
 // data written to 'reg2' if 'regs_we' is enabled
 wire [15:0] regs_wd = state == 1 ? instr : 
                       is_alu_op ? alu_res :
-                      is_ram_read ? ram_dat_out :
+                      op == OP_LOAD ? ram_dat_out :
                       0;
 
 assign debug1 = alu_zf;
