@@ -21,6 +21,6 @@
 0280 // 20: znxr c [skip] 2 instructions
 ffff // 21: 
 ffff // 22: 
-41c0 // 23: znxr c [load] %3=ram[%1]
+41c0 // 23: znxr c [load] %4=ram[%1]
 
 
