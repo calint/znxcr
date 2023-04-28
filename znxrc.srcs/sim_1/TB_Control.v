@@ -52,7 +52,7 @@ module TB_Control;
         if (dut.regs.mem[1] == 4) $display("case 5 passed");
         else $display("case 5 failed - Expected 4, got %d", dut.regs.mem[1]);
 
-//        instruction = 16'h1260; // znxr c [right shift] register 1 by 2
+        // 1260 // 08: znxr c [shift] reg[1]>>=2
         #clk_tk;
 
         if (dut.regs.mem[1] == 1) $display("case 6 passed");
@@ -124,14 +124,6 @@ module TB_Control;
         if (dut.pc == 32) $display("case 17 passed");
         else $display("case 17 failed - Expected 32, got %d", dut.pc);
 
-        // 0000 // 25: 
-        // 0000 // 26: 
-        // 0000 // 27: 
-        // 0000 // 28: 
-        // 0000 // 29: 
-        // 0000 // 30: 
-        // 0000 // 31: 
-        
         // 51c0 // 32: znxr c [load] %5=ram[%1] (reg[5]=ram[4] => reg[5]==4)
         #clk_tk
         if (dut.regs.mem[5] == 4) $display("case 18 passed");
@@ -140,10 +132,36 @@ module TB_Control;
         // 61c8 // 33: znxR c [load & return] %6=ram[%1] (reg[6]=ram[4] => reg[6]==4)
         #clk_tk
         if (dut.regs.mem[6] == 4) $display("case 19 passed");
-        else $display("case 19 failed - Expected 4, got %d", dut.regs.mem[6]);
-        
+        else $display("case 19 failed - Expected 4, got %d", dut.regs.mem[6]);       
         if (dut.pc == 25) $display("case 20 passed");
         else $display("case 20 failed - Expected 25, got %d", dut.pc);
+        
+        // 6040 // 25: znxr c [loop] %6 (reg[6]==4)
+        #clk_tk
+        
+        if (dut.ls.pc_out == 26) $display("case 21 passed");
+        else $display("case 21 failed - Expected 26, got %d", dut.ls.pc_out);
+        if (!dut.ls.done) $display("case 22 passed");
+        else $display("case 22 failed - Expected false, got %d", dut.ls.done);
+        
+        // 6284 // 26: znXr c [addi & next] reg[6]+=2
+        #clk_tk
+        
+        if (dut.ls.pc_out == 26) $display("case 22 passed");
+        else $display("case 22 failed - Expected 26, got %d", dut.ls.pc_out);
+        if (dut.regs.mem[6] == 6) $display("case 23 passed");
+        else $display("case 23 failed - Expected 6, got %d", dut.regs.mem[6]);
+        if (!dut.ls.done) $display("case 24 passed");
+        else $display("case 24 failed - Expected false, got %d", dut.ls.done);
+        if (dut.ls.cnt_out == 3) $display("case 25 passed");
+        else $display("case 25 failed - Expected 3, got %d", dut.ls.cnt_out);
+ 
+        #clk_tk // cnt==2
+        #clk_tk // cnt==1
+        #clk_tk // cnt==0, done==1
+        
+        if (dut.pc == 27) $display("case 26 passed");
+        else $display("case 26 failed - Expected 27, got %d", dut.pc);
         
         // 0000 // 33: 
 

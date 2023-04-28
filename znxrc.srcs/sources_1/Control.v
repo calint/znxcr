@@ -17,9 +17,6 @@ wire cs_zf,cs_nf,alu_zf,alu_nf;
 wire [15:0] alu_res;
 wire [15:0] reg1_dat;
 wire [15:0] reg2_dat;
-wire ls_loop_finished;
-wire ls_new_loop = 0;
-wire [15:0] ls_jmp_address;
 
 wire [15:0] instr; // instruction
 wire instr_z = instr[0];
@@ -33,18 +30,25 @@ wire [3:0] reg2 = state == 1 ? reg_to_write : instr[15:12];
 wire [9:0] imm8 = instr[15:8];
 wire [9:0] imm11 = instr[15:5];
 
+wire ls_loop_finished;
+wire ls_new_loop = state == 0 ? instr[11:0] == 11'b0000_0100_0000 : 0;
+wire [15:0] ls_jmp_address;
+wire [15:0] ls_cnt_out;
+
 wire is_cr = instr_c && instr_r;
 wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0;
 wire cs_push = is_cs_op ? instr_c : 0;
 wire cs_pop = is_cs_op ? instr_r : 0;
 
-wire is_alu_op = op == 3'b101 || op == 3'b001 || op == 3'b011; // 'add','inc','shf' or 'not':
-wire [2:0] alu_op = op == 3'b011 && reg1 == 0 ? 3'b111 : op;
-wire [15:0] alu_operand_1 = alu_op == 3'b011 && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // shift imm4
-                            alu_op == 3'b001 ? {{12{reg1[3]}}, reg1} : // increment imm4
+wire is_alu_op = op == 3'b101 || op == 3'b100 || op == 3'b110; // 'add','inc','shf' or 'not':
+wire [2:0] alu_op = op == 3'b110 && reg1 == 0 ? 3'b111 :
+                    op == 3'b100 ? 3'b101 : // 'inc' is add 
+                    op;
+wire [15:0] alu_operand_1 = op == 3'b110 && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // shift imm4
+                            op == 3'b100 ? {{12{reg1[3]}}, reg1} : // increment imm4
                             reg1_dat;
 
-wire is_ram_read = op == 3'b110;
+wire is_ram_read = op == 3'b011;
 wire is_ram_write = op == 3'b111;
 wire [15:0] ram_addr = reg1_dat;
 wire ram_we = is_ram_write;
@@ -77,16 +81,36 @@ always @(posedge clk) begin
                 pc = cs_pc_out + 1;
             end else begin // operation
                 case(op)
+                //-------------------------------------------------------------
                 3'b000: begin // 'load': load register with data from the next instruction 
                     state = 1;
                     reg_to_write = reg2;
                 end
-                3'b100: begin // 'skip': jump forward 
+                //-------------------------------------------------------------
+                3'b001: begin // 'skip': jump forward 
                     pc = pc + {8'd0, imm8};
                 end
+                //-------------------------------------------------------------
+//                3'b010: begin // 'loop': new loop with counter value from reg2
+//                    ls_new_loop = 1;     
+//                end
+                //-------------------------------------------------------------
                 default: state=0;
                 endcase
-                pc = pc + 1;        
+                // if loop 'next' 
+                if (instr_x) begin
+                    // check if this was last iteration
+                    if (ls_cnt_out == 1) begin
+                        // loop done
+                        pc = pc + 1;
+                    end else begin
+                        // jump to start of loop
+                        pc = ls_jmp_address;        
+                    end
+                end else begin
+                    // next 
+                    pc = pc + 1;
+                end        
             end
         end
         //---------------------------------------------------------------------
@@ -122,12 +146,13 @@ CallStack cs(
 LoopStack ls(
     .rst(rst),
     .clk(clk),
-    .new_loop(ls_new_loop), // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
-    .count(reg1_dat), // number of iterations in loop when creating new loop with 'new_loop'
-    .loop_address(pc), // the address to which to jump at next
-    .next(instr_x), // true if current loop is at instruction that is 'next'
-    .loop_finished(ls_loop_finished), // true if current loop is finished
-    .jmp_address(ls_jmp_address) // the address to jump to if loop is not finished
+    .new(ls_new_loop), // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
+    .cnt_in(reg2_dat), // number of iterations in loop when creating new loop with 'new_loop'
+    .pc_in(pc), // the address to which to jump at next
+    .nxt(instr_x), // true if current loop is at instruction that is 'next'
+    .pc_out(ls_jmp_address), // the address to jump to if loop is not finished
+    .cnt_out(ls_cnt_out), // current loop counter
+    .done(ls_loop_finished) // true if current loop is finished
     );
 
 Registers regs(
