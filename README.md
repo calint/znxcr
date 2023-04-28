@@ -32,21 +32,21 @@ under construction
    / . / . / . / 1 / 1 / 0 0 0 / .... / .... /  copy
 
     op :       :
-   ----:-------:-------------------------------------------------------
+   ----:-------:------------------------------------------------------------------------
    000 : loadi : load next instruction into register b
    001 : addi  : add immediate 4 bit signed value into register b
-   010 : loop  : starts loop with counter value set by register b
-   011 : not   : register b if immediate value of 'rega' is 0
-   011 : shift : register b by immediate 4 bit signed value of 'rega'
+   010 : loop  : start loop with counter value set by register b
+   011 : not   : not register b
+   011 : shift : shift register b by immediate 4 bit signed value (negative being left)
    100 : skip  : adds immediate 8 bit value to program counter
-   101 : add   : register a to register b
-   110 : load  : loads ram location of register b into register a
-   111 : store : stores register a into ram location of register b
+   101 : add   : add register a to register b
+   110 : load  : load ram location pointed to by register b into register a
+   111 : store : store register a into ram location pointed to by register b
 
    page cr = 11
 
     op :       :
-   ----:-------:-------------------------------------------------------
+   ----:-------:--------------------------------------------------------------------------
    000 : copy  : copies register a into register b 
    001 :       : 
    010 :       :
