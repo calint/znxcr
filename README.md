@@ -33,7 +33,7 @@ under construction
 
     op :       :
    ----:-------:-------------------------------------------------------
-   000 : loadi : next instruction into register b
+   000 : loadi : load next instruction into register b
    001 : addi  : add immediate 4 bit signed value to register b
    010 : loop  : starts loop with counter value set by register b
    011 : not   : register b if immediate value of 'rega' is 0
