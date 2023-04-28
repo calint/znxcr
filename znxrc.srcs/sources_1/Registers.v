@@ -1,13 +1,14 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module Registers(
-    input clk,
-    input [3:0] ra1, // register address 1
-    input [3:0] ra2, // register address 2
-    input we, // write 'wd' to address 'ra1'
-    input [15:0] wd, // data to write when 'we' is enabled
-    output [15:0] rd1, // register data 1
-    output [15:0] rd2 // register data 2
+    input wire clk,
+    input wire [3:0] ra1, // register address 1
+    input wire [3:0] ra2, // register address 2
+    input wire we, // write 'wd' to address 'ra1'
+    input wire [15:0] wd, // data to write when 'we' is enabled
+    output wire [15:0] rd1, // register data 1
+    output wire [15:0] rd2 // register data 2
     );
 
 reg signed [15:0] mem [0:15];

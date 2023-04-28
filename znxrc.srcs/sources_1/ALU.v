@@ -1,16 +1,15 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module ALU(
-//  input clk,
-  input [2:0] op,
-  input signed [15:0] a,
-  input signed [15:0] b,
-  output reg [15:0] result,
-  output reg zf,
-  output reg nf
+  input wire [2:0] op, // operation
+  input wire signed [15:0] a, // first operand
+  input wire signed [15:0] b, // second operand
+  output reg [15:0] result, // result of a op b
+  output reg zf, // enabled if result is zero
+  output reg nf // enabled if result is negative
 );
 
-//always @(posedge clk) begin
 always @(*) begin
   case(op)
     3'b101: result = a + b;

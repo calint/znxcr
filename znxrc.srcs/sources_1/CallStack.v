@@ -1,13 +1,14 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module CallStack(
-    input rst,
-    input clk,
-    input [15:0] program_counter_in,
-    input zero_flag_in,
-    input negative_flag_in,
-    input push,
-    input pop,
+    input wire rst,
+    input wire clk,
+    input wire [15:0] program_counter_in,
+    input wire zero_flag_in,
+    input wire negative_flag_in,
+    input wire push,
+    input wire pop,
     output reg [15:0] program_counter_out,
     output reg zero_flag_out,
     output reg negative_flag_out

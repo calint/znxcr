@@ -1,15 +1,18 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module Control(
-    input rst,
-    input clk,
-    output [15:0] debug1,
-    output [15:0] debug2
+    input wire rst,
+    input wire clk,
+    output wire [15:0] debug1,
+    output wire [15:0] debug2
     );
+
+assign debug1 = regs.mem[1];
+assign debug2 = regs.mem[2];
 
 reg state = 0;
 reg [15:0] program_counter = 0;
-wire [15:0] instruction;
 reg [3:0] reg_to_write = 0;
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
@@ -21,9 +24,13 @@ wire ls_new_loop = 0;
 wire [15:0] ls_jmp_address;
 wire [15:0] cs_program_counter_nxt;
 
-wire ifz = state == 0 ? instruction[0] : 0;
-wire ifn = state == 0 ? instruction[1] : 0;
-wire ls_next = state == 0 ? instruction[2] : 0;
+wire [15:0] instruction;
+wire instr_z = state == 0 ? instruction[0] : 0;
+wire instr_n = state == 0 ? instruction[1] : 0;
+wire instr_x = state == 0 ? instruction[2] : 0;
+wire instr_r = state == 0 ? instruction[3] : 0;
+wire instr_c = state == 0 ? instruction[4] : 0;
+
 wire cs_pop = state == 0 ? instruction[3] : 0;
 wire cs_push = state == 0 ? instruction[4] : 0;
 wire [3:0] op = state == 0 ? instruction[7:4] : 0;
@@ -37,9 +44,6 @@ wire regs_we = state == 1 || is_alu_op ? 1 : 0;
 wire [15:0] regs_wd = state == 1 ? instruction : 
                       is_alu_op ? alu_res :
                       0;
-                 
-assign debug1 = regs.mem[1];
-assign debug2 = regs.mem[2];
 
 always @(posedge clk) begin
     if (rst) begin
@@ -95,7 +99,7 @@ LoopStack ls(
     .new_loop(ls_new_loop), // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
     .count(reg1_dat), // number of iterations in loop when creating new loop with 'new_loop'
     .loop_address(program_counter), // the address to which to jump at next
-    .next(ls_next), // true if current loop is at instruction that is 'next'
+    .next(instr_x), // true if current loop is at instruction that is 'next'
     .loop_finished(ls_loop_finished), // true if current loop is finished
     .jmp_address(ls_jmp_address) // the address to jump to if loop is not finished
     );

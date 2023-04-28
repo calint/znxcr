@@ -1,12 +1,13 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module LoopStack(
-    input rst,
-    input clk,
-    input new_loop, // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
-    input [15:0] count, // number of iterations in loop when creating new loop with 'new_loop'
-    input [15:0] loop_address, // the address to which to jump at next
-    input next, // true if current loop is at instruction that is 'next'
+    input wire rst,
+    input wire clk,
+    input wire new_loop, // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
+    input wire [15:0] count, // number of iterations in loop when creating new loop with 'new_loop'
+    input wire [15:0] loop_address, // the address to which to jump at next
+    input wire next, // true if current loop is at instruction that is 'next'
     output reg loop_finished, // true if current loop is finished
     output reg [15:0] jmp_address // the address to jump to if loop is not finished
     );

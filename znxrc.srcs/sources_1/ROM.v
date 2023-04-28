@@ -1,8 +1,9 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module ROM (
-    input [15:0] addr,
-    output [15:0] data
+    input wire [15:0] addr,
+    output wire [15:0] data
 );
   
   reg [15:0] mem [0:65535];
