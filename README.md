@@ -60,4 +60,5 @@ under construction
 todo:
 - [ ] zn
 - [ ] op copy
-- [ ] assembler in webapp using server b
+- [ ] emulator
+- [ ] assembler
