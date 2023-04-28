@@ -14,7 +14,7 @@ always @(*) begin
   case(op)
     3'b101: result = a + b;
     3'b111: result = ~b;
-    3'b001: result = b + 1;
+    3'b001: result = b + a;
     3'b011: 
         if (a < 0) 
             result = b <<< -a;

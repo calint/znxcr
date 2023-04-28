@@ -38,7 +38,9 @@ wire cs_push = is_cs_op ? instr_r : 0;
 
 wire is_alu_op = op == 3'b101 || op == 3'b001 || op == 3'b011; // 'add','inc','shf' or 'not':
 wire [2:0] alu_op = op == 3'b011 && reg1 == 0 ? 3'b111 : op;
-wire [15:0] alu_operand_1 = alu_op == 3'b011 && reg1 != 0 ? {{12{reg1[3]}}, reg1} : reg1_dat;
+wire [15:0] alu_operand_1 = alu_op == 3'b011 && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // shift imm4
+                            alu_op == 3'b001 ? {{12{reg1[3]}}, reg1} : // increment imm4
+                            reg1_dat;
 
 wire is_ram_read = op == 3'b110;
 wire is_ram_write = op == 3'b111;

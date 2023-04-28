@@ -58,21 +58,29 @@ module TB_ALU;
         if (result == -1) $display("case 4 passed");
         else $display("case 4 failed - Expected -1, got %d", result);
 
-        a = 0;
+        a = 2;
         b = -1;
-        op = 3'b001; // inc b
+        op = 3'b001; // inc b by 2
         #clk_tk;
 
-        if (result == 0) $display("case 5 passed");
-        else $display("case 5 failed - Expected 0, got %d", result);
+        if (result == 1) $display("case 5 passed");
+        else $display("case 5 failed - Expected 1, got %d", result);
+
+        a = -2;
+        b = 1;
+        op = 3'b001; // inc b by -2
+        #clk_tk;
+
+        if (result == -1) $display("case 6 passed");
+        else $display("case 5 failed - Expected -1, got %d", result);
 
         a = 0;
         b = 1;
         op = 3'b111; // not b
         #clk_tk;
 
-        if (result == -1) $display("case 6 passed");
-        else $display("case 6 failed - Expected -1, got %d", result);
+        if (result == -2) $display("case 7 passed");
+        else $display("case 7 failed - Expected -2, got %d", result);
 
         $finish;
         
