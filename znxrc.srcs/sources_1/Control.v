@@ -25,7 +25,6 @@ reg [15:0] cs_pc_in; // program counter as input to call stack
 wire [15:0] cs_pc_out; // program counter at top of the call stack
 reg [3:0] reg_to_write; // register to write when doing 'loadi'
 
-wire cs_zf,cs_nf,alu_zf,alu_nf;
 wire [15:0] alu_res; // result from alu
 wire [15:0] rega_dat; // regs[rega]
 wire [15:0] regb_dat; // regs[regb]
@@ -51,13 +50,21 @@ wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0; // enabled 
 wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
 wire cs_pop = is_cs_op ? instr_r : 0; // enabled if command also does 'return'
 
-wire is_alu_op = op == OP_ADD || op == OP_ADDI || op == OP_SHIFT;
-wire [2:0] alu_op =         op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
+wire is_alu_op = state == 0 && !cs_push && (op == OP_ADD || op == OP_ADDI || op == OP_SHIFT);
+wire [2:0] alu_op =         !is_alu_op ? 0 :
+                            op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
                             op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega
                             op; // same as op
-wire [15:0] alu_operand_a = op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} : // 'shift' with signed immediate value 'rega'
+wire [15:0] alu_operand_a = !is_alu_op ? 0 :
+                            op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} : // 'shift' with signed immediate value 'rega'
                             op == OP_ADDI ? {{12{rega[3]}}, rega} : // 'addi' is add with signed immediate value 'rega'
                             rega_dat; // otherwise regs[rega]
+
+wire cs_zf,cs_nf,alu_zf,alu_nf,zf,nf;
+wire zn_we = is_alu_op || cs_pop;
+wire zn_sel = is_alu_op ? 1 :
+              cs_pop ? 0 :
+              0;
 
 wire ram_we = op == OP_STORE; // connected to ram write enable input
 wire [15:0] ram_dat_out; // connected to ram data output
@@ -132,8 +139,8 @@ CallStack cs(
     .rst(rst),
     .clk(clk),
     .pc_in(cs_pc_in),
-    .zf_in(alu_zf),
-    .nf_in(alu_nf),
+    .zf_in(zf),
+    .nf_in(nf),
     .push(cs_push),
     .pop(cs_pop),
     .pc_out(cs_pc_out),
@@ -177,6 +184,19 @@ RAM ram(
   .we(ram_we),
   .dat_in(regb_dat),
   .dat_out(ram_dat_out)
+);
+
+Zn zn(
+    .rst(rst),
+    .clk(clk),
+    .cs_zf(cs_zf),
+    .cs_nf(cs_nf),
+    .alu_zf(alu_zf),
+    .alu_nf(alu_nf),
+    .zf(zf),
+    .nf(nf),
+    .we(zn_we), // copy cs or alu zn flags
+    .sel(zn_sel) // enabled alu, disabled cs 
 );
 
 endmodule

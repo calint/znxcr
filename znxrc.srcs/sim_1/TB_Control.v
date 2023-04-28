@@ -57,6 +57,8 @@ module TB_Control;
 
         if (dut.regs.mem[1] == 1) $display("case 6 passed");
         else $display("case 6 failed - Expected 1, got %d", dut.regs.mem[1]);
+        if (dut.zf == 0 && dut.nf == 0) $display("case 6.1 passed");
+        else $display("case 6.1 failed - Expected 0,1, got %d,%d", dut.zf, dut.nf);
  
         // 1ec0 // 09: znxr c [shift] reg[1]<<=2
         #clk_tk;
@@ -69,6 +71,8 @@ module TB_Control;
 
         if (dut.regs.mem[1] == -5) $display("case 8 passed");
         else $display("case 8 failed - Expected -5, got %d", dut.regs.mem[1]);
+        if (dut.zf == 0 && dut.nf == 1) $display("case 8.1 passed");
+        else $display("case 8.1 failed - Expected 0,1, got %d,%d", dut.zf, dut.nf);
 
         // 1000 // 11: znxr c [loadi] reg[1]={data}
         #clk_tk
@@ -136,6 +140,10 @@ module TB_Control;
         if (dut.pc == 24) $display("case 20 passed");
         else $display("case 20 failed - Expected 24, got %d", dut.pc);
         
+        // check that zf and nf is popped. instruction 10: did set nf=1 zf=0
+        if (dut.zf == 0 && dut.nf == 1) $display("case 24.1 passed");
+        else $display("case 24.1 failed - Expected 0,1, got %d,%d", dut.zf, dut.nf);
+
         // 6040 // 25: znxr c [loop] %6 (reg[6]==4)
         #clk_tk
         
