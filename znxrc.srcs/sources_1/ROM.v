@@ -5,7 +5,7 @@ module ROM (
     output [15:0] data
 );
   
-  reg [15:0] mem [0:255];
+  reg [15:0] mem [0:65535];
 
   initial begin
     $readmemh("rom.hex", mem);

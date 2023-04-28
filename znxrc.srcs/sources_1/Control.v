@@ -7,7 +7,7 @@ module Control(
     output [15:0] debug2
     );
 
-reg [3:0] state = 0;
+reg state = 0;
 reg [15:0] program_counter = 0;
 wire [15:0] instruction;
 reg [3:0] reg_to_write = 0;
@@ -17,6 +17,7 @@ wire [15:0] alu_res;
 wire [15:0] reg1_dat;
 wire [15:0] reg2_dat;
 wire ls_loop_finished;
+wire ls_new_loop = 0;
 wire [15:0] ls_jmp_address;
 wire [15:0] cs_program_counter_nxt;
 
@@ -37,8 +38,8 @@ wire [15:0] regs_wd = state == 1 ? instruction :
                       is_alu_op ? alu_res :
                       0;
                  
-assign debug1 = regs.regs[1];
-assign debug2 = regs.regs[2];
+assign debug1 = regs.mem[1];
+assign debug2 = regs.mem[2];
 
 always @(posedge clk) begin
     if (rst) begin
@@ -46,7 +47,7 @@ always @(posedge clk) begin
         program_counter <= 0;
     end else begin
         case(state)
-        4'd0: // state 0: decode instruction
+        0: // state 0: decode instruction
         begin
             if (cs_push) begin // 'call': calls immediate imm10
                 program_counter = {2'b00, imm10<<4};            
@@ -60,10 +61,11 @@ always @(posedge clk) begin
                 endcase
             end
         end
-        4'd1: // state 1: write 'reg_to_write' with current 'instruction'
+        1: // state 1: write 'reg_to_write' with current 'instruction'
         begin
             state = 0;            
         end
+//        default: state = 0;
         endcase
         program_counter = program_counter + 1;
     end

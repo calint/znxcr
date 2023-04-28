@@ -8,7 +8,7 @@ module RAM (
   output [15:0] dat_out
 );
 
-reg [15:0] mem [0:255];
+reg [15:0] mem [0:65535];
 
 always @(posedge clk) begin
     if (we)

@@ -1,0 +1,11 @@
+1000 // znxr c [load register] 1 with data
+1234 // data
+2000 // znxr c [load register] 2 with data
+0001 // data
+12a0 // znxr c [add] register 2 to register 1
+12a0 // znxr c [add] register 2 to register 1
+1000 // znxr c [load register] 1 with data
+0004 // data
+1260 // znxr c [right shift] register 1 by 2
+1e60 // znxr c [lef shift] register 1 by 2
+1060 // znxr c [not] register 1

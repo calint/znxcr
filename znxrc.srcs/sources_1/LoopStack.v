@@ -28,7 +28,7 @@ module LoopStack(
                 loop_finished = 0;
             end else if (next) begin
                 stack_loop_counter[stack_idx] = stack_loop_counter[stack_idx] - 1;
-                if (stack_loop_counter[stack_idx] === 0) begin
+                if (stack_loop_counter[stack_idx] == 0) begin
                     loop_finished = 1;
                     stack_idx = stack_idx - 1;
                 end else begin
