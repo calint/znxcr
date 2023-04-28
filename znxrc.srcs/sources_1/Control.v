@@ -27,8 +27,8 @@ reg [3:0] reg_to_write; // register to write when doing 'loadi'
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
 wire [15:0] alu_res; // result from alu
-wire [15:0] reg1_dat; // regs[reg1]
-wire [15:0] reg2_dat; // regs[reg2]
+wire [15:0] rega_dat; // regs[reg1]
+wire [15:0] regb_dat; // regs[reg2]
 
 wire [15:0] instr; // instruction
 wire instr_z = instr[0]; // if enabled execute command if z-flag is on
@@ -37,8 +37,8 @@ wire instr_x = instr[2]; // if enabled execute command and step an iteration in 
 wire instr_r = instr[3]; // if enabled execute command and return from current sub-routine
 wire instr_c = instr[4]; // if enabled call a sub-routine (instr_r && instr_c is illegal and instead enables more commands)
 wire [3:0] op = instr[7:5];
-wire [3:0] reg1 = instr[11:8];
-wire [3:0] reg2 = state == 1 ? reg_to_write : instr[15:12];
+wire [3:0] rega = instr[11:8];
+wire [3:0] regb = state == 1 ? reg_to_write : instr[15:12];
 wire [9:0] imm8 = instr[15:8];
 wire [9:0] imm11 = instr[15:5];
 
@@ -52,12 +52,12 @@ wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
 wire cs_pop = is_cs_op ? instr_r : 0; // enabled if command also does 'return'
 
 wire is_alu_op = op == OP_ADD || op == OP_ADDI || op == OP_SHIFT;
-wire [2:0] alu_op =         op == OP_SHIFT && reg1 == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
+wire [2:0] alu_op =         op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
                             op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'reg1'
                             op; // same as op
-wire [15:0] alu_operand_1 = op == OP_SHIFT && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // 'shift' with signed immediate value 'reg1'
-                            op == OP_ADDI ? {{12{reg1[3]}}, reg1} : // 'addi' is add with signed immediate value 'reg1'
-                            reg1_dat; // otherwise regs[reg1]
+wire [15:0] alu_operand_a = op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} : // 'shift' with signed immediate value 'reg1'
+                            op == OP_ADDI ? {{12{rega[3]}}, rega} : // 'addi' is add with signed immediate value 'reg1'
+                            rega_dat; // otherwise regs[reg1]
 
 wire ram_we = op == OP_STORE; // connected to ram write enable input
 wire [15:0] ram_dat_out; // connected to ram data output
@@ -96,7 +96,7 @@ always @(posedge clk) begin
                 //-------------------------------------------------------------
                 OP_LOADI: begin // load register with data from the next instruction 
                     state = 1;
-                    reg_to_write = reg2;
+                    reg_to_write = regb;
                 end
                 //-------------------------------------------------------------
                 OP_SKIP: begin 
@@ -145,7 +145,7 @@ LoopStack ls(
     .rst(rst),
     .clk(clk),
     .new(ls_new_loop), // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
-    .cnt_in(reg2_dat), // number of iterations in loop when creating new loop with 'new_loop'
+    .cnt_in(regb_dat), // number of iterations in loop when creating new loop with 'new_loop'
     .pc_in(pc), // the address to which to jump at next
     .nxt(instr_x), // true if current loop is at instruction that is 'next'
     .pc_out(ls_pc_out), // the address to jump to if loop is not finished
@@ -154,18 +154,18 @@ LoopStack ls(
 
 Registers regs(
     .clk(clk),
-    .ra1(reg1),
-    .ra2(reg2),
+    .ra1(rega),
+    .ra2(regb),
     .we(regs_we), // write 'wd' to address 'ra2'
     .wd(regs_wd), // data to write when 'we' is enabled
-    .rd1(reg1_dat), // data of register 'reg1'
-    .rd2(reg2_dat) // data of register 'reg2'
+    .rd1(rega_dat), // data of register 'reg1'
+    .rd2(regb_dat) // data of register 'reg2'
     );
 
 ALU alu(
     .op(alu_op),
-    .a(alu_operand_1),
-    .b(reg2_dat),
+    .a(alu_operand_a),
+    .b(regb_dat),
     .result(alu_res),
     .zf(alu_zf),
     .nf(alu_nf)
@@ -173,9 +173,9 @@ ALU alu(
 
 RAM ram(
   .clk(clk),
-  .addr(reg1_dat),
+  .addr(rega_dat),
   .we(ram_we),
-  .dat_in(reg2_dat),
+  .dat_in(regb_dat),
   .dat_out(ram_dat_out)
 );
 
