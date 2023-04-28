@@ -16,37 +16,37 @@ module TB_Control;
         #clk_tk;
         rst = 0;
 
-//        instruction = 16'h1000; // znxr c [load register] 1 with data
+        // 1000 // 00: znxr c [loadi] reg[1]={data}
         #clk_tk;
-//        instruction = 16'h1234; // data
+        // 1234 // 01: {data}
         #clk_tk;
         
         if (dut.regs.mem[1] == 16'h1234) $display("case 1 passed");
         else $display("case 1 failed - Expected 0x1234, got %d", dut.regs.mem[1]);
 
-//        instruction = 16'h2000; // znxr c [load register] 2 with data
+        // 2000 // 02: znxr c [loadi] reg[2]={data}
         #clk_tk;
-//        instruction = 16'h0001; // data
+        // 0001 // 03: {data}
         #clk_tk;
 
         if (dut.regs.mem[2] == 16'h1) $display("case 2 passed");
         else $display("case 2 failed - Expected 1, got %d", dut.regs.mem[2]);
 
-//        instruction = 16'h12a0; // znxr c [add] register 2 to register 1
+        // 12a0 // 04: znxr c [add] regs[1]+=regs[2]
         #clk_tk;
 
         if (dut.regs.mem[1] == 16'h1235) $display("case 3 passed");
         else $display("case 3 failed - Expected 0x1235, got %d", dut.regs.mem[1]);
 
-//        instruction = 16'h12a0; // znxr c [add] register 1 to register 2
+        // 12a0 // 05: znxr c [add] regs[1]+=regs[2]
         #clk_tk;
 
         if (dut.regs.mem[1] == 16'h1236) $display("case 4 passed");
         else $display("case 4 failed - Expected 0x1236, got %d", dut.regs.mem[1]);
 
-//        instruction = 16'h1000; // znxr c [load register] 1 with data
+        // 1000 // 06: znxr c [loadi] reg[1]={data}
         #clk_tk;
-//        instruction = 16'h0004; // data
+        // 0004 // 07: {data}
         #clk_tk;
 
         if (dut.regs.mem[1] == 4) $display("case 5 passed");
@@ -58,28 +58,28 @@ module TB_Control;
         if (dut.regs.mem[1] == 1) $display("case 6 passed");
         else $display("case 6 failed - Expected 1, got %d", dut.regs.mem[1]);
  
-//        instruction = 16'h1e60; // znxr c [lef shift] register 1 by 2
+        // 1ec0 // 09: znxr c [shift] reg[1]<<=2
         #clk_tk;
 
         if (dut.regs.mem[1] == 4) $display("case 7 passed");
         else $display("case 7 failed - Expected 4, got %d", dut.regs.mem[1]);
 
-//        instruction = 16'h1060; // znxr c [not] register 1
+        // 10c0 // 10: znxr c [not] reg[1]=~reg[1]
         #clk_tk;
 
         if (dut.regs.mem[1] == -5) $display("case 8 passed");
         else $display("case 8 failed - Expected -5, got %d", dut.regs.mem[1]);
 
-        // 1000 // znxr c [load register] 1 with data
+        // 1000 // 11: znxr c [loadi] reg[1]={data}
         #clk_tk
-        // 0003 // data
+        // 0003 // 12: {data}
         #clk_tk
         if (dut.regs.mem[1] == 3) $display("case 9 passed");
         else $display("case 9 failed - Expected 1, got %d", dut.regs.mem[1]);
 
-        // 2000 // znxr c [load register] 2 with data
+        // 2000 // 13: znxr c [loadi] reg[2]={data}
         #clk_tk
-        // 0004 // data        
+        // 0004 // 14: {data}        
         #clk_tk
         if (dut.regs.mem[2] == 4) $display("case 10 passed");
         else $display("case 10 failed - Expected 2, got %d", dut.regs.mem[2]);
