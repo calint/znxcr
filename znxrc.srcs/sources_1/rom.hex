@@ -7,5 +7,5 @@
 1000 // znxr c [load register] 1 with data
 0004 // data
 1260 // znxr c [right shift] register 1 by 2
-1e60 // znxr c [lef shift] register 1 by 2
+1e60 // znxr c [left shift] register 1 by 2
 1060 // znxr c [not] register 1
