@@ -28,6 +28,7 @@ module LoopStack(
                 stk_addr[idx] = pc_in;
                 stk_cnt[idx] = cnt_in;
             end else if (nxt) begin
+                // ? racing with Control that is accessing 'pc_out' and 'done' in its 'posedge clk'
                 stk_cnt[idx] = stk_cnt[idx] - 1;
                 if (stk_cnt[idx] == 0) begin
                     idx = idx - 1;

@@ -19,11 +19,11 @@ localparam ALU_ADD = OP_ADD;
 localparam ALU_SHIFT = OP_SHIFT;
 localparam ALU_NOT = 3'b111;
 
-reg state = 0; // state == 1 => write the instruction to register 'reg_to_write'
-reg [15:0] pc = -1; // program counter
+reg state; // 0 => normal instruction, 1 => write the instruction to register 'reg_to_write'
+reg [15:0] pc; // program counter
 reg [15:0] cs_pc_in; // program counter as input to call stack
 wire [15:0] cs_pc_out; // program counter at top of the call stack
-reg [3:0] reg_to_write = 0; // register to write when doing 'loadi'
+reg [3:0] reg_to_write; // register to write when doing 'loadi'
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
 wire [15:0] alu_res; // result from alu
@@ -44,7 +44,7 @@ wire [9:0] imm11 = instr[15:5];
 
 wire ls_done; // loop stack enables this if it is the last iteration in current loop
 wire ls_new_loop = state == 0 ? instr[11:0] == 11'b0000_0100_0000 : 0; // creates new loop with counter set from regs[reg2]
-wire [15:0] ls_pc_out; // loop stack jump to if loop is not done
+wire [15:0] ls_pc_out; // loop stack 'jump to' if loop is not done
 
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands
 wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0; // enabled if command operates on call stack
@@ -87,10 +87,10 @@ always @(posedge clk) begin
         //---------------------------------------------------------------------
         begin
             if (cs_push) begin // 'call': calls imm11<<3
-                cs_pc_in = pc;
-                pc = {2'b00, imm11<<3} - 1; // -1 because pc will be incremented by 1 in (negedge clk)
+                cs_pc_in = pc; // save current pc to be read by CallStack at 'posedge clk'
+                pc = {2'b00, (imm11<<3) - 1}; // -1 because pc will be incremented by 1 in 'negedge clk'
             end else if (cs_pop) begin // 'ret' flag
-                pc = cs_pc_out;
+                pc = cs_pc_out; // set pc to top of stack, will be incremented by 1 in 'negedge clk'
             end else begin // operation
                 case(op)
                 //-------------------------------------------------------------
@@ -103,9 +103,10 @@ always @(posedge clk) begin
                     pc = pc + {8'd0, imm8};
                 end
                 //-------------------------------------------------------------
-                default: state=0;
+                default: state = 0;
                 endcase
                 // if loop 'next' 
+                // ? racing with LoopStack that may change 'ls_pc_out' and 'ls_done' during its 'posedge clk'
                 if (instr_x && !ls_done) begin
                     pc = ls_pc_out;        
                 end        
@@ -137,7 +138,7 @@ CallStack cs(
     .pop(cs_pop),
     .pc_out(cs_pc_out),
     .zf_out(cs_zf),
-    .nf_out(cs_zf)
+    .nf_out(cs_nf)
     );
 
 LoopStack ls(
