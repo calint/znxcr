@@ -21,7 +21,7 @@ localparam ALU_NOT = 3'b111;
 
 reg state = 0; // state == 1 => write the instruction to register 'reg_to_write'
 reg [15:0] pc = 0; // program counter
-reg [15:0] cs_pc_in; // program counter to call stack
+reg [15:0] cs_pc_in; // program counter as input to call stack
 wire [15:0] cs_pc_out; // program counter at top of the call stack
 reg [3:0] reg_to_write = 0; // register to write when doing 'loadi'
 
