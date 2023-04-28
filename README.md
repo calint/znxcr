@@ -37,7 +37,7 @@ under construction
    001 : addi  : reg[b]+=imm4
    010 : loop  : start loop with counter value from reg[b]
    011 : not   : reg[b]=~reg[b]
-   011 : shift : reg[b]>>=imm4
+   011 : shift : reg[b]>>=imm4 (negative imm4 means 'left')
    100 : skip  : pc+=imm8+1
    101 : add   : reg[b]+=reg[a]
    110 : load  : reg[b]=ram[a]
