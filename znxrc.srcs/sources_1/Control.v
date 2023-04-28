@@ -49,6 +49,9 @@ wire [15:0] regs_wd = state == 1 ? instr :
                       is_alu_op ? alu_res :
                       0;
 
+wire ram_we = 0;
+wire [15:0] ram_dat_out = 0;
+
 always @(posedge clk) begin
     if (rst) begin
         state <= 0;
@@ -129,6 +132,14 @@ ALU alu(
     .result(alu_res),
     .zf(alu_zf),
     .nf(alu_nf)
+);
+
+RAM ram(
+  .clk(clk),
+  .addr(reg2_dat),
+  .we(ram_we),
+  .dat_in(reg1_dat),
+  .dat_out(ram_dat_out)
 );
 
 endmodule
