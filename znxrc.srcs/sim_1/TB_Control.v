@@ -162,6 +162,8 @@ module TB_Control;
         
         if (dut.pc == 27) $display("case 26 passed");
         else $display("case 26 failed - Expected 27, got %d", dut.pc);
+        if (dut.regs.mem[6] == 12) $display("case 28 passed");
+        else $display("case 28 failed - Expected 12, got %d", dut.regs.mem[6]);
         
         // 0000 // 33: 
 
