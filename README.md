@@ -58,6 +58,6 @@ under construction
 ```
 
 todo:
-[ ] zn logic
-[ ] op copy
-[ ] assembler in webapp using server b
+- [ ] zn
+- [ ] op copy
+- [ ] assembler in webapp using server b
