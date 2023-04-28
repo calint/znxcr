@@ -2,8 +2,8 @@
 `default_nettype none
 
 module ROM (
-    input wire [15:0] addr,
-    output wire [15:0] data
+    input wire [15:0] addr, // address
+    output wire [15:0] data // data at address
 );
   
   reg [15:0] mem [0:65535];

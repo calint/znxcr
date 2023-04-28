@@ -24,24 +24,28 @@ wire ls_new_loop = 0;
 wire [15:0] ls_jmp_address;
 wire [15:0] cs_program_counter_nxt;
 
-wire [15:0] instruction;
-wire instr_z = state == 0 ? instruction[0] : 0;
-wire instr_n = state == 0 ? instruction[1] : 0;
-wire instr_x = state == 0 ? instruction[2] : 0;
-wire instr_r = state == 0 ? instruction[3] : 0;
-wire instr_c = state == 0 ? instruction[4] : 0;
+wire [15:0] instr; // instruction
+wire instr_z = instr[0];
+wire instr_n = instr[1];
+wire instr_x = instr[2];
+wire instr_r = instr[3];
+wire instr_c = instr[4];
+wire [3:0] op = instr[7:5];
+wire [3:0] reg1 = instr[11:8];
+wire [3:0] reg2 = state == 1 ? reg_to_write : instr[15:12];
+wire [9:0] imm10 = instr[15:6];
 
-wire cs_pop = state == 0 ? instruction[3] : 0;
-wire cs_push = state == 0 ? instruction[4] : 0;
-wire [3:0] op = state == 0 ? instruction[7:4] : 0;
-wire [3:0] reg1 = instruction[11:8];
-wire [3:0] reg2 = state == 1 ? reg_to_write : instruction[15:12];
-wire [2:0] alu_op = instruction[7:5] == 3'b011 && reg1 == 0 ? 3'b111 : instruction[7:5];
+wire is_cr = instr_c && instr_r;
+wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0;
+wire cs_pop = is_cs_op ? instr_c : 0;
+wire cs_push = is_cs_op ? instr_r : 0;
+
+wire is_alu_op = op == 3'b101 || op == 3'b001 || op == 3'b011; // 'add','inc','shf' or 'not':
+wire [2:0] alu_op = op == 3'b011 && reg1 == 0 ? 3'b111 : op;
 wire [15:0] alu_operand_1 = alu_op == 3'b011 && reg1 != 0 ? {{12{reg1[3]}}, reg1} : reg1_dat;
-wire [9:0] imm10 = state == 0 ? instruction[15:6] : 0;
-wire is_alu_op = op == 4'b1010 || op == 4'b0010 || op == 4'b0110; // 'add','inc','shf' or 'not':
+
 wire regs_we = state == 1 || is_alu_op ? 1 : 0;
-wire [15:0] regs_wd = state == 1 ? instruction : 
+wire [15:0] regs_wd = state == 1 ? instr : 
                       is_alu_op ? alu_res :
                       0;
 
@@ -51,10 +55,12 @@ always @(posedge clk) begin
         program_counter <= 0;
     end else begin
         case(state)
+        //---------------------------------------------------------------------
         0: // state 0: decode instruction
+        //---------------------------------------------------------------------
         begin
-            if (cs_push) begin // 'call': calls immediate imm10
-                program_counter = {2'b00, imm10<<4};            
+            if (cs_push) begin // 'call': calls immediate imm10<<4
+                program_counter = {2'b00, imm10<<4};
             end else begin // operation
                 case(op)
                 4'b0000: begin // 'ld': load register with data from the next instruction 
@@ -65,7 +71,9 @@ always @(posedge clk) begin
                 endcase
             end
         end
-        1: // state 1: write 'reg_to_write' with current 'instruction'
+        //---------------------------------------------------------------------
+        1: // state 1: write 'reg_to_write' data of current 'instruction'
+        //---------------------------------------------------------------------
         begin
             state = 0;            
         end
@@ -77,7 +85,7 @@ end
 
 ROM rom(
     .addr(program_counter),
-    .data(instruction)
+    .data(instr)
     );
 
 CallStack cs(
