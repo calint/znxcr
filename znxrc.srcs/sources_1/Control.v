@@ -52,11 +52,11 @@ wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
 wire cs_pop = is_cs_op ? instr_r : 0; // enabled if command also does 'return'
 
 wire is_alu_op = op == OP_ADD || op == OP_ADDI || op == OP_SHIFT;
-wire [2:0] alu_op =         op == OP_SHIFT && reg1 == 0 ? ALU_NOT : // 'shift' with argument 0 is interpreted as a 'not'
-                            op == OP_ADDI ? ALU_ADD : // 'addi' is add with 'reg1' as a signed value instead of regs[reg1]
+wire [2:0] alu_op =         op == OP_SHIFT && reg1 == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
+                            op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'reg1'
                             op; // same as op
-wire [15:0] alu_operand_1 = op == OP_SHIFT && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // 'shift' with argument signed value of 'reg1' argument
-                            op == OP_ADDI ? {{12{reg1[3]}}, reg1} : // 'addi' is add with 'reg1' argument as signed value instead of regs[reg1]
+wire [15:0] alu_operand_1 = op == OP_SHIFT && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // 'shift' with signed immediate value 'reg1'
+                            op == OP_ADDI ? {{12{reg1[3]}}, reg1} : // 'addi' is add with signed immediate value 'reg1'
                             reg1_dat; // otherwise regs[reg1]
 
 wire ram_we = op == OP_STORE; // connected to ram write enable input
