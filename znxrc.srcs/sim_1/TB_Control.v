@@ -106,6 +106,19 @@ module TB_Control;
         if (dut.regs.mem[3] == 4) $display("case 14 passed");
         else $display("case 14 failed - Expected 4, got %d", dut.regs.mem[3]);
         
+        // 0280 // 20: znxr c [skip] 2 instructions
+        #clk_tk
+        if (dut.pc == 23) $display("case 15 passed");
+        else $display("case 15 failed - Expected 23, got %d", dut.pc);
+        
+        // ffff // 21: 
+        // ffff // 22:
+         
+        // 41c0 // 23: znxr c [load] %3=ram[%1]
+        #clk_tk
+        if (dut.regs.mem[4] == 4) $display("case 16 passed");
+        else $display("case 16 failed - Expected 4, got %d", dut.regs.mem[4]);
+
         $finish;
     end
 endmodule

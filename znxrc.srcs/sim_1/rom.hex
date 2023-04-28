@@ -1,21 +1,26 @@
-1000 // znxr c [load register] 1 with data
-1234 // data
-2000 // znxr c [load register] 2 with data
-0001 // data
-12a0 // znxr c [add] register 2 to register 1
-12a0 // znxr c [add] register 2 to register 1
-1000 // znxr c [load register] 1 with data
-0004 // data
-1260 // znxr c [right shift] register 1 by 2
-1e60 // znxr c [left shift] register 1 by 2
-1060 // znxr c [not] register 1
-1000 // znxr c [load register] 1 with data
-0003 // data
-2000 // znxr c [load register] 2 with data
-0004 // data
-12e0 // znxr c [store] ram[%1]=%2
-1000 // znxr c [load register] 2 with data
-0004 // data
-21e0 // znxr c [store] ram[%1]=%2
-31c0 // znxr c [load] %3=ram[%1]
+1000 // 00: znxr c [load register] 1 with data
+1234 // 01: data
+2000 // 02: znxr c [load register] 2 with data
+0001 // 03: data
+12a0 // 04: znxr c [add] register 2 to register 1
+12a0 // 05: znxr c [add] register 2 to register 1
+1000 // 06: znxr c [load register] 1 with data
+0004 // 07: data
+1260 // 08: znxr c [right shift] register 1 by 2
+1e60 // 09: znxr c [left shift] register 1 by 2
+1060 // 10: znxr c [not] register 1
+1000 // 11: znxr c [load register] 1 with data
+0003 // 12: data
+2000 // 13: znxr c [load register] 2 with data
+0004 // 14: data
+12e0 // 15: znxr c [store] ram[%1]=%2
+1000 // 16: znxr c [load register] 2 with data
+0004 // 17: data
+21e0 // 18: znxr c [store] ram[%1]=%2
+31c0 // 19: znxr c [load] %3=ram[%1]
+0280 // 20: znxr c [skip] 2 instructions
+ffff // 21: 
+ffff // 22: 
+41c0 // 23: znxr c [load] %3=ram[%1]
+
 

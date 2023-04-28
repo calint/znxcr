@@ -29,6 +29,7 @@ wire instr_c = instr[4];
 wire [3:0] op = instr[7:5];
 wire [3:0] reg1 = instr[11:8];
 wire [3:0] reg2 = state == 1 ? reg_to_write : instr[15:12];
+wire [9:0] imm8 = instr[15:8];
 wire [9:0] imm10 = instr[15:6];
 
 wire is_cr = instr_c && instr_r;
@@ -72,9 +73,12 @@ always @(posedge clk) begin
                 pc = {2'b00, imm10<<4};
             end else begin // operation
                 case(op)
-                4'b0000: begin // 'ld': load register with data from the next instruction 
+                3'b000: begin // 'load': load register with data from the next instruction 
                     state = 1;
                     reg_to_write = reg2;
+                end
+                3'b100: begin // 'skip': jump forward 
+                    pc = pc + {{8{1'b0}}, imm8};
                 end
                 default: state=0;
                 endcase
