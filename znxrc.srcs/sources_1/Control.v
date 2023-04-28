@@ -7,6 +7,18 @@ module Control(
     output wire debug1
     );
 
+localparam OP_LOADI = 3'b000;
+localparam OP_ADDI = 3'b100;
+localparam OP_ADD = 3'b101;
+localparam OP_SHIFT = 3'b110;
+localparam OP_LOAD = 3'b011;
+localparam OP_STORE = 3'b111;
+localparam OP_SKIP = 3'b001;
+
+localparam ALU_ADD = OP_ADD;
+localparam ALU_SHIFT = OP_SHIFT;
+localparam ALU_NOT = 3'b111;
+
 reg state = 0;
 reg [15:0] pc = 0; // program counter
 reg [15:0] cs_pc_in; // program counter to call stack
@@ -39,16 +51,16 @@ wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0;
 wire cs_push = is_cs_op ? instr_c : 0;
 wire cs_pop = is_cs_op ? instr_r : 0;
 
-wire is_alu_op = op == 3'b101 || op == 3'b100 || op == 3'b110; // 'add','inc','shf' or 'not':
-wire [2:0] alu_op = op == 3'b110 && reg1 == 0 ? 3'b111 :
-                    op == 3'b100 ? 3'b101 : // 'inc' is add 
+wire is_alu_op = op == OP_ADD || op == OP_ADDI || op == OP_SHIFT;
+wire [2:0] alu_op = op == OP_SHIFT && reg1 == 0 ? ALU_NOT :
+                    op == OP_ADDI ? ALU_ADD : // 'addi' is add 
                     op;
-wire [15:0] alu_operand_1 = op == 3'b110 && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // shift imm4
-                            op == 3'b100 ? {{12{reg1[3]}}, reg1} : // increment imm4
+wire [15:0] alu_operand_1 = op == OP_SHIFT && reg1 != 0 ? {{12{reg1[3]}}, reg1} : // shift imm4
+                            op == OP_ADDI ? {{12{reg1[3]}}, reg1} : // addi imm4
                             reg1_dat;
 
-wire is_ram_read = op == 3'b011;
-wire is_ram_write = op == 3'b111;
+wire is_ram_read = op == OP_LOAD;
+wire is_ram_write = op == OP_STORE;
 wire [15:0] ram_addr = reg1_dat;
 wire ram_we = is_ram_write;
 wire [15:0] ram_dat_out;
@@ -81,18 +93,14 @@ always @(posedge clk) begin
             end else begin // operation
                 case(op)
                 //-------------------------------------------------------------
-                3'b000: begin // 'load': load register with data from the next instruction 
+                OP_LOADI: begin // load register with data from the next instruction 
                     state = 1;
                     reg_to_write = reg2;
                 end
                 //-------------------------------------------------------------
-                3'b001: begin // 'skip': jump forward 
+                OP_SKIP: begin 
                     pc = pc + {8'd0, imm8};
                 end
-                //-------------------------------------------------------------
-//                3'b010: begin // 'loop': new loop with counter value from reg2
-//                    ls_new_loop = 1;     
-//                end
                 //-------------------------------------------------------------
                 default: state=0;
                 endcase
