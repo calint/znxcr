@@ -20,7 +20,7 @@ localparam ALU_SHIFT = OP_SHIFT;
 localparam ALU_NOT = 3'b111;
 
 reg state = 0; // state == 1 => write the instruction to register 'reg_to_write'
-reg [15:0] pc = 0; // program counter
+reg [15:0] pc = -1; // program counter
 reg [15:0] cs_pc_in; // program counter as input to call stack
 wire [15:0] cs_pc_out; // program counter at top of the call stack
 reg [3:0] reg_to_write = 0; // register to write when doing 'loadi'
@@ -72,10 +72,14 @@ wire [15:0] regs_wd = state == 1 ? instr : // write instruction into registers
 
 assign debug1 = alu_zf;
 
+always @(negedge clk) begin
+    pc = pc + 1;
+end
+
 always @(posedge clk) begin
     if (rst) begin
         state <= 0;
-        pc <= 0;
+        pc <= -1;
     end else begin
         case(state)
         //---------------------------------------------------------------------
@@ -84,9 +88,9 @@ always @(posedge clk) begin
         begin
             if (cs_push) begin // 'call': calls imm11<<3
                 cs_pc_in = pc;
-                pc = {2'b00, imm11<<3};
+                pc = {2'b00, imm11<<3} - 1; // -1 because pc will be incremented by 1 in (negedge clk)
             end else if (cs_pop) begin // 'ret' flag
-                pc = cs_pc_out + 1;
+                pc = cs_pc_out;
             end else begin // operation
                 case(op)
                 //-------------------------------------------------------------
@@ -102,18 +106,8 @@ always @(posedge clk) begin
                 default: state=0;
                 endcase
                 // if loop 'next' 
-                if (instr_x) begin
-                    // check if this was last iteration
-                    if (ls_done) begin
-                        // loop done
-                        pc = pc + 1;
-                    end else begin
-                        // jump to start of loop
-                        pc = ls_pc_out;        
-                    end
-                end else begin
-                    // next 
-                    pc = pc + 1; // ? racing with LoopStack.always(posedge clk) which depends on pc to be incremeted
+                if (instr_x && !ls_done) begin
+                    pc = ls_pc_out;        
                 end        
             end
         end
@@ -122,7 +116,6 @@ always @(posedge clk) begin
         //---------------------------------------------------------------------
         begin
             state = 0;
-            pc = pc + 1;
         end
 //        default: state = 0;
         endcase

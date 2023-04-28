@@ -25,7 +25,7 @@ module LoopStack(
         end else begin
             if (new) begin
                 idx = idx + 1;
-                stk_addr[idx] = pc_in; // pc_in has been incremented in 'Control always @(posedge clk)' // ? racing
+                stk_addr[idx] = pc_in;
                 stk_cnt[idx] = cnt_in;
             end else if (nxt) begin
                 stk_cnt[idx] = stk_cnt[idx] - 1;

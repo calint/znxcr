@@ -56,3 +56,8 @@ under construction
    110 :       :
    111 :       :
 ```
+
+todo:
+[ ] zn logic
+[ ] op copy
+[ ] assembler in webapp using server b
