@@ -10,6 +10,7 @@ module Control(
 reg state = 0;
 reg [15:0] pc = 0; // program counter
 reg [15:0] cs_pc_in; // program counter to call stack
+wire [15:0] cs_pc_out; // program counter at top of the call stack
 reg [3:0] reg_to_write = 0;
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
@@ -19,7 +20,6 @@ wire [15:0] reg2_dat;
 wire ls_loop_finished;
 wire ls_new_loop = 0;
 wire [15:0] ls_jmp_address;
-wire [15:0] cs_pc_out;
 
 wire [15:0] instr; // instruction
 wire instr_z = instr[0];

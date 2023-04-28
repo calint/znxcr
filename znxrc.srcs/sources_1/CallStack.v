@@ -23,7 +23,7 @@ module CallStack(
     
     always @(posedge clk) begin
         if (rst) begin
-            mem_idx <= 0;
+            mem_idx <= 4'hf;
         end else begin
             if (push) begin
                 mem_idx = mem_idx + 1;

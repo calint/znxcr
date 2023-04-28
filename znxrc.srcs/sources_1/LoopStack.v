@@ -4,37 +4,38 @@
 module LoopStack(
     input wire rst,
     input wire clk,
-    input wire new_loop, // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
-    input wire [15:0] count, // number of iterations in loop when creating new loop with 'new_loop'
-    input wire [15:0] loop_address, // the address to which to jump at next
-    input wire next, // true if current loop is at instruction that is 'next'
-    output reg loop_finished, // true if current loop is finished
-    output reg [15:0] jmp_address // the address to jump to if loop is not finished
+    input wire new, // enabled to create a new loop using 'pc_in' + 1 for the jump at 'next' and 'cnt' for the number of iterations
+    input wire [15:0] cnt_in, // number of iterations in loop created 'new'
+    input wire [15:0] pc_in, // the address to which to jump at next
+    input wire nxt, // true if current loop is at instruction that is 'next'
+    output wire [15:0] cnt_out, // current loop counter
+    output wire [15:0] pc_out, // the address to jump to if loop is not finished
+    output reg done // true if loop is finished
     );
     
-    reg [3:0] stack_idx;
-    reg [15:0] stack_loop_address [0:15];
-    reg [15:0] stack_loop_counter [0:15];
+    reg [3:0] idx;
+    reg [15:0] stk_addr [0:15];
+    reg [15:0] stk_cnt [0:15];
+
+    assign pc_out = stk_addr[idx];
+    assign cnt_out = stk_cnt[idx];
 
     always @(posedge clk) begin
         if (rst) begin
-            stack_idx <= 0;
-            loop_finished <= 0;
-            jmp_address <= 0;
+            idx <= 4'hf;
+            done <= 0;
         end else begin
-            if (new_loop) begin
-                stack_idx = stack_idx + 1;
-                stack_loop_address[stack_idx] = loop_address;
-                stack_loop_counter[stack_idx] = count;
-                loop_finished = 0;
-            end else if (next) begin
-                stack_loop_counter[stack_idx] = stack_loop_counter[stack_idx] - 1;
-                if (stack_loop_counter[stack_idx] == 0) begin
-                    loop_finished = 1;
-                    stack_idx = stack_idx - 1;
+            if (new) begin
+                idx = idx + 1;
+                stk_addr[idx] = pc_in + 1;
+                stk_cnt[idx] = cnt_in;
+            end else if (nxt) begin
+                stk_cnt[idx] = stk_cnt[idx] - 1;
+                if (stk_cnt[idx] == 0) begin
+                    idx = idx - 1;
+                    done = 1;
                 end else begin
-                    loop_finished = 0;
-                    jmp_address = stack_loop_address[stack_idx];
+                    done = 0;
                 end
             end
         end

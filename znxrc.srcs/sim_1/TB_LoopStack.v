@@ -6,67 +6,73 @@ module TB_LoopStack;
     always #(clk_tk/2) clk = ~clk;
 
     reg rst = 1;
-    reg new_loop = 0;
-    reg next = 0;
-    reg [15:0] count = 0;
-    reg [15:0] loop_address = 0;
-    wire loop_finished;
-    wire [15:0] jmp_address;
+    reg new = 0;
+    reg nxt = 0;
+    reg [15:0] cnt_in = 0;
+    reg [15:0] pc_in = 0;
+    wire [15:0] cnt_out;
+    wire [15:0] pc_out;
+    wire done;
 
     LoopStack dut(
         .rst(rst),
         .clk(clk),
-        .new_loop(new_loop),
-        .count(count),
-        .loop_address(loop_address),
-        .next(next),
-        .loop_finished(loop_finished),
-        .jmp_address(jmp_address)
+        .new(new),
+        .cnt_in(cnt_in),
+        .pc_in(pc_in),
+        .nxt(nxt),
+        .cnt_out(cnt_out),
+        .pc_out(pc_out),
+        .done(done)
     );
     
     initial begin
         #clk_tk;
         rst = 0;
         
-        new_loop = 1;
-        next = 0;
-        count = 2;
-        loop_address = 1;
+        // push loop count 2, jmp address 2
+        new = 1;
+        nxt = 0;
+        cnt_in = 2;
+        pc_in = 1;
         #clk_tk;
 
-        new_loop = 1;
-        next = 0;
-        count = 2;
-        loop_address = 2;
-        #clk_tk;
-        
-        new_loop = 0;
-        next = 1;
-        #clk_tk;
-
-        if (loop_finished == 0 && jmp_address == 2) $display("case 1 passed");
-        else $display("case 1 failed - Expected 0, 2 got %d, %d", loop_finished, jmp_address);
-
-        new_loop = 0;
-        next = 1;
-        #clk_tk;
-
-        if (loop_finished == 1) $display("case 2 passed");
-        else $display("case 2 failed - Expected 0 got %d", loop_finished);
-
-        new_loop = 0;
-        next = 1;
-        #clk_tk;
-
-        if (loop_finished == 0 && jmp_address == 1) $display("case 3 passed");
-        else $display("case 3 failed - Expected 0, 2 got %d, %d", loop_finished, jmp_address);
-
-        new_loop = 0;
-        next = 1;
+        // push loop count 2, jmp address 3
+        new = 1;
+        nxt = 0;
+        cnt_in = 2;
+        pc_in = 2;
         #clk_tk;
         
-        if (loop_finished == 1) $display("case 4 passed");
-        else $display("case 4 failed - Expected 1, got %d", loop_finished);
+        // next => counter=1
+        new = 0;
+        nxt = 1;
+        #clk_tk;
+
+        if (!done && pc_out == 3) $display("case 1 passed");
+        else $display("case 1 failed - Expected false, 3 got %d, %d", done, pc_out);
+
+        // next => counter=0
+        new = 0;
+        nxt = 1;
+        #clk_tk;
+
+        if (done) $display("case 2 passed");
+        else $display("case 2 failed - Expected true got %d", done);
+
+        new = 0;
+        nxt = 1;
+        #clk_tk;
+
+        if (!done && pc_out == 2) $display("case 3 passed");
+        else $display("case 3 failed - Expected false, 2 got %d, %d", done, pc_out);
+
+        new = 0;
+        nxt = 1;
+        #clk_tk;
+        
+        if (done) $display("case 4 passed");
+        else $display("case 4 failed - Expected true, got %d", done);
 
         $finish;
     end 
