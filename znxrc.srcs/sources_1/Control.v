@@ -113,7 +113,7 @@ always @(posedge clk) begin
                     end
                 end else begin
                     // next 
-                    pc = pc + 1;
+                    pc = pc + 1; // ? racing with LoopStack.always(posedge clk) which depends on pc to be incremeted
                 end        
             end
         end
