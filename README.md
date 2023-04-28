@@ -4,22 +4,32 @@ experimental retro 16 bit cpu written in verilog xilinix vivado intended for fpg
 under construction
 
 ```
-           zn-x-cr vintage 16 bit cpu
+                 n
+                 e
+             z n-x-c r   vintage 16 bit cpu
+             e e t a e
+             r g   l t
+             o a   l u
+               t     r
+               i     n
+               v
+               e
 
-           | 0 | 1 | 2 | 3 | 4 | 5 - 7 | 8-11 | 12-15|
-           |---|---|---|---|---|-------|------|------|
-           | . | . | . | . | . | o p   | rega | regb |
-           |---|---|---|---|---|-------|------|------|
-           / Z / N / n / R / C / 0 0 0 / 0000 / .... /  loadi
-          / e / e / e / e / a / 0 0 1 / 0000 / .... /  increment
-         / r / g / X / t / l / 0 1 0 / 0000 / .... /  loop
-        / o / a / t / u / l / 0 1 1 / 0000 / .... /  not
-       / . / t / . / r / . / 0 1 1 / imm4 / .... /  shift
-      / . / i / . / n / . / 1 0 0 / immediate 8 /  skip
-     / . / v / . / . / . / 1 0 1 / .... / .... /  add
-    / . / e / . / . / . / 1 1 0 / addr / dst  /  load
-   / . / . / . / . / . / 1 1 1 / addr / src  /  store
-  / . / . / . / . / 1 / immediate 10 << 4   /  call
+             | 0 | 1 | 2 | 3 | 4 | 5 - 7 | 8-11 | 12-15|
+             |---|---|---|---|---|-------|------|------|
+             | z | n | x | r | c | o p   | rega | regb |
+             |---|---|---|---|---|-------|------|------|
+             / . / . / . / . / 0 / 0 0 0 / 0000 / .... /  loadi
+            / . / . / . / . / 0 / 0 0 1 / 0000 / .... /  increment
+           / 0 / 0 / 0 / 0 / 0 / 0 1 0 / 0000 / .... /  loop
+          / . / . / . / . / 0 / 0 1 1 / 0000 / .... /  not
+         / . / . / . / . / 0 / 0 1 1 / imm4 / .... /  shift
+        / . / . / 0 / 0 / 0 / 1 0 0 / immediate 8 /  skip
+       / . / . / . / . / 0 / 1 0 1 / .... / .... /  add
+      / . / . / . / . / 0 / 1 1 0 / addr / dst  /  load
+     / . / . / . / . / 0 / 1 1 1 / addr / src  /  store
+    / . / . / . / 0 / 1 / immediate 10 << 4   /  call
+   / . / . / . / 1 / 1 / 0 0 0 / .... / .... /  copy
 
     op :       :
    ----:-------:---------------------------------------------------
@@ -36,7 +46,7 @@ under construction
    page cr = 11
 
     op :       :
-   ----:-------:--------------------------------------
+   ----:-------:---------------------------------------------------
    000 : copy  : copies register a into register b 
    001 :       : 
    010 :       :
