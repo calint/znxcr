@@ -12,7 +12,7 @@ assign debug1 = regs.mem[1];
 assign debug2 = regs.mem[2];
 
 reg state = 0;
-reg [15:0] program_counter = 0;
+reg [15:0] pc = 0; // program counter
 reg [3:0] reg_to_write = 0;
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
@@ -52,7 +52,7 @@ wire [15:0] regs_wd = state == 1 ? instr :
 always @(posedge clk) begin
     if (rst) begin
         state <= 0;
-        program_counter <= 0;
+        pc <= 0;
     end else begin
         case(state)
         //---------------------------------------------------------------------
@@ -60,7 +60,7 @@ always @(posedge clk) begin
         //---------------------------------------------------------------------
         begin
             if (cs_push) begin // 'call': calls immediate imm10<<4
-                program_counter = {2'b00, imm10<<4};
+                pc = {2'b00, imm10<<4};
             end else begin // operation
                 case(op)
                 4'b0000: begin // 'ld': load register with data from the next instruction 
@@ -79,26 +79,26 @@ always @(posedge clk) begin
         end
 //        default: state = 0;
         endcase
-        program_counter = program_counter + 1;
+        pc = pc + 1;
     end
 end
 
 ROM rom(
-    .addr(program_counter),
+    .addr(pc),
     .data(instr)
     );
 
 CallStack cs(
     .rst(rst),
     .clk(clk),
-    .program_counter_in(program_counter),
-    .zero_flag_in(alu_zf),
-    .negative_flag_in(alu_nf),
+    .pc_in(pc),
+    .zf_in(alu_zf),
+    .nf_in(alu_nf),
     .push(cs_push),
     .pop(cs_pop),
-    .program_counter_out(cs_program_counter_nxt),
-    .zero_flag_out(cs_zf),
-    .negative_flag_out(cs_zf)
+    .pc_out(cs_program_counter_nxt),
+    .zf_out(cs_zf),
+    .nf_out(cs_zf)
     );
 
 LoopStack ls(
@@ -106,7 +106,7 @@ LoopStack ls(
     .clk(clk),
     .new_loop(ls_new_loop), // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
     .count(reg1_dat), // number of iterations in loop when creating new loop with 'new_loop'
-    .loop_address(program_counter), // the address to which to jump at next
+    .loop_address(pc), // the address to which to jump at next
     .next(instr_x), // true if current loop is at instruction that is 'next'
     .loop_finished(ls_loop_finished), // true if current loop is finished
     .jmp_address(ls_jmp_address) // the address to jump to if loop is not finished

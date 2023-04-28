@@ -4,34 +4,34 @@
 module CallStack(
     input wire rst,
     input wire clk,
-    input wire [15:0] program_counter_in,
-    input wire zero_flag_in,
-    input wire negative_flag_in,
+    input wire [15:0] pc_in, // current program counter
+    input wire zf_in, // current zero flag
+    input wire nf_in, // current negative flag
     input wire push,
     input wire pop,
-    output reg [15:0] program_counter_out,
-    output reg zero_flag_out,
-    output reg negative_flag_out
+    output reg [15:0] pc_out, // popped program counter
+    output reg zf_out, // popped zero flag
+    output reg nf_out // popped negative flag
     );
     
-    reg [3:0] memory_idx;
-    reg [17:0] memory [0:15];
+    reg [3:0] mem_idx;
+    reg [17:0] mem [0:15];
     
     always @(posedge clk) begin
         if (rst) begin
-            memory_idx <= 0;
-            program_counter_out <= 0;
-            zero_flag_out <= 0;
-            negative_flag_out <= 0;
+            mem_idx <= 0;
+            pc_out <= 0;
+            zf_out <= 0;
+            nf_out <= 0;
         end else begin
             if (push) begin
-                memory[memory_idx] = {zero_flag_in, negative_flag_in, program_counter_in};
-                memory_idx = memory_idx + 1;
+                mem[mem_idx] = {zf_in, nf_in, pc_in};
+                mem_idx = mem_idx + 1;
             end else if (pop) begin
-                memory_idx = memory_idx - 1;
-                zero_flag_out = memory[memory_idx][17];
-                negative_flag_out = memory[memory_idx][16];
-                program_counter_out = memory[memory_idx][15:0];
+                mem_idx = mem_idx - 1;
+                zf_out = mem[mem_idx][17];
+                nf_out = mem[mem_idx][16];
+                pc_out = mem[mem_idx][15:0];
             end
         end
     end
