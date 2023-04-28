@@ -3,7 +3,8 @@
 
 module Control(
     input wire rst,
-    input wire clk
+    input wire clk,
+    output wire debug1
     );
 
 reg state = 0;
@@ -52,6 +53,8 @@ wire [15:0] regs_wd = state == 1 ? instr :
                       is_alu_op ? alu_res :
                       is_ram_read ? ram_dat_out :
                       0;
+
+assign debug1 = alu_zf;
 
 always @(posedge clk) begin
     if (rst) begin
