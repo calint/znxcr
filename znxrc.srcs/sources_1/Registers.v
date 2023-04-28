@@ -17,8 +17,8 @@ assign rd1 = mem[ra1];
 assign rd2 = mem[ra2];
 
 always @(posedge clk) begin
-  if (we)
-    mem[ra2] = wd;
+    if (we)
+        mem[ra2] = wd;
 end
 
 endmodule

@@ -28,7 +28,7 @@ under construction
        / . / . / . / . / 0 / 1 0 1 / .... / .... /  add
       / . / . / . / . / 0 / 1 1 0 / addr / dst  /  load
      / . / . / . / . / 0 / 1 1 1 / addr / src  /  store
-    / . / . / . / 0 / 1 / immediate 10 << 4   /  call
+    / . / . / . / 0 / 1 / immediate 11 << 3   /  call
    / . / . / . / 1 / 1 / 0 0 0 / .... / .... /  copy
 
     op :       :
@@ -38,7 +38,7 @@ under construction
    010 : loop  : start loop with counter value from reg[b]
    011 : not   : reg[b]=~reg[b]
    011 : shift : reg[b]>>=imm4
-   100 : skip  : pc+=imm8
+   100 : skip  : pc+=imm8+1
    101 : add   : reg[b]+=reg[a]
    110 : load  : reg[b]=ram[a]
    111 : store : ram[a]=reg[b]

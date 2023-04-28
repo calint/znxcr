@@ -84,24 +84,24 @@ module TB_Control;
         if (dut.regs.mem[2] == 4) $display("case 10 passed");
         else $display("case 10 failed - Expected 2, got %d", dut.regs.mem[2]);
 
-        // 12e0 // znxr c [store] ram[%1]=%2
+        // 12e0 // 15: znxr c [store] ram[%2]=%1 (ram[4]=3)
         #clk_tk
-        if (dut.ram.mem[3] == 4) $display("case 11 passed");
-        else $display("case 11 failed - Expected 2, got %d", dut.ram.mem[1]);
+        if (dut.ram.mem[4] == 3) $display("case 11 passed");
+        else $display("case 11 failed - Expected 3, got %d", dut.ram.mem[4]);
         
-        // 1000 // znxr c [load register] 2 with data
+        // 1000 // 16: znxr c [loadi] reg[2]={data}
         #clk_tk
-        // 0004 // data
+        // 0004 // 17: {data}
         #clk_tk
         if (dut.regs.mem[1] == 4) $display("case 12 passed");
         else $display("case 12 failed - Expected 4, got %d", dut.regs.mem[1]);
 
-        // 21e0 // znxr c [store] ram[%1]=%2
+        // 21e0 // 18: znxr c [store] ram[%1]=%2 (ram[4]=4)
         #clk_tk
         if (dut.ram.mem[4] == 4) $display("case 13 passed");
         else $display("case 11 failed - Expected 4, got %d", dut.ram.mem[4]);
         
-        // 31c0 // znxr c [load] %3=ram[%1]
+        // 31c0 // 19: znxr c [load] %3=ram[%1] (reg[3]=ram[4] => reg[3]==4)
         #clk_tk
         if (dut.regs.mem[3] == 4) $display("case 14 passed");
         else $display("case 14 failed - Expected 4, got %d", dut.regs.mem[3]);
@@ -114,10 +114,38 @@ module TB_Control;
         // ffff // 21: 
         // ffff // 22:
          
-        // 41c0 // 23: znxr c [load] %3=ram[%1]
+        // 41c0 // 23: znxr c [load] %4=ram[%1] (reg[4]=ram[4] => reg[4]==4)
         #clk_tk
         if (dut.regs.mem[4] == 4) $display("case 16 passed");
         else $display("case 16 failed - Expected 4, got %d", dut.regs.mem[4]);
+
+        // 0090 // 24: znxr C [call] 32 => encoded (32>>2)|1==9
+        #clk_tk
+        if (dut.pc == 32) $display("case 17 passed");
+        else $display("case 17 failed - Expected 32, got %d", dut.pc);
+
+        // 0000 // 25: 
+        // 0000 // 26: 
+        // 0000 // 27: 
+        // 0000 // 28: 
+        // 0000 // 29: 
+        // 0000 // 30: 
+        // 0000 // 31: 
+        
+        // 51c0 // 32: znxr c [load] %5=ram[%1] (reg[5]=ram[4] => reg[5]==4)
+        #clk_tk
+        if (dut.regs.mem[5] == 4) $display("case 18 passed");
+        else $display("case 18 failed - Expected 4, got %d", dut.regs.mem[5]);
+
+        // 61c8 // 33: znxR c [load & return] %6=ram[%1] (reg[6]=ram[4] => reg[6]==4)
+        #clk_tk
+        if (dut.regs.mem[6] == 4) $display("case 19 passed");
+        else $display("case 19 failed - Expected 4, got %d", dut.regs.mem[6]);
+        
+        if (dut.pc == 25) $display("case 20 passed");
+        else $display("case 20 failed - Expected 25, got %d", dut.pc);
+        
+        // 0000 // 33: 
 
         $finish;
     end

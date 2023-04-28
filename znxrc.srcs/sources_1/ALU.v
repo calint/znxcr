@@ -11,7 +11,7 @@ module ALU(
 );
 
 always @(*) begin
-  case(op)
+    case(op)
     3'b101: result = a + b;
     3'b111: result = ~b;
     3'b001: result = b + a;
@@ -21,10 +21,10 @@ always @(*) begin
         else
             result = b >>> a;
     default: result = 0;
-  endcase
-  
-  zf <= (result == 0);
-  nf <= result[15];
+    endcase
+    
+    zf <= (result == 0);
+    nf <= result[15];
 end
 
 endmodule

@@ -9,6 +9,7 @@ module Control(
 
 reg state = 0;
 reg [15:0] pc = 0; // program counter
+reg [15:0] cs_pc_in; // program counter to call stack
 reg [3:0] reg_to_write = 0;
 
 wire cs_zf,cs_nf,alu_zf,alu_nf;
@@ -18,7 +19,7 @@ wire [15:0] reg2_dat;
 wire ls_loop_finished;
 wire ls_new_loop = 0;
 wire [15:0] ls_jmp_address;
-wire [15:0] cs_program_counter_nxt;
+wire [15:0] cs_pc_out;
 
 wire [15:0] instr; // instruction
 wire instr_z = instr[0];
@@ -30,12 +31,12 @@ wire [3:0] op = instr[7:5];
 wire [3:0] reg1 = instr[11:8];
 wire [3:0] reg2 = state == 1 ? reg_to_write : instr[15:12];
 wire [9:0] imm8 = instr[15:8];
-wire [9:0] imm10 = instr[15:6];
+wire [9:0] imm11 = instr[15:5];
 
 wire is_cr = instr_c && instr_r;
 wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0;
-wire cs_pop = is_cs_op ? instr_c : 0;
-wire cs_push = is_cs_op ? instr_r : 0;
+wire cs_push = is_cs_op ? instr_c : 0;
+wire cs_pop = is_cs_op ? instr_r : 0;
 
 wire is_alu_op = op == 3'b101 || op == 3'b001 || op == 3'b011; // 'add','inc','shf' or 'not':
 wire [2:0] alu_op = op == 3'b011 && reg1 == 0 ? 3'b111 : op;
@@ -69,8 +70,11 @@ always @(posedge clk) begin
         0: // state 0: decode instruction
         //---------------------------------------------------------------------
         begin
-            if (cs_push) begin // 'call': calls immediate imm10<<4
-                pc = {2'b00, imm10<<4};
+            if (cs_push) begin // 'call': calls imm11<<3
+                cs_pc_in = pc;
+                pc = {2'b00, imm11<<3};
+            end else if (cs_pop) begin // 'ret' flag
+                pc = cs_pc_out + 1;
             end else begin // operation
                 case(op)
                 3'b000: begin // 'load': load register with data from the next instruction 
@@ -78,21 +82,22 @@ always @(posedge clk) begin
                     reg_to_write = reg2;
                 end
                 3'b100: begin // 'skip': jump forward 
-                    pc = pc + {{8{1'b0}}, imm8};
+                    pc = pc + {8'd0, imm8};
                 end
                 default: state=0;
                 endcase
+                pc = pc + 1;        
             end
         end
         //---------------------------------------------------------------------
         1: // state 1: write 'reg_to_write' data of current 'instruction'
         //---------------------------------------------------------------------
         begin
-            state = 0;            
+            state = 0;
+            pc = pc + 1;
         end
 //        default: state = 0;
         endcase
-        pc = pc + 1;
     end
 end
 
@@ -104,12 +109,12 @@ ROM rom(
 CallStack cs(
     .rst(rst),
     .clk(clk),
-    .pc_in(pc),
+    .pc_in(cs_pc_in),
     .zf_in(alu_zf),
     .nf_in(alu_nf),
     .push(cs_push),
     .pop(cs_pop),
-    .pc_out(cs_program_counter_nxt),
+    .pc_out(cs_pc_out),
     .zf_out(cs_zf),
     .nf_out(cs_zf)
     );
