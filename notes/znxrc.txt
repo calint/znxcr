@@ -3,7 +3,7 @@
 
            | 0 | 1 | 2 | 3 | 4 | 5 - 7 | 8-11 | 12-15|
            |---|---|---|---|---|-------|------|------|
-           | . | . | . | . | . | o p . | rega | regb |
+           | . | . | . | . | . | o p   | rega | regb |
            |---|---|---|---|---|-------|------|------|
            / Z / N / n / R / C / 0 0 0 / 0000 / .... /  loadi
           / e / e / e / e / a / 0 0 1 / 0000 / .... /  increment
@@ -12,8 +12,8 @@
        / . / t / . / r / . / 0 1 1 / imm4 / .... /  shift
       / . / i / . / n / . / 1 0 0 / immediate 8 /  skip
      / . / v / . / . / . / 1 0 1 / .... / .... /  add
-    / . / e / . / . / . / 1 1 0 / src  / dest /  load
-   / . / . / . / . / . / 1 1 1 / src  / dest /  store
+    / . / e / . / . / . / 1 1 0 / addr / dst  /  load
+   / . / . / . / . / . / 1 1 1 / addr / src  /  store
   / . / . / . / . / 1 / immediate 10 << 4   /  call
 
     op :       :
@@ -25,8 +25,8 @@
    011 : shift : register b by immediate 4 bit value of 'rega'
    100 : skip  : adds immediate 8 bit value to program counter
    101 : add   : register a to register b
-   110 : load  : loads ram location of register a into register b
-   111 : store : stores register b into ram location of register a
+   110 : load  : loads ram location of register b into register a
+   111 : store : stores register a into ram location of register b
 
    page cr = 11
 

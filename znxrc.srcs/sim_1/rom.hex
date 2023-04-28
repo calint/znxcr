@@ -9,3 +9,13 @@
 1260 // znxr c [right shift] register 1 by 2
 1e60 // znxr c [left shift] register 1 by 2
 1060 // znxr c [not] register 1
+1000 // znxr c [load register] 1 with data
+0003 // data
+2000 // znxr c [load register] 2 with data
+0004 // data
+12e0 // znxr c [store] ram[%1]=%2
+1000 // znxr c [load register] 2 with data
+0004 // data
+21e0 // znxr c [store] ram[%1]=%2
+31c0 // znxr c [load] %3=ram[%1]
+

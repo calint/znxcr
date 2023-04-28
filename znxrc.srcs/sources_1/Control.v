@@ -3,13 +3,8 @@
 
 module Control(
     input wire rst,
-    input wire clk,
-    output wire [15:0] debug1,
-    output wire [15:0] debug2
+    input wire clk
     );
-
-assign debug1 = regs.mem[1];
-assign debug2 = regs.mem[2];
 
 reg state = 0;
 reg [15:0] pc = 0; // program counter
@@ -44,13 +39,19 @@ wire is_alu_op = op == 3'b101 || op == 3'b001 || op == 3'b011; // 'add','inc','s
 wire [2:0] alu_op = op == 3'b011 && reg1 == 0 ? 3'b111 : op;
 wire [15:0] alu_operand_1 = alu_op == 3'b011 && reg1 != 0 ? {{12{reg1[3]}}, reg1} : reg1_dat;
 
-wire regs_we = state == 1 || is_alu_op ? 1 : 0;
+wire is_ram_read = op == 3'b110;
+wire is_ram_write = op == 3'b111;
+wire [15:0] ram_addr = reg1_dat;
+wire ram_we = is_ram_write;
+wire [15:0] ram_dat_out;
+
+// enables write to registers if is 'loadi' alu op or 'load'
+wire regs_we = state == 1 || is_alu_op || is_ram_read ? 1 : 0;
+// data written to 'reg2' if 'regs_we' is enabled
 wire [15:0] regs_wd = state == 1 ? instr : 
                       is_alu_op ? alu_res :
+                      is_ram_read ? ram_dat_out :
                       0;
-
-wire ram_we = 0;
-wire [15:0] ram_dat_out = 0;
 
 always @(posedge clk) begin
     if (rst) begin
@@ -119,10 +120,10 @@ Registers regs(
     .clk(clk),
     .ra1(reg1),
     .ra2(reg2),
-    .we(regs_we), // write 'wd' to address 'ra1'
-    .wd(regs_wd), // data to write when 'we' is true
-    .rd1(reg1_dat),
-    .rd2(reg2_dat)
+    .we(regs_we), // write 'wd' to address 'ra2'
+    .wd(regs_wd), // data to write when 'we' is enabled
+    .rd1(reg1_dat), // data of register 'reg1'
+    .rd2(reg2_dat) // data of register 'reg2'
     );
 
 ALU alu(
@@ -136,9 +137,9 @@ ALU alu(
 
 RAM ram(
   .clk(clk),
-  .addr(reg2_dat),
+  .addr(reg1_dat),
   .we(ram_we),
-  .dat_in(reg1_dat),
+  .dat_in(reg2_dat),
   .dat_out(ram_dat_out)
 );
 
