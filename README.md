@@ -59,7 +59,7 @@ under construction
 
 todo:
 - [x] zn
-- [ ]   reset zn at call
+- [ ]  +- reset zn at call
 - [ ] op copy
 - [ ] review racing conditions
 - [ ] emulator
