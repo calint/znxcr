@@ -1,0 +1,7 @@
+[x] zn
+[ ]   at 'call' after push reset zn
+[ ] op 'copy'
+[ ] refactor operations encoding to align op with alu-op
+[ ] review racing conditions
+[ ] emulator
+[ ] assembler

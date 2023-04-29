@@ -56,11 +56,3 @@ under construction
    110 :       :
    111 :       :
 ```
-
-todo:
-- [x] zn
-> - [ ] reset zn at call
-- [ ] op copy
-- [ ] review racing conditions
-- [ ] emulator
-- [ ] assembler
