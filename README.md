@@ -60,5 +60,6 @@ under construction
 todo:
 - [ ] zn
 - [ ] op copy
+- [ ] review racing conditions
 - [ ] emulator
 - [ ] assembler
