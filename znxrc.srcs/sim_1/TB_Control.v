@@ -171,6 +171,50 @@ module TB_Control;
         if (dut.regs.mem[6] == 12) $display("case 27 passed");
         else $display("case 27 failed - Expected 12, got %d", dut.regs.mem[6]);
         
+        // 5000 // 27: znxr c [load] %5=1
+        #clk_tk
+        #clk_tk
+        if (dut.regs.mem[5] == 1) $display("case 28 passed");
+        else $display("case 28 failed - Expected 1, got %d", dut.regs.mem[5]);
+        
+        // 5f80 // 29: znxr c [addi] %5-=1
+        #clk_tk
+        if (dut.regs.mem[5] == 0) $display("case 29 passed");
+        else $display("case 29 failed - Expected 9, got %d", dut.regs.mem[5]);
+        
+        // 0322 // 30: zNxr c [skip] 3 instructions
+        #clk_tk
+        if (dut.pc == 30) $display("case 30 passed");
+        else $display("case 30 failed - Expected 30, got %d", dut.pc);
+        
+        // 0321 // 31: Znxr c [skip] 3 instructions
+        #clk_tk
+        if (dut.pc == 34) $display("case 31 passed");
+        else $display("case 31 failed - Expected 34, got %d", dut.pc);
+        
+        // 5f83 // 35: znxr c [addi] %5-=1
+        #clk_tk
+        // 0122 // 36: zNxr c [skip] 1
+        #clk_tk
+        if (dut.pc == 37) $display("case 32 passed");
+        else $display("case 32 failed - Expected 37, got %d", dut.pc);
+        
+        // 0000 // 37: 
+        // 5280 // 38: znxr c [addi] %5+=2
+        #clk_tk
+        if (dut.regs.mem[5] == 1) $display("case 33 passed");
+        else $display("case 33 failed - Expected 1, got %d", dut.regs.mem[5]);
+        
+        // 0123 // 39: ZNxr c [skip] 1
+        #clk_tk
+        if (dut.pc == 41) $display("case 34 passed");
+        else $display("case 34 failed - Expected 40, got %d", dut.pc);
+
+        // 0000 // 40: 
+        // 7000 // 41: znxr c [load] %7=-1
+        // ffff // 42: {data -1} 
+
+        
         // 0000 // 33: 
 
         $finish;

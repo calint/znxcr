@@ -58,7 +58,8 @@ under construction
 ```
 
 todo:
-- [ ] zn
+- [x] zn
+- [ ]   reset zn at call
 - [ ] op copy
 - [ ] review racing conditions
 - [ ] emulator

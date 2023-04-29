@@ -46,15 +46,16 @@ wire ls_new_loop = state == 0 ? instr[11:0] == 11'b0000_0100_0000 : 0; // create
 wire [15:0] ls_pc_out; // loop stack 'jump to' if loop is not done
 
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands
-wire is_cs_op = state == 0 && !is_cr && (instr_c ^ instr_r) ? 1 : 0; // enabled if command operates on call stack
+wire is_cs_op = is_do_op && !is_cr && (instr_c ^ instr_r); // enabled if command operates on call stack
 wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
 wire cs_pop = is_cs_op ? instr_r : 0; // enabled if command also does 'return'
 
-wire is_alu_op = state == 0 && !cs_push && (op == OP_ADD || op == OP_ADDI || op == OP_SHIFT);
-wire [2:0] alu_op =         !is_alu_op ? 0 :
-                            op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
-                            op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega
-                            op; // same as op
+// note. state==0 is tested in the is_cs_op and then propagated through the ands
+wire is_alu_op = !cs_push && (op == OP_ADD || op == OP_ADDI || op == OP_SHIFT);
+wire [2:0] alu_op = !is_alu_op ? 0 :
+                    op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
+                    op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega
+                    op; // same as op
 wire [15:0] alu_operand_a = !is_alu_op ? 0 :
                             op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} : // 'shift' with signed immediate value 'rega'
                             op == OP_ADDI ? {{12{rega[3]}}, rega} : // 'addi' is add with signed immediate value 'rega'
@@ -66,11 +67,14 @@ wire zn_sel = is_alu_op ? 1 :
               cs_pop ? 0 :
               0;
 
+wire is_do_op = state==0 && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n));
+
 wire ram_we = op == OP_STORE; // connected to ram write enable input
 wire [15:0] ram_dat_out; // connected to ram data output
 
+// if is_nop then don't enable any writes
 // enables write to registers if 'loadi' or alu op or 'load'
-wire regs_we = state == 1 || is_alu_op || op == OP_LOAD ? 1 : 0;
+wire regs_we = state == 1 || (is_do_op && (is_alu_op || op == OP_LOAD));
 // data written to 'regb' if 'regs_we' is enabled
 wire [15:0] regs_wd = state == 1 ? instr : // write instruction into registers
                       is_alu_op ? alu_res : // write alu result to registers
@@ -106,15 +110,17 @@ always @(posedge clk) begin
                     reg_to_write = regb;
                 end
                 //-------------------------------------------------------------
-                OP_SKIP: begin 
-                    pc = pc + {8'd0, imm8};
+                OP_SKIP: begin
+                    if (is_do_op) begin
+                        pc = pc + {8'd0, imm8};
+                    end
                 end
                 //-------------------------------------------------------------
                 default: state = 0;
                 endcase
                 // if loop 'next' 
                 // ? racing with LoopStack that may change 'ls_pc_out' and 'ls_done' during its 'posedge clk'
-                if (instr_x && !ls_done) begin
+                if (is_do_op && instr_x && !ls_done) begin
                     pc = ls_pc_out;        
                 end        
             end

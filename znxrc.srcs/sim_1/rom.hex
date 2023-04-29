@@ -1,34 +1,48 @@
-1000 // 00: znxr c [loadi] reg[1]={data}
+1003 // 00: znxr c [loadi] reg[1]={data}
 1234 // 01: {data}
-2000 // 02: znxr c [loadi] reg[2]={data}
+2003 // 02: znxr c [loadi] reg[2]={data}
 0001 // 03: {data}
-12a0 // 04: znxr c [add] regs[1]+=regs[2]
-12a0 // 05: znxr c [add] regs[1]+=regs[2]
-1000 // 06: znxr c [loadi] reg[1]={data}
+12a3 // 04: znxr c [add] regs[1]+=regs[2]
+12a3 // 05: znxr c [add] regs[1]+=regs[2]
+1003 // 06: znxr c [loadi] reg[1]={data}
 0004 // 07: {data}
-12c0 // 08: znxr c [shift] reg[1]>>=2
-1ec0 // 09: znxr c [shift] reg[1]<<=2
-10c0 // 10: znxr c [not] reg[1]=~reg[1]
-1000 // 11: znxr c [loadi] reg[1]={data}
+12c3 // 08: znxr c [shift] reg[1]>>=2
+1ec3 // 09: znxr c [shift] reg[1]<<=2
+10c3 // 10: znxr c [not] reg[1]=~reg[1]
+1003 // 11: znxr c [loadi] reg[1]={data}
 0003 // 12: {data}
-2000 // 13: znxr c [loadi] reg[2]={data}
+2003 // 13: znxr c [loadi] reg[2]={data}
 0004 // 14: {data}
-12e0 // 15: znxr c [store] ram[%2]=%1 (ram[4]=3)
-1000 // 16: znxr c [loadi] reg[2]={data}
+12e3 // 15: znxr c [store] ram[%2]=%1 (ram[4]=3)
+1003 // 16: znxr c [loadi] reg[2]={data}
 0004 // 17: {data}
-21e0 // 18: znxr c [store] ram[%1]=%2 (ram[4]=4)
-3160 // 19: znxr c [load] %3=ram[%1] (reg[3]=ram[4] => reg[3]==4)
-0220 // 20: znxr c [skip] 2 instructions
+21e3 // 18: znxr c [store] ram[%1]=%2 (ram[4]=4)
+3163 // 19: znxr c [load] %3=ram[%1] (reg[3]=ram[4] => reg[3]==4)
+0223 // 20: znxr c [skip] 2 instructions
 ffff // 21: 
 ffff // 22: 
-4160 // 23: znxr c [load] %4=ram[%1] (reg[4]=ram[4] => reg[4]==4)
-0090 // 24: znxr C [call] 32 => encoded (32>>2)|1==9
+4163 // 23: znxr c [load] %4=ram[%1] (reg[4]=ram[4] => reg[4]==4)
+0093 // 24: znxr C [call] 32 => encoded (32>>2)|1==9
 6040 // 25: znxr c [loop] %6 (reg[6]==4)
-6284 // 26: znXr c [addi & next] reg[6]+=2
-0000 // 27: 
-0000 // 28: 
-0000 // 29: 
-0000 // 30: 
-0000 // 31: 
-5160 // 32: znxr c [load] %5=ram[%1] (reg[5]=ram[4] => reg[5]==4)
-6168 // 33: znxR c [load & return] %6=ram[%1] (reg[6]=ram[4] => reg[6]==4)
+6287 // 26: znXr c [addi & next] reg[6]+=2
+5003 // 27: znxr c [load] %5=1
+0001 // 28: data: 1
+5f83 // 29: znxr c [addi] %5-=1
+0322 // 30: zNxr c [skip] 3 instructions
+0321 // 31: Znxr c [skip] 3 instructions
+5163 // 32: znxr c [load] %5=ram[%1] (reg[5]=ram[4] => reg[5]==4)
+616b // 33: znxR c [load & return] %6=ram[%1] (reg[6]=ram[4] => reg[6]==4)
+0000 // 34: 
+5f83 // 35: znxr c [addi] %5-=1
+0122 // 36: zNxr c [skip] 1
+0000 // 37: 
+5283 // 38: znxr c [addi] %5+=2
+0220 // 39: ZNxr c [skip] 2
+0000 // 40:
+0000 // 41: 
+7003 // 42: znxr c [load] %7=-1
+ffff // 43: {data -1} 
+0000 // 44:
+0000 // 45:
+0000 // 46:
+0000 // 47:
