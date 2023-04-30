@@ -20,8 +20,8 @@ module Zn(
             nf <= 0;
         end else begin
             if (we) begin
-                zf = sel ? alu_zf : cs_zf;
-                nf = sel ? alu_nf : cs_nf;
+                zf <= sel ? alu_zf : cs_zf;
+                nf <= sel ? alu_nf : cs_nf;
             end
         end
     end    
