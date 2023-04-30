@@ -51,7 +51,7 @@ wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
 wire cs_pop = is_cs_op ? instr_r : 0; // enabled if command also does 'return'
 
 // note. state==0 is tested in the is_cs_op and then propagated through the ands
-wire is_alu_op = !cs_push && (op == OP_ADD || op == OP_ADDI || op == OP_SHIFT);
+wire is_alu_op = !is_cr && !cs_push && (op == OP_ADD || op == OP_ADDI || op == OP_SHIFT);
 wire [2:0] alu_op = !is_alu_op ? 0 :
                     op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
                     op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega
@@ -107,12 +107,6 @@ always @(posedge clk) begin
                 if (!is_cr) begin
                     case(op)
                     //-------------------------------------------------------------
-                    OP_SKIP: begin
-                        if (is_do_op) begin
-                            pc = pc + {8'd0, imm8};
-                        end
-                    end
-                    //-------------------------------------------------------------
                     default: state = 0;
                     endcase
                 end else begin // instruction bits c and r are 11
@@ -121,6 +115,12 @@ always @(posedge clk) begin
                     OP_LOADI: begin // load register with data from the next instruction 
                         state = 1;
                         reg_to_write = regb;
+                    end
+                    //-------------------------------------------------------------
+                    OP_SKIP: begin
+                        if (is_do_op) begin
+                            pc = pc + {8'd0, imm8};
+                        end
                     end
                     //-------------------------------------------------------------
                     default: state = 0;

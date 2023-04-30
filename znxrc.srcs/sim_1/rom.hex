@@ -18,7 +18,7 @@
 0004 // 17: 0x004
 21e3 // 18: store r1 r2 ; ram[4] => 4
 3163 // 19: load r3 r1  ; ram[4] => 4
-0223 // 20: skip 2
+023b // 20: skip 2
 ffff // 21: 
 ffff // 22: 
 4163 // 23: load r4 r1 ; r4=ram[4] => 4
@@ -28,16 +28,16 @@ ffff // 22:
 5058 // 27: loadi r5
 0001 // 28: 0x0001
 5f83 // 29: addi r5 -1
-0322 // 30: ifn skip 3
-0321 // 31: ifz skip 3
+033a // 30: ifn skip 3
+0339 // 31: ifz skip 3
 5163 // 32: load r5 r1 ; ram[4] => 4
 616b // 33: load r6 r1 return ; ram[4] => 4
 0000 // 34: 
 5f83 // 35: addi r5 -1
-0122 // 36: ifn skip 1
+013a // 36: ifn skip 1
 0000 // 37: 
 5283 // 38: addi r5 2
-0220 // 39: ifp skip 2
+0238 // 39: ifp skip 2
 0000 // 40:
 0000 // 41: 
 7058 // 42: loadi r7

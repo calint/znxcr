@@ -30,17 +30,17 @@ under construction
          / . / . / . / . / 0 / 1 1 1 / addr / src  /  store
         / . / . / . / 0 / 1 / immediate 11 << 3   /  call
        / 0 / 0 / 0 / 1 / 1 / 0 0 0 / 0000 / .... /  loop
-      / . / . / 0 / 1 / 1 / 0 0 1 / immediate 8 /  skip
+      / . / . / 0 / 1 / 1 / 1 0 0 / immediate 8 /  skip
      / . / . / . / 1 / 1 / 0 1 0 / 0000 / .... /  loadi
 
     op :       :
    ----:-------:-----------------------------------------------------
-   000 : loadi : reg[b]={next instruction}
+   000 :       : 
    001 : addi  : reg[b]+=imm4
    010 : loop  : start loop with counter value from reg[b]
    011 : not   : reg[b]=~reg[b]
    011 : shift : reg[b]>>=imm4 (negative imm4 means 'left')
-   100 : skip  : pc+=imm8+1
+   100 :       : 
    101 : add   : reg[b]+=reg[a]
    110 : load  : reg[b]=ram[a]
    111 : store : ram[a]=reg[b]
@@ -50,8 +50,8 @@ under construction
     op :       :
    ----:-------:-----------------------------------------------------
    000 : loop  : counter from regb
-   001 : skip  : immediate 8
-   010 : loadi : loads next instruction into regb
+   001 : skip  : pc+=imm8+1
+   010 : loadi : reg[b]={next instruction}
    011 :       : 
    100 :       :
    101 :       : 

@@ -82,7 +82,7 @@ module TB_Control;
         if (dut.regs.mem[3] == 4) $display("case 14 passed");
         else $display("case 14 failed - expected 4, got %d", dut.regs.mem[3]);
         
-        #clk_tk // 0223 // 20: skip 2
+        #clk_tk // 023b // 20: skip 2
         if (dut.pc == 22) $display("case 15 passed");
         else $display("case 15 failed - expected 22, got %d", dut.pc);
         
@@ -148,16 +148,16 @@ module TB_Control;
         if (dut.zf == 1 && dut.nf == 0) $display("case 29.1 passed");
         else $display("case 29.1 failed - expected 1,0, got %d,%d", dut.zf, dut.nf);
         
-        #clk_tk // 0322 // 30: ifn skip 3
+        #clk_tk // 033a // 30: ifn skip 3
         if (dut.pc == 30) $display("case 30 passed");
         else $display("case 30 failed - expected 30, got %d", dut.pc);
         
-        #clk_tk // 0321 // 31: ifz skip 3
+        #clk_tk // 0339 // 31: ifz skip 3
         if (dut.pc == 34) $display("case 31 passed");
         else $display("case 31 failed - expected 34, got %d", dut.pc);
         
         #clk_tk // 5f83 // 35: addi r5 -1
-        #clk_tk // 0122 // 36: ifn skip 1
+        #clk_tk // 013a // 36: ifn skip 1
         if (dut.pc == 37) $display("case 32 passed");
         else $display("case 32 failed - expected 37, got %d", dut.pc);
         
@@ -165,7 +165,7 @@ module TB_Control;
         if (dut.regs.mem[5] == 1) $display("case 33 passed");
         else $display("case 33 failed - expected 1, got %d", dut.regs.mem[5]);
         
-        #clk_tk // 0220 // 39: ifp skip 2
+        #clk_tk // 0238 // 39: ifp skip 2
         if (dut.pc == 41) $display("case 34 passed");
         else $display("case 34 failed - expected 40, got %d", dut.pc);
 
