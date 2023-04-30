@@ -28,7 +28,7 @@ under construction
            / . / . / . / . / 0 / 1 0 1 / .... / .... /  add
           / . / . / . / . / 0 / 1 1 0 / addr / dst  /  load
          / . / . / . / . / 0 / 1 1 1 / addr / src  /  store
-        / . / . / . / 0 / 1 / immediate 11 << 3   /  call
+        / . / . / 0 / 0 / 1 / immediate 11 << 3   /  call
        / 0 / 0 / 0 / 1 / 1 / 0 0 0 / 0000 / .... /  loop
       / . / . / 0 / 1 / 1 / 1 0 0 / immediate 8 /  skip
      / . / . / . / 1 / 1 / 0 1 0 / 0000 / .... /  loadi

@@ -15,7 +15,7 @@ assign dat_out = mem[addr];
 
 always @(posedge clk) begin
     if (we)
-        mem[addr] = dat_in;
+        mem[addr] <= dat_in;
 end
 
 endmodule
