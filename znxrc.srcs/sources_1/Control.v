@@ -39,8 +39,8 @@ wire instr_c = instr[4]; // if enabled call a sub-routine (instr_r && instr_c is
 wire [3:0] op = instr[7:5];
 wire [3:0] rega = instr[11:8];
 wire [3:0] regb = state == 1 ? reg_to_write : instr[15:12];
-wire [9:0] imm8 = instr[15:8];
-wire [9:0] imm11 = instr[15:5];
+wire [7:0] imm8 = instr[15:8];
+wire [10:0] imm11 = instr[15:5];
 
 wire ls_done; // loop stack enables this if it is the last iteration in current loop
 wire ls_new_loop = state == 0 && instr[11:0] == 12'b0000_0001_1000; // creates new loop with counter set from regs[regb]
