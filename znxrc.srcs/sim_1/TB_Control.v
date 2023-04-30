@@ -107,10 +107,10 @@ module TB_Control;
         if (dut.pc == 24) $display("case 20 passed");
         else $display("case 20 failed - expected 24, got %d", dut.pc);
         // check that zf and nf is popped. instruction 10: did set nf=1 zf=0
-        if (dut.zf == 0 && dut.nf == 1) $display("case 24.1 passed");
-        else $display("case 24.1 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
+        if (dut.zf == 0 && dut.nf == 1) $display("case 20.1 passed");
+        else $display("case 20.1 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
 
-        #clk_tk // 6040 // 25: loop r6 ; r6 => 4
+        #clk_tk // 6018 // 25: loop r6 ; r6 => 4
         if (dut.ls.pc_out == 25) $display("case 21 passed");
         else $display("case 21 failed - expected 25, got %d", dut.ls.pc_out);
         if (!dut.ls.done) $display("case 22 passed");

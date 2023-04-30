@@ -42,7 +42,7 @@ wire [9:0] imm8 = instr[15:8];
 wire [9:0] imm11 = instr[15:5];
 
 wire ls_done; // loop stack enables this if it is the last iteration in current loop
-wire ls_new_loop = state == 0 ? instr[11:0] == 11'b0000_0100_0000 : 0; // creates new loop with counter set from regs[regb]
+wire ls_new_loop = state == 0 ? instr[11:0] == 12'b0000_0001_1000 : 0; // creates new loop with counter set from regs[regb]
 wire [15:0] ls_pc_out; // loop stack 'jump to' if loop is not done
 
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands
@@ -103,21 +103,25 @@ always @(posedge clk) begin
             end else if (cs_pop) begin // 'ret' flag
                 pc = cs_pc_out; // set pc to top of stack, will be incremented by 1 in 'negedge clk'
             end else begin // operation
-                case(op)
-                //-------------------------------------------------------------
-                OP_LOADI: begin // load register with data from the next instruction 
-                    state = 1;
-                    reg_to_write = regb;
-                end
-                //-------------------------------------------------------------
-                OP_SKIP: begin
-                    if (is_do_op) begin
-                        pc = pc + {8'd0, imm8};
+                // if instruction bits c and r are not 11
+                if (!is_cr) begin
+                    case(op)
+                    //-------------------------------------------------------------
+                    OP_LOADI: begin // load register with data from the next instruction 
+                        state = 1;
+                        reg_to_write = regb;
                     end
+                    //-------------------------------------------------------------
+                    OP_SKIP: begin
+                        if (is_do_op) begin
+                            pc = pc + {8'd0, imm8};
+                        end
+                    end
+                    //-------------------------------------------------------------
+                    default: state = 0;
+                    endcase
+                end else begin
                 end
-                //-------------------------------------------------------------
-                default: state = 0;
-                endcase
                 // if loop 'next' 
                 // ? racing with LoopStack that may change 'ls_pc_out' and 'ls_done' during its 'posedge clk'
                 if (is_do_op && instr_x && !ls_done) begin
