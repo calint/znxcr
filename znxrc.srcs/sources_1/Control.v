@@ -161,22 +161,22 @@ CallStack cs(
 LoopStack ls(
     .rst(rst),
     .clk(clk),
-    .new(ls_new_loop), // true to create a new loop using 'loop_address' for the jump and 'count' for the number of iterations
-    .cnt_in(regb_dat), // number of iterations in loop when creating new loop with 'new_loop'
-    .pc_in(pc), // the address to which to jump at next
-    .nxt(instr_x), // true if current loop is at instruction that is 'next'
-    .pc_out(ls_pc_out), // the address to jump to if loop is not finished
-    .done(ls_done) // true if current loop at last iteration
+    .new(ls_new_loop),
+    .cnt_in(regb_dat),
+    .pc_in(pc),
+    .nxt(instr_x),
+    .pc_out(ls_pc_out),
+    .done(ls_done)
     );
 
 Registers regs(
     .clk(clk),
     .ra1(rega),
     .ra2(regb),
-    .we(regs_we), // write 'wd' to address 'ra2'
-    .wd(regs_wd), // data to write when 'we' is enabled
-    .rd1(rega_dat), // data of register 'rega'
-    .rd2(regb_dat) // data of register 'regb'
+    .we(regs_we),
+    .wd(regs_wd),
+    .rd1(rega_dat),
+    .rd2(regb_dat)
     );
 
 ALU alu(
@@ -205,8 +205,8 @@ Zn zn(
     .alu_nf(alu_nf),
     .zf(zf),
     .nf(nf),
-    .we(zn_we), // copy cs or alu zn flags
-    .sel(zn_sel) // enabled alu, disabled cs 
+    .we(zn_we),
+    .sel(zn_sel)
 );
 
 endmodule

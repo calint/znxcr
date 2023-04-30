@@ -5,8 +5,8 @@ module Registers(
     input wire clk,
     input wire [3:0] ra1, // register address 1
     input wire [3:0] ra2, // register address 2
-    input wire we, // write 'wd' to address 'ra1'
-    input wire [15:0] wd, // data to write when 'we' is enabled
+    input wire we, // write 'wd' to address 'ra2'
+    input wire [15:0] wd, // data to write to register 'ra2' when 'we' is enabled
     output wire [15:0] rd1, // register data 1
     output wire [15:0] rd2 // register data 2
     );

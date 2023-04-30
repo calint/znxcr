@@ -4,11 +4,11 @@
 module LoopStack(
     input wire rst,
     input wire clk,
-    input wire new, // enabled to create a new loop using 'pc_in' + 1 for the jump at 'next' and 'cnt' for the number of iterations
-    input wire [15:0] cnt_in, // number of iterations in loop created 'new'
-    input wire [15:0] pc_in, // the address to which to jump at next
-    input wire nxt, // true if current loop is at instruction that is 'next'
-    output wire [15:0] pc_out, // the address to jump to if loop is not finished
+    input wire new, // enabled to create a new loop using 'pc_in' and 'cnt_in'
+    input wire [15:0] cnt_in, // number of iterations in loop created when 'new'
+    input wire [15:0] pc_in, // the program counter at 'loop' op
+    input wire nxt, // enabled if instruction has 'next'
+    output wire [15:0] pc_out, // the 'pc_in' when the loop was created
     output wire done // enabled if loop is at last iteration
     );
     
