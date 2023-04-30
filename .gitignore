@@ -6,4 +6,4 @@
 *.sim/
 
 # iverilog files
-/cpu
+cpu
