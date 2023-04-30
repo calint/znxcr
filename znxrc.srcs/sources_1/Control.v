@@ -7,7 +7,7 @@ module Control(
     output wire debug1
     );
 
-localparam OP_LOADI = 3'b000;
+localparam OP_LOADI = 3'b010;
 localparam OP_ADDI = 3'b100;
 localparam OP_ADD = 3'b101;
 localparam OP_SHIFT = 3'b110;
@@ -107,11 +107,6 @@ always @(posedge clk) begin
                 if (!is_cr) begin
                     case(op)
                     //-------------------------------------------------------------
-                    OP_LOADI: begin // load register with data from the next instruction 
-                        state = 1;
-                        reg_to_write = regb;
-                    end
-                    //-------------------------------------------------------------
                     OP_SKIP: begin
                         if (is_do_op) begin
                             pc = pc + {8'd0, imm8};
@@ -120,7 +115,16 @@ always @(posedge clk) begin
                     //-------------------------------------------------------------
                     default: state = 0;
                     endcase
-                end else begin
+                end else begin // instruction bits c and r are 11
+                    case(op)
+                    //-------------------------------------------------------------
+                    OP_LOADI: begin // load register with data from the next instruction 
+                        state = 1;
+                        reg_to_write = regb;
+                    end
+                    //-------------------------------------------------------------
+                    default: state = 0;
+                    endcase
                 end
                 // if loop 'next' 
                 // ? racing with LoopStack that may change 'ls_pc_out' and 'ls_done' during its 'posedge clk'

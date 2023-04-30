@@ -16,12 +16,12 @@ module TB_Control;
         #clk_tk;
         rst = 0;
         
-        #clk_tk // 1003 // 00: loadi r1
+        #clk_tk // 1058 // 00: loadi r1
         #clk_tk // 1234 // 01: 0x1234
         if (dut.regs.mem[1] == 16'h1234) $display("case 1 passed");
         else $display("case 1 failed - expected 0x1234, got %d", dut.regs.mem[1]);
 
-        #clk_tk // 2003 // 02: loadi r2
+        #clk_tk // 2058 // 02: loadi r2
         #clk_tk // 0001 // 03: 0x0001
         if (dut.regs.mem[2] == 16'h1) $display("case 2 passed");
         else $display("case 2 failed - expected 1, got %d", dut.regs.mem[2]);
@@ -34,7 +34,7 @@ module TB_Control;
         if (dut.regs.mem[1] == 16'h1236) $display("case 4 passed");
         else $display("case 4 failed - expected 0x1236, got %d", dut.regs.mem[1]);
 
-        #clk_tk // 1003 // 06: loadi
+        #clk_tk // 1058 // 06: loadi r1
         #clk_tk // 0004 // 07: 0x0004
         if (dut.regs.mem[1] == 4) $display("case 5 passed");
         else $display("case 5 failed - expected 4, got %d", dut.regs.mem[1]);
@@ -55,12 +55,12 @@ module TB_Control;
         if (dut.zf == 0 && dut.nf == 1) $display("case 8.1 passed");
         else $display("case 8.1 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
 
-        #clk_tk // 1003 // 11: loadi r1
+        #clk_tk // 1058 // 11: loadi r1
         #clk_tk // 0003 // 12: 0x003
         if (dut.regs.mem[1] == 3) $display("case 9 passed");
         else $display("case 9 failed - expected 1, got %d", dut.regs.mem[1]);
 
-        #clk_tk // 2003 // 13: loadi r2
+        #clk_tk // 2058 // 13: loadi r2
         #clk_tk // 0004 // 14: 0x004
         if (dut.regs.mem[2] == 4) $display("case 10 passed");
         else $display("case 10 failed - expected 2, got %d", dut.regs.mem[2]);
@@ -69,7 +69,7 @@ module TB_Control;
         if (dut.ram.mem[4] == 3) $display("case 11 passed");
         else $display("case 11 failed - expected 3, got %d", dut.ram.mem[4]);
         
-        #clk_tk // 1003 // 16: loadi r2
+        #clk_tk // 1058 // 16: loadi r2
         #clk_tk // 0004 // 17: 0x004
         if (dut.regs.mem[1] == 4) $display("case 12 passed");
         else $display("case 12 failed - expected 4, got %d", dut.regs.mem[1]);
@@ -137,7 +137,7 @@ module TB_Control;
         if (dut.regs.mem[6] == 12) $display("case 27 passed");
         else $display("case 27 failed - expected 12, got %d", dut.regs.mem[6]);
         
-        #clk_tk // 5003 // 27: load r5
+        #clk_tk // 5058 // 27: loadi r5
         #clk_tk // 0001 // 28: 0x0001
         if (dut.regs.mem[5] == 1) $display("case 28 passed");
         else $display("case 28 failed - expected 1, got %d", dut.regs.mem[5]);
