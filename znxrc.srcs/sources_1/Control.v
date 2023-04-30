@@ -103,13 +103,8 @@ always @(posedge clk) begin
             end else if (cs_pop) begin // 'ret' flag
                 pc = cs_pc_out; // set pc to top of stack, will be incremented by 1 in 'negedge clk'
             end else begin // operation
-                // if instruction bits c and r are not 11
-                if (!is_cr) begin
-                    case(op)
-                    //-------------------------------------------------------------
-                    default: state = 0;
-                    endcase
-                end else begin // instruction bits c and r are 11
+                // if instruction bits c and r are 11
+                if (is_cr) begin
                     case(op)
                     //-------------------------------------------------------------
                     OP_LOADI: begin // load register with data from the next instruction 
@@ -118,6 +113,7 @@ always @(posedge clk) begin
                     end
                     //-------------------------------------------------------------
                     OP_SKIP: begin
+                        state = 0;
                         if (is_do_op) begin
                             pc = pc + {8'd0, imm8};
                         end
@@ -125,6 +121,8 @@ always @(posedge clk) begin
                     //-------------------------------------------------------------
                     default: state = 0;
                     endcase
+                end else begin // instruction bits c and r are not 11
+                    state = 0;
                 end
                 // if loop 'next' 
                 // ? racing with LoopStack that may change 'ls_pc_out' and 'ls_done' during its 'posedge clk'
