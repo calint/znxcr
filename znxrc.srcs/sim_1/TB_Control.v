@@ -96,6 +96,8 @@ module TB_Control;
         #clk_tk // 0093 // 24: call 32 ; encoded (32>>2)|1 => 9
         if (dut.pc == 31) $display("case 17 passed");
         else $display("case 17 failed - expected 31, got %d", dut.pc);
+        if (dut.cs.mem[0][15:0] == 24) $display("case 17.1 passed");
+        else $display("case 17.1 failed - expected 24, got %d", dut.cs.mem[0][15:0]);
 
         #clk_tk // 5163 // 32: load r5 r1 ; ram[4] => 4
         if (dut.regs.mem[5] == 4) $display("case 18 passed");

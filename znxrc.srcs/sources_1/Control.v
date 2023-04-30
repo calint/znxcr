@@ -98,7 +98,7 @@ always @(posedge clk) begin
         begin
             if (cs_push) begin // 'call': calls imm11<<3
                 cs_pc_in = pc; // save current pc to be read by CallStack at 'posedge clk'
-                pc = {2'b00, (imm11<<3) - 1}; // -1 because pc will be incremented by 1 in 'negedge clk'
+                pc = {2'b00, (imm11<<3) - 14'd1}; // -1 because pc will be incremented by 1 in 'negedge clk'
             end else if (cs_pop) begin // 'ret' flag
                 pc = cs_pc_out; // set pc to top of stack, will be incremented by 1 in 'negedge clk'
             end else begin // operation
