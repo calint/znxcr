@@ -4,3 +4,6 @@
 *.ip_user_files/
 *.runs/
 *.sim/
+
+# iverilog files
+/cpu

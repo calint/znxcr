@@ -5,5 +5,7 @@
 [ ] op 'skip' signed value
 [ ] refactor operations encoding to align op with alu-op
 [ ] review racing conditions
+[x]   Control vs CallStack
+[x]   Control vs LoopStack
 [ ] emulator
 [ ] assembler

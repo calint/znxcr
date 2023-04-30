@@ -15,24 +15,32 @@ module LoopStack(
     reg [3:0] idx;
     reg [15:0] stk_addr [0:15];
     reg [15:0] stk_cnt [0:15];
+    reg do_nxt;
 
     assign pc_out = stk_addr[idx];
     assign done = stk_cnt[idx] == 1;
 
+    always @(negedge clk) begin
+        if (do_nxt) begin
+            do_nxt = 0;
+            stk_cnt[idx] = stk_cnt[idx] - 1;
+            if (stk_cnt[idx] == 0) begin
+                idx = idx - 1;
+            end
+        end
+    end
+    
     always @(posedge clk) begin
         if (rst) begin
             idx <= 4'hf;
+            do_nxt <=0;
         end else begin
             if (new) begin
                 idx = idx + 1;
                 stk_addr[idx] = pc_in;
                 stk_cnt[idx] = cnt_in;
             end else if (nxt) begin
-                // ? racing with Control that is accessing 'pc_out' and 'done' in its 'posedge clk'
-                stk_cnt[idx] = stk_cnt[idx] - 1;
-                if (stk_cnt[idx] == 0) begin
-                    idx = idx - 1;
-                end
+                do_nxt = 1;
             end
         end
     end
