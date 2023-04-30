@@ -15,6 +15,7 @@ localparam OP_SHIFT = 3'b110;
 localparam OP_LOAD = 3'b011;
 localparam OP_STORE = 3'b111;
 localparam OP_SKIP = 3'b001;
+localparam OP_LOOP = 12'b0000_0001_1000;
 
 localparam ALU_ADD = OP_ADD;
 localparam ALU_SHIFT = OP_SHIFT;
@@ -43,7 +44,7 @@ wire [7:0] imm8 = instr[15:8];
 wire [10:0] imm11 = instr[15:5];
 
 wire ls_done; // loop stack enables this if it is the last iteration in current loop
-wire ls_new_loop = state == 0 && instr[11:0] == 12'b0000_0001_1000; // creates new loop with counter set from regs[regb]
+wire ls_new_loop = state == 0 && instr[11:0] == OP_LOOP; // creates new loop with counter set from regs[regb]
 wire [15:0] ls_pc_out; // loop stack: address to set 'pc' to if loop is not done
 
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands that can't piggy back 'return'
