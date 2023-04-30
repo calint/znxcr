@@ -104,8 +104,7 @@ always @(posedge clk) begin
             end else if (cs_pop) begin // 'ret' flag
                 pc = cs_pc_out; // set pc to top of stack, will be incremented by 1 in 'negedge clk'
             end else begin // operation
-                // if instruction bits c and r are 11
-                if (is_cr) begin
+                if (is_cr) begin // if instruction bits c and r are 11 then select the second page of operations
                     case(op)
                     //-------------------------------------------------------------
                     OP_LOADI: begin // load register with data from the next instruction 
