@@ -1,7 +1,7 @@
 [x] zn
 [ ]   at 'call' after push reset zn
-[ ] op 'copy'
-[ ] solve "ifzn [op] next return"
+[x] op 'copy'
+[ ] solve "ifX [op] next return"
 [ ] op 'skip' signed value
 [ ] refactor operations encoding to align op with alu-op
 [ ] review racing conditions
