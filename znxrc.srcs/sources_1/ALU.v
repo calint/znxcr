@@ -12,6 +12,7 @@ module ALU(
 
 always @(*) begin
     case(op)
+    3'b010: result = a;
     3'b101: result = a + b;
     3'b111: result = ~b;
     3'b110: 

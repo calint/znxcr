@@ -36,20 +36,20 @@ under construction
     op :       :
    ----:-------:-----------------------------------------------------
    000 :       : 
-   001 : addi  : reg[b]+=imm4
-   010 : loop  : start loop with counter value from reg[b]
-   011 : not   : reg[b]=~reg[b]
-   011 : shift : reg[b]>>=imm4 (negative imm4 means 'left')
-   100 :       : 
+   100 : addi  : reg[b]+=imm4
+   010 : copy  : reg[b]=reg[a]
+   110 : not   : reg[b]=~reg[b]
+   110 : shift : reg[b]>>=imm4 (negative imm4 means 'left')
+   001 :       : 
    101 : add   : reg[b]+=reg[a]
-   110 : load  : reg[b]=ram[a]
+   011 : load  : reg[b]=ram[a]
    111 : store : ram[a]=reg[b]
 
    page cr = 11
 
     op :       :
    ----:-------:-----------------------------------------------------
-   000 : loop  : counter from regb
+   000 : loop  : start loop with counter value from reg[b]
    001 : skip  : pc+=imm8+1
    010 : loadi : reg[b]={next instruction}
    011 :       : 

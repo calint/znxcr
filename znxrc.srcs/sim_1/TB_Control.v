@@ -171,9 +171,13 @@ module TB_Control;
 
         // 0000 // 40:
         // 0000 // 41: 
-        // 7003 // 42: load r7
-        // ffff // 43: 0xffff 
-        // 0000 // 44:
+        #clk_tk // 7003 // 42: load r7
+        #clk_tk // ffff // 43: 0xffff
+         
+        #clk_tk // 8740 // 44: copy r7 r8
+        if (dut.regs.mem[8] == -1) $display("case 35 passed");
+        else $display("case 35 failed - expected -1, got %d", dut.regs.mem[8]);
+        
         // 0000 // 45:
         // 0000 // 46:
         // 0000 // 47:

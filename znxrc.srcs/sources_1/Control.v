@@ -9,6 +9,7 @@ module Control(
 
 localparam OP_LOADI = 3'b010;
 localparam OP_ADDI = 3'b100;
+localparam OP_COPY = 3'b010;
 localparam OP_ADD = 3'b101;
 localparam OP_SHIFT = 3'b110;
 localparam OP_LOAD = 3'b011;
@@ -51,7 +52,7 @@ wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
 wire cs_pop = is_cs_op ? instr_r : 0; // enabled if command also does 'return'
 
 // note. state==0 is tested in the is_cs_op and then propagated through the ands
-wire is_alu_op = !is_cr && !cs_push && (op == OP_ADD || op == OP_ADDI || op == OP_SHIFT);
+wire is_alu_op = !is_cr && !cs_push && (op == OP_ADD || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT);
 wire [2:0] alu_op = !is_alu_op ? 0 :
                     op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as a 'not'
                     op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega
