@@ -70,8 +70,7 @@ wire is_do_op = state==0 && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n
 wire ram_we = op == OP_STORE; // connected to ram write enable input
 wire [15:0] ram_dat_out; // connected to ram data output
 
-// if !is_do_op disable writes
-// enables write to registers if 'loadi' (state==1) or alu op or 'load'
+// enables write to registers
 wire regs_we = state == 1 || (is_do_op && (is_alu_op || op == OP_LOAD));
 // data written to 'regb' if 'regs_we' is enabled
 wire [15:0] regs_wd = state == 1 ? instr : // write instruction into registers
