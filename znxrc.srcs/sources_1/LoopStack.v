@@ -22,10 +22,10 @@ module LoopStack(
 
     always @(negedge clk) begin
         if (do_nxt) begin
-            do_nxt = 0;
+            do_nxt <= 0;
             stk_cnt[idx] = stk_cnt[idx] - 1;
             if (stk_cnt[idx] == 0) begin
-                idx = idx - 1;
+                idx <= idx - 1;
             end
         end
     end
@@ -37,10 +37,10 @@ module LoopStack(
         end else begin
             if (new) begin
                 idx = idx + 1;
-                stk_addr[idx] = pc_in;
-                stk_cnt[idx] = cnt_in;
+                stk_addr[idx] <= pc_in;
+                stk_cnt[idx] <= cnt_in;
             end else if (nxt) begin
-                do_nxt = 1;
+                do_nxt <= 1;
             end
         end
     end

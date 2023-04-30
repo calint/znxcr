@@ -98,42 +98,42 @@ always @(posedge clk) begin
         //---------------------------------------------------------------------
         begin
             if (cs_push) begin // 'call': calls imm11<<3
-                pc = {2'b00, (imm11<<3) - 14'd1}; // -1 because pc will be incremented by 1 in 'negedge clk'
+                pc <= {2'b00, (imm11<<3) - 14'd1}; // -1 because pc will be incremented by 1 in 'negedge clk'
             end else if (cs_pop) begin // 'ret' flag
-                pc = cs_pc_out; // set pc to top of stack, will be incremented by 1 in 'negedge clk'
+                pc <= cs_pc_out; // set pc to top of stack, will be incremented by 1 in 'negedge clk'
             end else begin // operation
                 if (is_cr) begin // if instruction bits c and r are 11 then select the second page of operations
                     case(op)
                     //-------------------------------------------------------------
                     OP_LOADI: begin // load register with data from the next instruction 
-                        state = 1;
-                        reg_to_write = regb;
+                        state <= 1;
+                        reg_to_write <= regb;
                     end
                     //-------------------------------------------------------------
                     OP_SKIP: begin
-                        state = 0;
+                        state <= 0;
                         if (is_do_op) begin
-                            pc = pc + {8'd0, imm8};
+                            pc <= pc + {8'd0, imm8};
                         end
                     end
                     //-------------------------------------------------------------
-                    default: state = 0;
+                    default: state <= 0;
                     endcase
                 end else begin // instruction bits c and r are not 11
-                    state = 0;
+                    state <= 0;
                 end
                 // if loop 'next' 
                 // ? racing with LoopStack that may change 'ls_pc_out' and 'ls_done' during its 'posedge clk'
                 if (is_do_op && instr_x && !ls_done) begin
-                    pc = ls_pc_out;        
+                    pc <= ls_pc_out;        
                 end        
             end
         end
         //---------------------------------------------------------------------
-        1: // state 1: write 'reg_to_write' data of current 'instruction'
+        1: // state 1: write to 'reg_to_write' current 'instruction'
         //---------------------------------------------------------------------
         begin
-            state = 0;
+            state <= 0;
         end
 //        default: state = 0;
         endcase

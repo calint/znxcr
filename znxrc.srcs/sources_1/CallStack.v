@@ -24,8 +24,8 @@ module CallStack(
 
     always @(negedge clk) begin
         if (do_pop) begin
-            mem_idx = mem_idx - 1;
-            do_pop = 0;
+            mem_idx <= mem_idx - 1;
+            do_pop <= 0;
         end
     end
         
@@ -38,7 +38,7 @@ module CallStack(
                 mem_idx = mem_idx + 1;
                 mem[mem_idx] = {zf_in, nf_in, pc_in};
             end else if (pop) begin
-                do_pop = 1;
+                do_pop <= 1;
             end
         end
     end
