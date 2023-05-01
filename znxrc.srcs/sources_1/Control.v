@@ -43,11 +43,13 @@ wire [3:0] regb = is_loadi ? reg_to_write : instr[15:12];
 wire [7:0] imm8 = instr[15:8];
 wire [10:0] imm11 = instr[15:5];
 
+wire cs_zf,cs_nf,alu_zf,alu_nf,zf,nf; // z- and n-flag connections between Zn, ALU and CallStack
 wire ls_done; // loop stack enables this if it is the last iteration in current loop
 wire ls_new_loop = !is_loadi && instr[11:0] == OP_LOOP; // creates new loop with counter set from regs[regb]
 wire [15:0] ls_pc_out; // loop stack: address to set 'pc' to if loop is not done
 
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands that can't piggy back 'return'
+wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n));
 wire is_cs_op = is_do_op && !is_cr && (instr_c ^ instr_r); // enabled if command operates on call stack
 wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
 wire cs_pop = is_cs_op ? instr_r : 0; // enabled if command also does 'return'
@@ -60,11 +62,8 @@ wire [15:0] alu_operand_a = op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} 
                             op == OP_ADDI ? {{12{rega[3]}}, rega} : // 'addi' is add with signed immediate value 'rega'
                             rega_dat; // otherwise regs[rega]
 
-wire cs_zf,cs_nf,alu_zf,alu_nf,zf,nf;
 wire zn_we = is_alu_op || cs_pop; // update flags if alu op or return
 wire zn_sel = is_alu_op; // if alu op then enabled otherwise it is 'cs_pop'
-
-wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n));
 
 wire ram_we = op == OP_STORE; // connected to ram write enable input
 wire [15:0] ram_dat_out; // connected to ram data output
