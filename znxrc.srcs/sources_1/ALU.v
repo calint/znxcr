@@ -1,10 +1,9 @@
 `timescale 1ns / 1ps
-`default_nettype none
 
 module ALU(
-  input wire [2:0] op, // operation
-  input wire signed [15:0] a, // first operand
-  input wire signed [15:0] b, // second operand
+  input [2:0] op, // operation
+  input signed [15:0] a, // first operand
+  input signed [15:0] b, // second operand
   output reg [15:0] result, // result of a op b
   output reg zf, // enabled if result is zero
   output reg nf // enabled if result is negative

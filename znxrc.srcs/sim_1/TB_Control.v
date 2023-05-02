@@ -83,8 +83,8 @@ module TB_Control;
         else $display("case 14 failed - expected 4, got %d", dut.regs.mem[3]);
         
         #clk_tk // 023b // 20: skip 2
-        if (dut.pc == 22) $display("case 15 passed");
-        else $display("case 15 failed - expected 22, got %d", dut.pc);
+        if (dut.pc == 23) $display("case 15 passed");
+        else $display("case 15 failed - expected 23, got %d", dut.pc);
         
         // ffff // 21: 
         // ffff // 22: 
@@ -94,8 +94,11 @@ module TB_Control;
         else $display("case 16 failed - expected 4, got %d", dut.regs.mem[4]);
 
         #clk_tk // 0093 // 24: call 32 ; encoded (32>>2)|1 => 9
-        if (dut.pc == 31) $display("case 17 passed");
-        else $display("case 17 failed - expected 31, got %d", dut.pc);
+        if (dut.pc == 32) $display("case 17 passed");
+        else $display("case 17 failed - expected 32, got %d", dut.pc);
+//        $display("  ix=%d",dut.cs.mem_idx);
+//        $display("  [0]=%d",dut.cs.mem[0][15:0]);
+//        $display("  [1]=%d",dut.cs.mem[1][15:0]);        
         if (dut.cs.mem[0][15:0] == 24) $display("case 17.1 passed");
         else $display("case 17.1 failed - expected 24, got %d", dut.cs.mem[0][15:0]);
 
@@ -106,8 +109,8 @@ module TB_Control;
         #clk_tk // 616b // 33: load r6 r1 return ; ram[4] => 4
         if (dut.regs.mem[6] == 4) $display("case 19 passed");
         else $display("case 19 failed - expected 4, got %d", dut.regs.mem[6]);       
-        if (dut.pc == 24) $display("case 20 passed");
-        else $display("case 20 failed - expected 24, got %d", dut.pc);
+        if (dut.pc == 25) $display("case 20 passed");
+        else $display("case 20 failed - expected 25, got %d", dut.pc);
         // check that zf and nf is popped. instruction 10: did set nf=1 zf=0
         if (dut.zf == 0 && dut.nf == 1) $display("case 20.1 passed");
         else $display("case 20.1 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
@@ -134,8 +137,8 @@ module TB_Control;
         #clk_tk
         // => cnt==0, next loop
         
-        if (dut.pc == 26) $display("case 26 passed");
-        else $display("case 26 failed - expected 26, got %d", dut.pc);
+        if (dut.pc == 27) $display("case 26 passed");
+        else $display("case 26 failed - expected 27, got %d", dut.pc);
         if (dut.regs.mem[6] == 12) $display("case 27 passed");
         else $display("case 27 failed - expected 12, got %d", dut.regs.mem[6]);
         
@@ -151,25 +154,25 @@ module TB_Control;
         else $display("case 29.1 failed - expected 1,0, got %d,%d", dut.zf, dut.nf);
         
         #clk_tk // 033a // 30: ifn skip 3
-        if (dut.pc == 30) $display("case 30 passed");
-        else $display("case 30 failed - expected 30, got %d", dut.pc);
+        if (dut.pc == 31) $display("case 30 passed");
+        else $display("case 30 failed - expected 31, got %d", dut.pc);
         
         #clk_tk // 0339 // 31: ifz skip 3
-        if (dut.pc == 34) $display("case 31 passed");
-        else $display("case 31 failed - expected 34, got %d", dut.pc);
+        if (dut.pc == 35) $display("case 31 passed");
+        else $display("case 31 failed - expected 35, got %d", dut.pc);
         
         #clk_tk // 5f83 // 35: addi r5 -1
         #clk_tk // 013a // 36: ifn skip 1
-        if (dut.pc == 37) $display("case 32 passed");
-        else $display("case 32 failed - expected 37, got %d", dut.pc);
+        if (dut.pc == 38) $display("case 32 passed");
+        else $display("case 32 failed - expected 38, got %d", dut.pc);
         
         #clk_tk // 5283 // 38: addi r5 2
         if (dut.regs.mem[5] == 1) $display("case 33 passed");
         else $display("case 33 failed - expected 1, got %d", dut.regs.mem[5]);
         
         #clk_tk // 0238 // 39: ifp skip 2
-        if (dut.pc == 41) $display("case 34 passed");
-        else $display("case 34 failed - expected 40, got %d", dut.pc);
+        if (dut.pc == 42) $display("case 34 passed");
+        else $display("case 34 failed - expected 42, got %d", dut.pc);
 
         // 0000 // 40:
         // 0000 // 41: 
