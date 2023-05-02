@@ -138,12 +138,9 @@ module TB_Control;
         if (!dut.ls.done) $display("case 25 passed");
         else $display("case 25 failed - expected 0, got %d", dut.ls.done);
  
-        #clk_tk
-        // => cnt==2
-        #clk_tk
-        // => cnt==1, done==true
-        #clk_tk
-        // => cnt==0, next loop
+        #clk_tk // => cnt==2
+        #clk_tk // => cnt==1, done==true
+        #clk_tk // => cnt==0, next loop
         
         if (dut.pc == 27) $display("case 26 passed");
         else $display("case 26 failed - expected 27, got %d", dut.pc);
