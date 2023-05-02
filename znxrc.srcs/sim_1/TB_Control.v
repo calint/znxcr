@@ -5,7 +5,7 @@ module TB_Control;
     parameter clk_tk = 10;
     always #(clk_tk/2) clk = ~clk;
 
-    reg rst;
+    reg rst = 1;
     wire debug1;
 //    wire [15:0] pc_out;
 
