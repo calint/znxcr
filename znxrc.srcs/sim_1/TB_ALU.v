@@ -36,7 +36,7 @@ module TB_ALU;
 
         a = -1;
         b = 1;
-        op = 3'b011; // shift b by a
+        op = 3'b110; // shift b by a
         #clk_tk;
 
         if (result == 2) $display("case 2 passed");
@@ -44,7 +44,7 @@ module TB_ALU;
                 
         a = 1;
         b = 2;
-        op = 3'b011; // shift b by a
+        op = 3'b110; // shift b by a
         #clk_tk;
 
         if (result == 1) $display("case 3 passed");
@@ -52,7 +52,7 @@ module TB_ALU;
         
         a = 1;
         b = -1;
-        op = 3'b011; // shift b by a
+        op = 3'b110; // shift b by a
         #clk_tk;
 
         if (result == -1) $display("case 4 passed");
@@ -60,19 +60,11 @@ module TB_ALU;
 
         a = 2;
         b = -1;
-        op = 3'b001; // inc b by 2
+        op = 3'b010; // b = a
         #clk_tk;
 
-        if (result == 1) $display("case 5 passed");
-        else $display("case 5 failed - Expected 1, got %d", result);
-
-        a = -2;
-        b = 1;
-        op = 3'b001; // inc b by -2
-        #clk_tk;
-
-        if (result == -1) $display("case 6 passed");
-        else $display("case 5 failed - Expected -1, got %d", result);
+        if (result == 2) $display("case 5 passed");
+        else $display("case 5 failed - Expected 2, got %d", result);
 
         a = 0;
         b = 1;
@@ -81,6 +73,16 @@ module TB_ALU;
 
         if (result == -2) $display("case 7 passed");
         else $display("case 7 failed - Expected -2, got %d", result);
+
+        a = 1;
+        b = 2;
+        op = 3'b001; // b - a
+        #clk_tk;
+
+        if (result == 1) $display("case 8 passed");
+        else $display("case 8 failed - Expected 1, got %d", result);
+
+
 
         $finish;
         
