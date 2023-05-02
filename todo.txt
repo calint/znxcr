@@ -1,5 +1,5 @@
 [x] zn
-[ ]   at 'call' after push reset zn
+[x]   at 'call' after push reset zn
 [x] op 'copy'
 [ ] solve "ifX [op] next return"
 [ ] op 'skip' signed value

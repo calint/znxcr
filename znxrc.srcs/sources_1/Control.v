@@ -63,8 +63,9 @@ wire [15:0] alu_operand_a = op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} 
                             op == OP_ADDI ? {{12{rega[3]}}, rega} : // 'addi' is add with signed immediate value 'rega'
                             rega_dat; // otherwise regs[rega]
 
-wire zn_we = is_alu_op || cs_pop; // update flags if alu op or return
+wire zn_we = is_alu_op || cs_pop || cs_push; // update flags if alu op or return
 wire zn_sel = is_alu_op; // if alu op then enabled otherwise it is 'cs_pop'
+wire zn_clr = cs_push; // clears the flags if it is a 'call'
 
 wire ram_we = op == OP_STORE; // connected to ram write enable input
 wire [15:0] ram_dat_out; // connected to ram data output
@@ -198,7 +199,8 @@ Zn zn(
     .zf(zf),
     .nf(nf),
     .we(zn_we),
-    .sel(zn_sel)
+    .sel(zn_sel),
+    .clr(zn_clr)
 );
 
 RAM ram(

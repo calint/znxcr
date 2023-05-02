@@ -105,6 +105,9 @@ module TB_Control;
         #clk_tk // 5163 // 32: load r5 r1 ; ram[4] => 4
         if (dut.regs.mem[5] == 4) $display("case 18 passed");
         else $display("case 18 failed - expected 4, got %d", dut.regs.mem[5]);
+        if (dut.zf == 0 && dut.nf == 0) $display("case 18.1 passed");
+        else $display("case 18.1 failed - expected 0,0, got %d,%d", dut.zf, dut.nf);
+
 
         #clk_tk // 616b // 33: load r6 r1 return ; ram[4] => 4
         if (dut.regs.mem[6] == 4) $display("case 19 passed");
