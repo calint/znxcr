@@ -5,7 +5,7 @@
 *.runs/
 *.sim/
 *.gen/
+znxrc.srcs/utils_1/imports/synth_1/top.dcp
 
 # iverilog files
 cpu
-znxrc.srcs/utils_1/imports/synth_1/top.dcp

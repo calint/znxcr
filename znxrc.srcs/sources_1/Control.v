@@ -145,6 +145,17 @@ ROM rom(
     .data(instr)
     );
 
+LoopStack ls(
+    .rst(rst),
+    .clk(clk),
+    .new(ls_new_loop),
+    .cnt_in(regb_dat),
+    .pc_in(ls_pc_in),
+    .nxt(instr_x),
+    .pc_out(ls_pc_out),
+    .done(ls_done)
+    );
+
 CallStack cs(
     .rst(rst),
     .clk(clk),
@@ -156,17 +167,6 @@ CallStack cs(
     .pc_out(cs_pc_out),
     .zf_out(cs_zf),
     .nf_out(cs_nf)
-    );
-
-LoopStack ls(
-    .rst(rst),
-    .clk(clk),
-    .new(ls_new_loop),
-    .cnt_in(regb_dat),
-    .pc_in(ls_pc_in),
-    .nxt(instr_x),
-    .pc_out(ls_pc_out),
-    .done(ls_done)
     );
 
 Registers regs(
@@ -188,14 +188,6 @@ ALU alu(
     .nf(alu_nf)
 );
 
-RAM ram(
-  .clk(clk),
-  .addr(rega_dat),
-  .we(ram_we),
-  .dat_in(regb_dat),
-  .dat_out(ram_dat_out)
-);
-
 Zn zn(
     .rst(rst),
     .clk(clk),
@@ -207,6 +199,14 @@ Zn zn(
     .nf(nf),
     .we(zn_we),
     .sel(zn_sel)
+);
+
+RAM ram(
+  .clk(clk),
+  .addr(rega_dat),
+  .we(ram_we),
+  .dat_in(regb_dat),
+  .dat_out(ram_dat_out)
 );
 
 endmodule

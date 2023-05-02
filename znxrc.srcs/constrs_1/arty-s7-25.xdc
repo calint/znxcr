@@ -7,18 +7,25 @@
 #set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS33} [get_ports ld]
 
 # reset button
-set_property -dict { PACKAGE_PIN G15   IOSTANDARD LVCMOS33 } [get_ports { rst }]; #IO_L18N_T2_A23_15 Sch=btn[0]
+set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports rst]
+# to avoid the warning in "Check Timing" "no_input_delay"
+set_input_delay -min 0 [get_ports rst]
+set_input_delay -max 0 [get_ports rst]
 
 # debug led
 set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS33} [get_ports debug1]
+# to avoid the warning in "Check Timing" "no_output_delay"
+set_output_delay -min 0 [get_ports debug1]
+set_output_delay -max 0 [get_ports debug1]
+
 
 # clock 100 Mhz
 #set_property -dict { PACKAGE_PIN R2    IOSTANDARD SSTL135 } [get_ports { clk }]; #IO_L12P_T1_MRCC_34 Sch=ddr3_clk[200]
 #create_clock -add -name sys_clk_pin -period 10.000 -waveform {0 5.000}  [get_ports { clk }];
 
 # clock 12 Mhz
-set_property -dict { PACKAGE_PIN F14   IOSTANDARD LVCMOS33 } [get_ports { clk }]; #IO_L13P_T2_MRCC_15 Sch=uclk
-create_clock -add -name sys_clk_pin -period 83.333 -waveform {0 41.667} [get_ports { clk }];
+set_property -dict {PACKAGE_PIN F14 IOSTANDARD LVCMOS33} [get_ports clk]
+create_clock -period 83.333 -name sys_clk_pin -waveform {0.000 41.667} -add [get_ports clk]
 
 
 
@@ -220,3 +227,6 @@ set_property CONFIG_MODE SPIx4 [current_design]
 ## used the internal reference is set to half that value (i.e. 0.675v). Note that
 ## this property must be set even if SW3 is not used in the design.
 set_property INTERNAL_VREF 0.675 [get_iobanks 34]
+
+set_input_delay -min 0.000 [get_ports rst]
+set_input_delay -max 0.000 [get_ports rst]
