@@ -31,8 +31,8 @@ module TB_ALU;
         op = 3'b101; // add a and b
         #clk_tk;
         
-        if (result == 8) $display("case 1 passed");
-        else $display("case 1 failed - Expected 8, got %d", result);
+        if (result == 8 && !zf && !nf) $display("case 1 passed");
+        else $display("case 1 failed - Expected 8, 0, 0 got %d", result, zf, nf);
 
         a = -1;
         b = 1;
@@ -63,8 +63,8 @@ module TB_ALU;
         op = 3'b010; // b = a
         #clk_tk;
 
-        if (result == 2) $display("case 5 passed");
-        else $display("case 5 failed - Expected 2, got %d", result);
+        if (result == 2 && !zf && !nf) $display("case 5 passed");
+        else $display("case 5 failed - Expected 2, 0, 0 got %d, %d", result, zf, nf);
 
         a = 0;
         b = 1;
@@ -82,6 +82,13 @@ module TB_ALU;
         if (result == 1) $display("case 8 passed");
         else $display("case 8 failed - Expected 1, got %d", result);
 
+        a = 2;
+        b = 2;
+        op = 3'b001; // b - a
+        #clk_tk;
+
+        if (result == 0 && zf && !nf) $display("case 9 passed");
+        else $display("case 9 failed - Expected 0, 1, 0 got %d, %d, %d", result, zf, nf);
 
 
         $finish;
