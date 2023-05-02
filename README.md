@@ -1,7 +1,7 @@
 # znxcr
 experimental retro 16 bit cpu written in verilog xilinix vivado intended for fpga board Arty S7-25
 
-under construction
+under construction, probably buggy, first try at fpga with vivado and verilog
 
 ```
                           n
