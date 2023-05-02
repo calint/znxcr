@@ -3,7 +3,8 @@
 module Control(
     input rst,
     input clk,
-    output debug1
+    output debug1 //,
+//    output [15:0] pc_out
     );
 
 // c,r != 1,1
@@ -27,6 +28,7 @@ localparam ALU_NOT = 3'b111;
 wire [3:0] step;
 reg is_loadi; // enabled if instruction data copy to register 'reg_to_write'
 reg [15:0] pc; // program counter
+//assign pc_out = pc;
 reg [15:0] pc_nxt; // pc is set to pc_nxt at beginning of a cycle
 reg [15:0] cs_pc_in; // program counter as input to call stack
 wire [15:0] cs_pc_out; // program counter at top of the call stack

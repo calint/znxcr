@@ -5,19 +5,24 @@ module TB_Control;
     parameter clk_tk = 10;
     always #(clk_tk/2) clk = ~clk;
 
-    reg rst = 1;
+    reg rst;
+    wire debug1;
+//    wire [15:0] pc_out;
 
     Control dut(
         .rst(rst),
-        .clk(clk)
+        .clk(clk),
+        .debug1(debug1) // ,
+//        .pc_out(pc_out)
     );
 
     initial begin
-        #clk_tk;
-        #clk_tk;
-        #clk_tk;
-        #clk_tk;
+        rst = 1;
+        #100 // https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Using-Test-Benches-and-Stimulus-Files
         rst = 0;
+
+//        if (pc_out == 0) $display("case 1.1 passed");
+//        else $display("case 1.1 failed - expected 0, got %d", pc_out);
                 
         #clk_tk // 1058 // 00: loadi r1
         #clk_tk // 1234 // 01: 0x1234
@@ -225,6 +230,9 @@ module TB_Control;
         #clk_tk // 3223 // 58: sub r2 r3 (r3-=r2)
         if (dut.regs.mem[3] == 1) $display("case 43 passed");
         else $display("case 43 failed - expected 1, got %d", dut.regs.mem[3]);
+
+//        if (pc_out == 59) $display("case 44 passed");
+//        else $display("case 44 failed - expected 59, got %d", pc_out);
 
         $finish;
     end
