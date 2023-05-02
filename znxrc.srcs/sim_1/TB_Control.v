@@ -18,7 +18,7 @@ module TB_Control;
         #clk_tk;
         #clk_tk;
         rst = 0;
-        
+                
         #clk_tk // 1058 // 00: loadi r1
         #clk_tk // 1234 // 01: 0x1234
         if (dut.regs.mem[1] == 16'h1234) $display("case 1 passed");
