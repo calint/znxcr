@@ -218,6 +218,14 @@ module TB_Control;
         if (dut.pc == 54) $display("case 42.1 passed");
         else $display("case 42.1 failed - expected 54, got %d", dut.pc);
         
+        #clk_tk // 2058 // 54: loadi r2
+        #clk_tk // 0001 // 55: 0x001
+        #clk_tk // 3058 // 56: loadi r3
+        #clk_tk // 0002 // 57: 0x002
+        #clk_tk // 3223 // 58: sub r2 r3 (r3-=r2)
+        if (dut.regs.mem[3] == 1) $display("case 43 passed");
+        else $display("case 43 failed - expected 1, got %d", dut.regs.mem[3]);
+
         $finish;
     end
 endmodule

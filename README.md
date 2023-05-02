@@ -24,7 +24,7 @@ under construction, probably buggy, first try at fpga with vivado and verilog
                / . / . / . / . / 0 / 0 1 0 / src  / dst  /  copy
               / . / . / . / . / 0 / 0 1 1 / 0000 / .... /  not
              / . / . / . / . / 0 / 0 1 1 / imm4 / .... /  shift
-            / . / . / . / . / 0 / 1 0 0 / ...  / .... /  
+            / . / . / . / . / 0 / 1 0 0 / ...  / .... /  sub
            / . / . / . / . / 0 / 1 0 1 / .... / .... /  add
           / . / . / . / . / 0 / 1 1 0 / addr / dst  /  load
          / . / . / . / . / 0 / 1 1 1 / addr / src  /  store
@@ -40,7 +40,7 @@ under construction, probably buggy, first try at fpga with vivado and verilog
    010 : copy  : reg[b]=reg[a]
    110 : not   : reg[b]=~reg[b]
    110 : shift : reg[b]>>=imm4 (negative imm4 means 'left')
-   001 :       : 
+   001 : sub   : reg[b]-=reg[a] 
    101 : add   : reg[b]+=reg[a]
    011 : load  : reg[b]=ram[a]
    111 : store : ram[a]=reg[b]

@@ -6,13 +6,17 @@ module Control(
     output debug1
     );
 
-localparam OP_LOADI = 3'b010;
+// c,r != 1,1
 localparam OP_ADDI = 3'b100;
 localparam OP_COPY = 3'b010;
 localparam OP_ADD = 3'b101;
-localparam OP_SHIFT = 3'b110;
+localparam OP_SUB = 3'b001;
+localparam OP_SHIFT = 3'b110; // also 'not' when 'rega'==0
 localparam OP_LOAD = 3'b011;
 localparam OP_STORE = 3'b111;
+
+// c,r == 1,1
+localparam OP_LOADI = 3'b010;
 localparam OP_SKIP = 3'b001;
 localparam OP_LOOP = 12'b0000_0001_1000;
 
@@ -58,7 +62,7 @@ wire is_cs_op = is_do_op && !is_cr && (instr_c ^ instr_r); // enabled if command
 wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
 wire cs_pop = is_cs_op && !(is_ls_nxt && !ls_done) ? instr_r : 0; // enabled if command also does 'return'
 
-wire is_alu_op = !is_loadi && !is_cr && !cs_push && (op == OP_ADD || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT);
+wire is_alu_op = !is_loadi && !is_cr && !cs_push && (op == OP_ADD || op == OP_SUB || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT);
 wire [2:0] alu_op = op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as 'not'
                     op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega'
                     op; // same as op
