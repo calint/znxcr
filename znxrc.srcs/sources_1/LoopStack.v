@@ -16,7 +16,7 @@ module LoopStack(
     reg [15:0] stk_cnt [0:15];
 
     assign pc_out = stk_addr[idx];
-    assign done = stk_cnt[idx] == 1;
+    assign done = stk_cnt[idx] == 1 || idx == 15;
 
     always @(posedge clk) begin
         $display("  clk: LoopStack");

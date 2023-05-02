@@ -14,6 +14,9 @@ module TB_Control;
 
     initial begin
         #clk_tk;
+        #clk_tk;
+        #clk_tk;
+        #clk_tk;
         rst = 0;
         
         #clk_tk // 1058 // 00: loadi r1
@@ -93,12 +96,9 @@ module TB_Control;
         if (dut.regs.mem[4] == 4) $display("case 16 passed");
         else $display("case 16 failed - expected 4, got %d", dut.regs.mem[4]);
 
-        #clk_tk // 0093 // 24: call 32 ; encoded (32>>2)|1 => 9
+        #clk_tk // 0093 // 24: call 32 ; encoded (32>>2)|1 => 0x9
         if (dut.pc == 32) $display("case 17 passed");
         else $display("case 17 failed - expected 32, got %d", dut.pc);
-//        $display("  ix=%d",dut.cs.mem_idx);
-//        $display("  [0]=%d",dut.cs.mem[0][15:0]);
-//        $display("  [1]=%d",dut.cs.mem[1][15:0]);        
         if (dut.cs.mem[0][15:0] == 24) $display("case 17.1 passed");
         else $display("case 17.1 failed - expected 24, got %d", dut.cs.mem[0][15:0]);
 
@@ -189,10 +189,34 @@ module TB_Control;
         #clk_tk // 8742 // 45: ifn copy r7 r8
         if (dut.regs.mem[8] == -1) $display("case 36 passed");
         else $display("case 36 failed - expected -1, got %d", dut.regs.mem[8]);
+
+        if (dut.zf == 0 && dut.nf == 1) $display("case 37 passed");
+        else $display("case 37 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
+        #clk_tk // 00d3 // 46: call 52 ; encoded (48>>2)|1 => 0xd
+        if (dut.pc == 48) $display("case 37.1 passed");
+        else $display("case 37.1 failed - expected 48, got %d", dut.pc);
         
-        // 0000 // 45:
-        // 0000 // 46:
-        // 0000 // 47:
+        #clk_tk // 1058 // 48: loadi r1
+        #clk_tk // 0002 // 49: 0x002
+        #clk_tk // 1018 // 50: loopi r1
+        #clk_tk // 1f8f // 51: addi r1 -1 next return (cnt==2)
+        if (dut.pc == 51) $display("case 38 passed");
+        else $display("case 38 failed - expected 51, got %d", dut.pc);
+        if (dut.regs.mem[1] == 1) $display("case 39 passed");
+        else $display("case 39 failed - expected 1, got %d", dut.regs.mem[1]);
+        
+        #clk_tk // 1f8f // 51: addi r1 -1 next return (cnt==1)
+        if (dut.pc == 47) $display("case 40 passed");
+        else $display("case 40 failed - expected 47, got %d", dut.pc);
+        if (dut.regs.mem[1] == 0) $display("case 41 passed");
+        else $display("case 41 failed - expected 0, got %d", dut.regs.mem[1]);
+         // check that zf and nf are same as before the call, see 'case 37'   
+        if (dut.zf == 0 && dut.nf == 1) $display("case 42 passed");
+        else $display("case 42 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
+        
+        #clk_tk // 063b // 47: skip 6
+        if (dut.pc == 54) $display("case 42.1 passed");
+        else $display("case 42.1 failed - expected 54, got %d", dut.pc);
         
         $finish;
     end

@@ -1,12 +1,17 @@
 [x] zn
 [x]   at 'call' after push reset zn
 [x] op 'copy'
-[ ] solve "ifX [op] next return"
+[x] solve "ifX [op] next return"
 [ ] op 'skip' signed value
 [ ] refactor operations encoding to align op with alu-op
 [o] review racing conditions
-[x]   Control vs CallStack
-[x]   Control vs LoopStack
+        simulation in vivado works correctly but not in verilog
+        because the 'always(posedge clk)' blocks are called in
+        different order
+        assume that the fpga layout of components are the same
+        as in the simulator and racing does not occur
+[ ]   Control vs CallStack
+[ ]   Control vs LoopStack
 [o] review non-blocking assignments vs blocking assignments
 [ ] emulator
 [ ] assembler

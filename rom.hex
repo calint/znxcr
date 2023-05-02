@@ -22,7 +22,7 @@
 ffff // 21: 
 ffff // 22: 
 4163 // 23: load r4 r1 ; r4=ram[4] => 4
-0093 // 24: call 32 ; encoded (32>>2)|1 => 9
+0093 // 24: call 32 ; encoded (32>>2)|1 => 0x9
 6018 // 25: loop r6 ; r6 => 4
 6287 // 26: addi r6 2 next
 5058 // 27: loadi r5
@@ -42,7 +42,16 @@ ffff // 22:
 0000 // 41: 
 7058 // 42: loadi r7
 ffff // 43: 0xffff 
-8741 // 44: ifz copy r7 r8
+8741 // 44: ifz copy r7 r5
 8742 // 45: ifn copy r7 r8
-0000 // 46:
-0000 // 47:
+00d3 // 46: call 48 ; encoded (48>>2)|1 => 0xd
+063b // 47: skip 6
+1058 // 48: loadi r1
+0002 // 49: 0x002
+1018 // 50: loopi r1
+1f8f // 51: addi r1 -1 next return
+1058 // 52: loadi r1
+0003 // 53: 0x003
+1058 // 54: loadi r1
+0002 // 55: 0x003
+
