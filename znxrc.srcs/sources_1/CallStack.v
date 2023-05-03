@@ -8,9 +8,9 @@ module CallStack(
     input nf_in, // current negative flag
     input push,
     input pop,
-    output reg [15:0] pc_out, // popped program counter
-    output reg zf_out, // popped zero flag
-    output reg nf_out // popped negative flag
+    output reg [15:0] pc_out, // top of stack program counter
+    output reg zf_out, // top of stack zero flag
+    output reg nf_out // top of stack negative flag
     );
     
     reg [3:0] mem_idx;
