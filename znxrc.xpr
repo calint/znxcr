@@ -58,7 +58,7 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-s7-25"/>
-    <Option Name="WTXSimLaunchSim" Val="1031"/>
+    <Option Name="WTXSimLaunchSim" Val="1032"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -131,13 +131,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/Stepper.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PSRCDIR/sources_1/Zn.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -161,14 +154,6 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/rom.hex"/>
-      <File Path="$PSRCDIR/sources_1/bd/design_1/design_1.bd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="Control"/>
@@ -332,12 +317,6 @@
           <ReportConfigOutputOption Name="pb" Type="string" Value=""/>
           <ReportConfigOutputOption Name="rpx" Type="string" Value=""/>
         </ReportConfig>
-        <ReportConfig DisplayName="Timing Summary 1 - Opt Design" Name="impl_1_opt_report_timing_summary_1" Spec="report_timing_summary" RunStep="opt_design" ReportFile="Control_timing_summary_opted.rpt" Version="1" Minor="0">
-          <ReportConfigOption Name="max_paths" Type="" Value="10"/>
-          <ReportConfigOption Name="report_unconstrained" Type="" Value="true"/>
-          <ReportConfigOutputOption Name="pb" Type="string" Value="Control_timing_summary_opted.pb"/>
-          <ReportConfigOutputOption Name="rpx" Type="string" Value="Control_timing_summary_opted.rpx"/>
-        </ReportConfig>
         <ReportConfig DisplayName="Timing Summary - Power Opt Design" Name="impl_1_power_opt_report_timing_summary_0" Spec="report_timing_summary" RunStep="power_opt_design" Version="1" Minor="0" IsDisabled="true">
           <ReportConfigOption Name="max_paths" Type="" Value="10"/>
           <ReportConfigOption Name="report_unconstrained" Type="" Value="true"/>
@@ -432,7 +411,7 @@
         <ReportConfig DisplayName="report_webtalk" Name="impl_1_bitstream_report_webtalk_0" Spec="" RunStep="write_bitstream" ReportFile="usage_statistics_webtalk.html">
           <ReportConfigOption Name="dummy_option" Type="string"/>
         </ReportConfig>
-        <ReportConfig DisplayName="implementation_log" Name="impl_1_bitstream_implementation_log_0" Spec="" RunStep="write_bitstream">
+        <ReportConfig DisplayName="implementation_log" Name="impl_1_bitstream_implementation_log_0" Spec="" RunStep="write_bitstream" ReportFile="Control.vdi">
           <ReportConfigOption Name="dummy_option" Type="string"/>
         </ReportConfig>
       </ReportStrategy>

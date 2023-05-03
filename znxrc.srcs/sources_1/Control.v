@@ -152,12 +152,6 @@ always @(posedge clk) begin
     end
 end
 
-Stepper stepper(
-    .rst(rst),
-    .clk(clk),
-    .step(step)
-    );
-
 ROM rom(
     .addr(pc),
     .data(instr)
