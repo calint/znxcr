@@ -21,7 +21,7 @@ module CallStack(
     assign pc_out = mem[mem_idx][15:0];
         
     always @(posedge clk) begin
-        $display("  clk: CallStack: %0t", $realtime);
+        $display("  clk: CallStack");
         if (rst) begin
             mem_idx <= 4'hf;
         end else begin

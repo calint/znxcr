@@ -90,7 +90,7 @@ wire [15:0] regs_wd = is_loadi ? instr : // write instruction into registers
 assign debug1 = alu_zf;
 
 always @(posedge clk) begin
-    $display("  clk: Control: %0t", $realtime);
+    $display("  clk: Control");
     if (rst) begin
         is_loadi <= 0;
         pc <= 0;
