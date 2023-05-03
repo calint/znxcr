@@ -7,15 +7,13 @@ module LoopStack(
     input [15:0] cnt_in, // number of iterations in loop created when 'new'
     input [15:0] pc_in, // the program counter at 'loop' op
     input nxt, // enabled if instruction has 'next'
-    output [15:0] pc_out, // the 'pc_in' when the loop was created
+    output reg [15:0] pc_out, // the 'pc_in' when the loop was created
     output reg done // enabled if loop is at last iteration
     );
     
     reg [3:0] idx;
     reg [15:0] stk_addr [0:15];
     reg [15:0] stk_cnt [0:15];
-
-    assign pc_out = stk_addr[idx];
 
     always @(posedge clk) begin
         $display("  clk: LoopStack");
@@ -28,9 +26,11 @@ module LoopStack(
                 stk_addr[idx] = pc_in;
                 stk_cnt[idx] = cnt_in;
                 done = cnt_in == 1;
+                pc_out = pc_in;
             end else if (nxt) begin
                 stk_cnt[idx] = stk_cnt[idx] - 1;
                 done = stk_cnt[idx] == 1;
+                pc_out = stk_addr[idx];
                 if (stk_cnt[idx] == 0) begin
                     idx = idx - 1;
                 end

@@ -161,7 +161,7 @@ LoopStack ls(
     .new(ls_new_loop),
     .cnt_in(regb_dat),
     .pc_in(pc),
-    .nxt(instr_x),
+    .nxt(is_ls_nxt),
     .pc_out(ls_pc_out),
     .done(ls_done)
     );
