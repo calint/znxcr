@@ -35,15 +35,15 @@ module CallStack(
         end else begin
             if (push) begin
                 idx = idx + 1;
-                mem[idx] = {zf_in, nf_in, pc_in};
-                zf_out_nxt = zf_in;
-                nf_out_nxt = nf_in;
-                pc_out_nxt = pc_in;
+                mem[idx] <= {zf_in, nf_in, pc_in};
+                zf_out_nxt <= zf_in;
+                nf_out_nxt <= nf_in;
+                pc_out_nxt <= pc_in;
              end else if (pop) begin
                 idx = idx - 1;
-                zf_out_nxt = mem[idx][17];
-                nf_out_nxt = mem[idx][16];
-                pc_out_nxt = mem[idx][15:0];
+                zf_out_nxt <= mem[idx][17];
+                nf_out_nxt <= mem[idx][16];
+                pc_out_nxt <= mem[idx][15:0];
             end
         end
     end

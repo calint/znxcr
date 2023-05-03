@@ -28,14 +28,14 @@ module LoopStack(
                 done = cnt_in == 1;
                 if (!done) begin
                     idx = idx + 1;
-                    stk_addr[idx] = pc_in;
-                    stk_cnt[idx] = cnt_in;
-                    pc_out = pc_in;
+                    stk_addr[idx] <= pc_in;
+                    stk_cnt[idx] <= cnt_in;
+                    pc_out <= pc_in;
                 end
             end else if (nxt) begin
                 stk_cnt[idx] = stk_cnt[idx] - 1;
                 done = stk_cnt[idx] == 1;
-                pc_out = stk_addr[idx];
+                pc_out <= stk_addr[idx];
                 if (done) begin
                     idx = idx - 1;
                 end

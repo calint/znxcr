@@ -115,9 +115,10 @@ module Control(
                         case(op)
                         //-------------------------------------------------------------
                         OP_LOADI: begin // load register with data from the next instruction 
-                            loadi_reg = regb; // save the target register for next cycle
+                            loadi_reg <= regb; // save the target register for next cycle
                             do_loadi = is_do_op; // save this for next cycle to determine whether data will be written to register
-                            is_loadi = 1; // save this for next cycle to indicate that next instruction is data
+                            // save state for next cycle to indicate that next instruction is data
+                            is_loadi <= 1; // 'is_loadi' must be set after 'do_loadi' because 'is_do_op' uses 'is_loadi' in condition
                         end
                         //-------------------------------------------------------------
                         OP_SKIP: begin

@@ -10,7 +10,7 @@ module ALU(
 );
 
 always @(*) begin
-//    $display("  * : ALU: op, a, b = %d, %d, %d", op, a, b);
+//      $display("   * : ALU: (op,a,b)=(%d,%d,%d)", op, a, b);
     `ifdef DBG
         $display("   * : ALU");
     `endif
