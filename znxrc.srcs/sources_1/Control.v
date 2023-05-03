@@ -107,9 +107,9 @@ always @(posedge clk) begin
         begin
             if (cs_push) begin // 'call': calls imm11<<3
                 cs_pc_in = pc;
-                pc_nxt = {2'b00, (imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1 in 'negedge clk'
+                pc_nxt = {2'b00, (imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
             end else if (cs_pop) begin // 'ret' flag
-                pc_nxt = cs_pc_out; // set pc to top of stack, will be incremented by 1 in 'negedge clk'
+                pc_nxt = cs_pc_out; // set pc to top of call stack, will be incremented by 1
             end else begin // operation
                 if (is_cr) begin // if instruction bits c and r are 11 then select the second page of operations
                     case(op)
