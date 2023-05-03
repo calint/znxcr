@@ -61,8 +61,8 @@ wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zf==instr_z && nf==instr_
 wire is_ls_nxt = is_do_op && instr_x && !ls_done;
 
 wire is_cs_op = is_do_op && !is_cr && (instr_c ^ instr_r); // enabled if command operates on call stack
-wire cs_push = is_cs_op ? instr_c : 0; // enabled if command is 'call'
-wire cs_pop = is_cs_op && !(is_ls_nxt && !ls_done) ? instr_r : 0; // enabled if command also does 'return'
+wire cs_push = is_cs_op && instr_c; // enabled if command is 'call'
+wire cs_pop = is_cs_op && !(is_ls_nxt && !ls_done) && instr_r; // enabled if command also does 'return'
 
 wire is_alu_op = !is_loadi && !is_cr && !cs_push && (op == OP_ADD || op == OP_SUB || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT);
 wire [2:0] alu_op = op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as 'not'
@@ -88,10 +88,6 @@ wire [15:0] regs_wd = is_loadi ? instr : // write instruction into registers
                       0; // otherwise don't write to registers
 
 assign debug1 = alu_zf;
-
-//always @(negedge clk) begin
-//    pc <= pc_nxt;
-//end
 
 always @(posedge clk) begin
     $display("  clk: Control");
@@ -207,7 +203,6 @@ RAM ram(
   .dat_in(regb_dat),
   .dat_out(ram_dat_out)
 );
-
 
 Zn zn(
     .rst(rst),
