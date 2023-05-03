@@ -10,6 +10,8 @@ module ALU(
 );
 
 always @(*) begin
+//    $display("  * : ALU: op, a, b = %d, %d, %d", op, a, b);
+    $display("  * : ALU");
     case(op)
     3'b010: result <= a;
     3'b101: result <= b + a;

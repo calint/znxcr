@@ -21,6 +21,7 @@ module Zn(
             nf <= 0;
         end else begin
             if (we) begin
+                $display("  clk: Zn: we");
                 if (clr) begin
                     zf <= 0;
                     nf <= 0;

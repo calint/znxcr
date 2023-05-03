@@ -188,7 +188,7 @@ module TB_Control;
         if (dut.regs.mem[8] !== -1) $display("case 35 passed");
         else $display("case 35 failed - expected not -1, got %d", dut.regs.mem[8]);
 
-        #clk_tk // 8742 // 45: ifn copy r7 r8
+        #clk_tk // 8740 // 45: ifp copy r7 r8
         if (dut.regs.mem[8] == -1) $display("case 36 passed");
         else $display("case 36 failed - expected -1, got %d", dut.regs.mem[8]);
 
@@ -242,18 +242,48 @@ module TB_Control;
         if (dut.regs.mem[3] == 0) $display("case 47 passed");
         else $display("case 47 failed - expected 0, got %d", dut.regs.mem[3]);
 
-        #clk_tk // 201a // 59: ifn loop r2 ; r2==1, nf=0, zf=1
+        #clk_tk // 201a // 63: ifn loop r2 ; r2==1, zf, !nf
         if (dut.ls.idx == 15) $display("case 48 passed");
         else $display("case 48 failed - expected 15, got %d", dut.ls.idx);
 
-        #clk_tk // 2019 // 59: ifz loop r2 ; r2==1, nf=0, zf=1
+        #clk_tk // 2019 // 64: ifz loop r2 ; r2==1, zf, nf
         if (dut.ls.done) $display("case 49 passed");
         else $display("case 49 failed - expected 0, got %d", dut.ls.done);
         
-        #clk_tk // 2f83 // 60: addi r2 -1 next
+        #clk_tk // 2f83 // 65: addi r2 -1 next
         if (dut.regs.mem[2] == 0) $display("case 50 passed");
         else $display("case 50 failed - expected 0, got %d", dut.regs.mem[2]);
 
+        #clk_tk // 0132 // 66: ifn call 72 ; encoded (72>>2)|1 => 0x13
+        if (dut.pc_nxt == 67) $display("case 51 passed");
+        else $display("case 51 failed - expected 67, got %d", dut.pc_nxt);
+        
+        #clk_tk // 01311 // 67: ifz call 72 ; encoded (72>>2)|1 => 0x13
+        if (dut.pc_nxt == 72) $display("case 51 passed");
+        else $display("case 51 failed - expected 72, got %d", dut.pc_nxt);
+
+        #clk_tk // 0153 // 72: call 80 ; encoded (80>>2)|1 => 0x15
+        if (dut.pc_nxt == 80) $display("case 52 passed");
+        else $display("case 52 failed - expected 80, got %d", dut.pc_nxt);
+        if (dut.cs.idx == 1) $display("case 53 passed");
+        else $display("case 53 failed - expected 1, got %d", dut.cs.idx);
+
+        #clk_tk // 008b // 80: addi r0 0 return
+        if (dut.pc_nxt == 73) $display("case 54 passed");
+        else $display("case 54 failed - expected 73, got %d", dut.pc_nxt);
+        if (dut.cs.idx == 0) $display("case 55 passed");
+        else $display("case 55 failed - expected 0, got %d", dut.cs.idx);
+        
+        // 008b // 73: addi r0 0 return 
+        #clk_tk
+        if (dut.pc_nxt == 68) $display("case 56 passed");
+        else $display("case 56 failed - expected 68, got %d", dut.pc_nxt);
+        
+        
+        #clk_tk // 0c3b // 68: skip 12
+        if (dut.pc_nxt == 81) $display("case 57 passed");
+        else $display("case 57 failed - expected 81, got %d", dut.pc_nxt);
+        
         $finish;
     end
 endmodule
