@@ -8,10 +8,10 @@ under construction, first try at fpga with vivado and verilog
                           e
                       z n-x-c r   vintage 16 bit cpu
                       e e t a e
-                      r g   l t
-                      o a   l u
-                        t     r
-                        i     n
+                      r g   l t   8192 x 16 bit instructions
+                      o a   l u   8192 x 16 bit data
+                        t     r   16 x 16 bit registers
+                        i     n   12 MHz
                         v
                         e
 
