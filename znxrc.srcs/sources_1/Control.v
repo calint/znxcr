@@ -27,6 +27,7 @@ localparam ALU_NOT = 3'b111;
 
 wire [3:0] step;
 reg is_loadi; // enabled if instruction data copy to register 'reg_to_write'
+reg do_loadi; // enabled if the 'loadi' was a 'is_do_op'
 reg [15:0] pc; // program counter
 //assign pc_out = pc;
 reg [15:0] pc_nxt; // pc is set to pc_nxt at beginning of a cycle
@@ -100,6 +101,7 @@ always @(posedge clk) begin
     if (rst) begin
         is_loadi <= 0;
         pc_nxt <= 0;
+        do_loadi <= 0;
     end else begin
         case(is_loadi)
         //---------------------------------------------------------------------

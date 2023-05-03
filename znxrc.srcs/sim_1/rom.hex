@@ -57,4 +57,9 @@ ffff // 43: 0xffff
 3058 // 56: loadi r3
 0002 // 57: 0x002
 3223 // 58: sub r2 r3
+3018 // 59: loopi r3 (r3==1)
+3f83 // 60: addi r3 -1 next
+305a // 61: ifn loadi r3
+0002 // 62: 0x002
+
 

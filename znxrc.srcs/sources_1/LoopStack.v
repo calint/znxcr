@@ -22,16 +22,18 @@ module LoopStack(
             done <= 0;
         end else begin
             if (new) begin
-                idx = idx + 1;
-                stk_addr[idx] = pc_in;
-                stk_cnt[idx] = cnt_in;
                 done = cnt_in == 1;
-                pc_out = pc_in;
+                if (!done) begin
+                    idx = idx + 1;
+                    stk_addr[idx] = pc_in;
+                    stk_cnt[idx] = cnt_in;
+                    pc_out = pc_in;
+                end
             end else if (nxt) begin
                 stk_cnt[idx] = stk_cnt[idx] - 1;
                 done = stk_cnt[idx] == 1;
                 pc_out = stk_addr[idx];
-                if (stk_cnt[idx] == 0) begin
+                if (done) begin
                     idx = idx - 1;
                 end
             end
