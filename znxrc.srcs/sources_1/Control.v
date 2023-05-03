@@ -39,11 +39,11 @@ wire [15:0] rega_dat; // regs[rega]
 wire [15:0] regb_dat; // regs[regb]
 
 wire [15:0] instr; // instruction
-wire instr_z = instr[0]; // if enabled execute instruction if z-flag is on
-wire instr_n = instr[1]; // if enabled execute instruction if n-flag is on
+wire instr_z = instr[0]; // if enabled execute instruction if z-flag is on (also considering instr_n)
+wire instr_n = instr[1]; // if enabled execute instruction if n-flag is on (also considering instr_z)
 wire instr_x = instr[2]; // if enabled execute instruction and step an iteration in current loop
 wire instr_r = instr[3]; // if enabled execute instruction and return from current sub-routine (if instr_x and loop not finished then ignored)
-wire instr_c = instr[4]; // if enabled call a sub-routine (instr_r && instr_c is illegal and instead enables more commands)
+wire instr_c = instr[4]; // if enabled call a sub-routine (instr_r && instr_c is illegal and instead enables more instructions)
 wire [3:0] op = instr[7:5];
 wire [3:0] rega = instr[11:8];
 wire [3:0] regb = is_loadi ? loadi_reg : instr[15:12];
