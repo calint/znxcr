@@ -275,11 +275,9 @@ module TB_Control;
         if (dut.cs.idx == 0) $display("case 55 passed");
         else $display("case 55 failed - expected 0, got %d", dut.cs.idx);
         
-        // 008b // 73: addi r0 0 return 
-        #clk_tk
+        #clk_tk // 008b // 73: addi r0 0 return
         if (dut.pc_nxt == 68) $display("case 56 passed");
         else $display("case 56 failed - expected 68, got %d", dut.pc_nxt);
-        
         
         #clk_tk // 0c3b // 68: skip 12
         if (dut.pc_nxt == 81) $display("case 57 passed");
