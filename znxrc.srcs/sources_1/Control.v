@@ -55,7 +55,7 @@ wire cs_zf,cs_nf,alu_zf,alu_nf,zf,nf; // z- and n-flag connections between Zn, A
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands that can't piggy back 'return'
 wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n)); // enabled if command will execute
 wire ls_new_loop = is_do_op && instr[11:2] == OP_LOOP; // creates new loop with counter set from regs[regb]
-wire ls_done; // LoopStack enables this if it is the last iteration in current loop
+wire ls_done; // LoopStack enables this if it is the last iteration in current loop, stable during negative edge
 wire is_ls_nxt = is_do_op && instr_x && !ls_done; // enabled if instruction has 'next' and loop is not finished
 wire [15:0] ls_pc_out; // connected to LoopStack: address to set 'pc' to if loop is not done
 
@@ -89,7 +89,7 @@ wire [15:0] regs_wd = is_loadi ? instr : // write instruction into register
 assign debug1 = alu_zf;
 
 always @(negedge clk) begin
-    pc <= pc_nxt;
+    pc <= pc_nxt; // this setup holds 'pc' stable during positive edge of clock
 end
 
 always @(posedge clk) begin

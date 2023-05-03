@@ -6,9 +6,9 @@ module LoopStack(
     input new, // enabled to create a new loop using 'pc_in' and 'cnt_in'
     input [15:0] cnt_in, // number of iterations in loop created when 'new'
     input [15:0] pc_in, // the program counter at 'loop' op
-    input nxt, // enabled if instruction has 'next'
-    output reg [15:0] pc_out, // the 'pc_in' when the loop was created
-    output reg done // enabled if loop is at last iteration
+    input nxt, // enabled if instruction is also 'next'
+    output reg [15:0] pc_out, // the 'pc_in' when the loop was created, stable during negative edge
+    output reg done // enabled if loop is at last iteration, stable during negative edge
     );
     
     reg [3:0] idx;
