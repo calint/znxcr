@@ -228,7 +228,7 @@ module TB_Control;
         if (dut.regs.mem[3] == 1) $display("case 43 passed");
         else $display("case 43 failed - expected 1, got %d", dut.regs.mem[3]);
 
-        #clk_tk // 3018 // 59: loopi r3 (r3==1)
+        #clk_tk // 3018 // 59: loopi r3 ; r3==1
         #clk_tk // 3f83 // 60: addi r3 -1 next
         if (dut.pc_nxt == 61) $display("case 44 passed");
         else $display("case 44 failed - expected 61, got %d", dut.pc_nxt);
@@ -241,9 +241,6 @@ module TB_Control;
         #clk_tk // 0002 // 62: 0x002
         if (dut.regs.mem[3] == 0) $display("case 47 passed");
         else $display("case 47 failed - expected 0, got %d", dut.regs.mem[3]);
-
-//        if (pc_out == 59) $display("case 44 passed");
-//        else $display("case 44 failed - expected 59, got %d", pc_out);
 
         $finish;
     end

@@ -79,7 +79,7 @@ wire ram_we = op == OP_STORE; // connected to ram write enable input
 wire [15:0] ram_dat_out; // connected to ram data output
 
 // enables write to registers
-wire regs_we = is_loadi || (is_do_op && (is_alu_op || op == OP_LOAD));
+wire regs_we = (is_loadi && do_loadi) || (is_do_op && (is_alu_op || op == OP_LOAD));
 // data written to 'regb' if 'regs_we' is enabled
 wire [15:0] regs_wd = is_loadi ? instr : // write instruction into registers
                       is_alu_op ? alu_res : // write alu result to registers
@@ -101,7 +101,6 @@ always @(posedge clk) begin
     if (rst) begin
         is_loadi <= 0;
         pc_nxt <= 0;
-        do_loadi <= 0;
     end else begin
         case(is_loadi)
         //---------------------------------------------------------------------
@@ -117,8 +116,9 @@ always @(posedge clk) begin
                     case(op)
                     //-------------------------------------------------------------
                     OP_LOADI: begin // load register with data from the next instruction 
-                        is_loadi <= 1;
-                        reg_to_write <= regb;
+                        do_loadi = is_do_op;
+                        is_loadi = 1;
+                        reg_to_write = regb;
                     end
                     //-------------------------------------------------------------
                     OP_SKIP: begin
