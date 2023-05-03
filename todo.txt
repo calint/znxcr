@@ -11,8 +11,8 @@
         assume that the fpga layout of components are the same
         as in the simulator and racing does not occur
 
-[x]   Control.pc racing
-[ ]   Control vs CallStack
+[x]   Control.pc vs CallStack, LoopStack
+[x]   CallStack.(pc_out, zf_out, nf_out) vs Control
 [ ]   Control vs LoopStack
 [o] review non-blocking assignments vs blocking assignments
 [ ] emulator
