@@ -61,3 +61,6 @@ ffff // 43: 0xffff
 3f83 // 60: addi r3 -1 next
 305a // 61: ifn loadi r3
 0002 // 62: 0x002
+201a // 59: ifn loopi r2 ; r2==1, nf=0, zf=1
+2019 // 59: ifz loopi r2 ; r2==1, nf=0, zf=1
+2f83 // 60: addi r2 -1 next

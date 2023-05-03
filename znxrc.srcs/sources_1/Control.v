@@ -19,7 +19,7 @@ localparam OP_STORE = 3'b111;
 // c,r == 1,1
 localparam OP_LOADI = 3'b010;
 localparam OP_SKIP = 3'b001;
-localparam OP_LOOP = 12'b0000_0001_1000;
+localparam OP_LOOP = 12'b0000_0001_10;
 
 localparam ALU_ADD = OP_ADD;
 localparam ALU_SHIFT = OP_SHIFT;
@@ -52,7 +52,7 @@ wire [10:0] imm11 = instr[15:5];
 
 wire cs_zf,cs_nf,alu_zf,alu_nf,zf,nf; // z- and n-flag connections between Zn, ALU and CallStack
 wire ls_done; // loop stack enables this if it is the last iteration in current loop
-wire ls_new_loop = !is_loadi && instr[11:0] == OP_LOOP; // creates new loop with counter set from regs[regb]
+wire ls_new_loop = !is_loadi && instr[11:2] == OP_LOOP; // creates new loop with counter set from regs[regb]
 wire [15:0] ls_pc_out; // loop stack: address to set 'pc' to if loop is not done
 
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands that can't piggy back 'return'

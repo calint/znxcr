@@ -242,6 +242,18 @@ module TB_Control;
         if (dut.regs.mem[3] == 0) $display("case 47 passed");
         else $display("case 47 failed - expected 0, got %d", dut.regs.mem[3]);
 
+        #clk_tk // 201a // 59: ifn loopi r2 ; r2==1, nf=0, zf=1
+        if (dut.ls.idx == 15) $display("case 48 passed");
+        else $display("case 48 failed - expected 15, got %d", dut.ls.idx);
+
+        #clk_tk // 2019 // 59: ifz loopi r2 ; r2==1, nf=0, zf=1
+        if (dut.ls.done) $display("case 49 passed");
+        else $display("case 49 failed - expected 0, got %d", dut.ls.done);
+        
+        #clk_tk // 2f83 // 60: addi r2 -1 next
+        if (dut.regs.mem[2] == 0) $display("case 50 passed");
+        else $display("case 50 failed - expected 0, got %d", dut.regs.mem[2]);
+
         $finish;
     end
 endmodule
