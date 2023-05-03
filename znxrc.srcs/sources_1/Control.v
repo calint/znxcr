@@ -25,14 +25,14 @@ localparam ALU_ADD = OP_ADD;
 localparam ALU_SHIFT = OP_SHIFT;
 localparam ALU_NOT = 3'b111;
 
-wire [3:0] step;
-reg is_loadi; // enabled if instruction data copy to register 'reg_to_write'
-reg do_loadi; // enabled if the 'loadi' was a 'is_do_op'
 reg [15:0] pc; // program counter
-//assign pc_out = pc;
-reg [15:0] pc_nxt; // pc is set to pc_nxt at beginning of a cycle
-wire [15:0] cs_pc_out; // program counter at top of the call stack
-reg [3:0] reg_to_write; // register to write when doing 'loadi'
+reg [15:0] pc_nxt; // 'pc' is set to 'pc_nxt' at beginning of a cycle
+
+reg is_loadi; // enabled if instruction data copy to register 'loadi_reg'
+reg do_loadi; // enabled if the 'loadi' was a 'is_do_op'
+reg [3:0] loadi_reg; // register to write when doing 'loadi'
+
+wire [15:0] cs_pc_out; // connected to program counter at top of the CallStack
 
 wire [15:0] alu_res; // result from alu
 wire [15:0] rega_dat; // regs[rega]
@@ -42,26 +42,26 @@ wire [15:0] instr; // instruction
 wire instr_z = instr[0]; // if enabled execute command if z-flag is on
 wire instr_n = instr[1]; // if enabled execute command if n-flag is on
 wire instr_x = instr[2]; // if enabled execute command and step an iteration in current loop
-wire instr_r = instr[3]; // if enabled execute command and return from current sub-routine
+wire instr_r = instr[3]; // if enabled execute command and return from current sub-routine (if instr_x and loop not finished then ignored)
 wire instr_c = instr[4]; // if enabled call a sub-routine (instr_r && instr_c is illegal and instead enables more commands)
 wire [3:0] op = instr[7:5];
 wire [3:0] rega = instr[11:8];
-wire [3:0] regb = is_loadi ? reg_to_write : instr[15:12];
+wire [3:0] regb = is_loadi ? loadi_reg : instr[15:12];
 wire [7:0] imm8 = instr[15:8];
 wire [10:0] imm11 = instr[15:5];
 
 wire cs_zf,cs_nf,alu_zf,alu_nf,zf,nf; // z- and n-flag connections between Zn, ALU and CallStack
 
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands that can't piggy back 'return'
-wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n));
+wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n)); // enabled if command will execute
 wire ls_new_loop = is_do_op && instr[11:2] == OP_LOOP; // creates new loop with counter set from regs[regb]
-wire ls_done; // loop stack enables this if it is the last iteration in current loop
-wire is_ls_nxt = is_do_op && instr_x && !ls_done;
-wire [15:0] ls_pc_out; // loop stack: address to set 'pc' to if loop is not done
+wire ls_done; // LoopStack enables this if it is the last iteration in current loop
+wire is_ls_nxt = is_do_op && instr_x && !ls_done; // enabled if instruction has 'next' and loop is not finished
+wire [15:0] ls_pc_out; // connected to LoopStack: address to set 'pc' to if loop is not done
 
-wire is_cs_op = is_do_op && !is_cr && (instr_c ^ instr_r); // enabled if command operates on call stack
+wire is_cs_op = is_do_op && !is_cr && (instr_c ^ instr_r); // enabled if command operates on CallStack
 wire cs_push = is_cs_op && instr_c; // enabled if command is 'call'
-wire cs_pop = is_cs_op && !(is_ls_nxt && !ls_done) && instr_r; // enabled if command also does 'return'
+wire cs_pop = is_cs_op && instr_r && !(is_ls_nxt && !ls_done); // enabled if 'return', disabled if also 'next' and loop not finished
 
 wire is_alu_op = !is_loadi && !is_cr && !cs_push && (op == OP_ADD || op == OP_SUB || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT);
 wire [2:0] alu_op = op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as 'not'
@@ -73,18 +73,18 @@ wire [15:0] alu_operand_a = op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} 
 
 wire zn_we = is_do_op && (is_alu_op || cs_pop || cs_push); // update flags if alu op or 'call' or 'return'
 wire zn_sel = !cs_pop; // if 'zn_we': if not 'return' then assume alu
-wire zn_clr = cs_push; // if 'zn_we': clears the flags if it is a 'call'
+wire zn_clr = cs_push; // if 'zn_we': clears the flags if it is a 'call'. has precedence over 'zn_sel' when 'zn_we'
 
-wire ram_we = op == OP_STORE; // connected to ram write enable input
-wire [15:0] ram_dat_out; // connected to ram data output
+wire ram_we = op == OP_STORE; // connected to ram write enable input, enabled if 'store' command
+wire [15:0] ram_dat_out; // connected to ram data output, data to be written to ram
 
-// enables write to registers
+// enables write to registers if 'loadi' or 'load' or alu op
 wire regs_we = (is_loadi && do_loadi) || (is_do_op && (is_alu_op || op == OP_LOAD));
 // data written to 'regb' if 'regs_we' is enabled
-wire [15:0] regs_wd = is_loadi ? instr : // write instruction into registers
-                      is_alu_op ? alu_res : // write alu result to registers
-                      op == OP_LOAD ? ram_dat_out : // write ram data output to registers
-                      0; // otherwise don't write to registers
+wire [15:0] regs_wd = is_loadi ? instr : // write instruction into register
+                      is_alu_op ? alu_res : // write alu result to register
+                      op == OP_LOAD ? ram_dat_out : // write ram output to register
+                      0; // otherwise 'regs_we' is disabled
 
 assign debug1 = alu_zf;
 
@@ -112,14 +112,14 @@ always @(posedge clk) begin
                     case(op)
                     //-------------------------------------------------------------
                     OP_LOADI: begin // load register with data from the next instruction 
-                        do_loadi = is_do_op;
-                        is_loadi = 1;
-                        reg_to_write = regb;
+                        do_loadi = is_do_op; // save this for next cycle to determine wether data will be written to register
+                        is_loadi = 1; // save this for next cycle to load instruction into the 'reg_to_write'
+                        loadi_reg = regb; // save the target register for next cycle
                     end
                     //-------------------------------------------------------------
                     OP_SKIP: begin
-                        is_loadi <= 0;
-                        if (is_do_op) begin
+                        is_loadi <= 0; // reset flag that triggers write instruction to register
+                        if (is_do_op) begin // only do if zn-flags match instruction zn-flags (or always if z,n=1,1)
                             pc_nxt = pc + {8'd0, imm8};
                         end
                     end
@@ -131,9 +131,9 @@ always @(posedge clk) begin
                 end else begin // instruction bits c and r are not 11
                     is_loadi <= 0;
                 end
-                // if loop 'next' 
+                // if 'next' and loop not done 
                 if (is_ls_nxt) begin
-                    pc_nxt = ls_pc_out;        
+                    pc_nxt = ls_pc_out; // get the address to jump to from LoopStack (will be incremented by 1)
                 end  
             end
         end
@@ -144,6 +144,7 @@ always @(posedge clk) begin
             is_loadi = 0;
         end
         endcase
+        // next instruction
         pc_nxt = pc_nxt + 1;
     end
 end
