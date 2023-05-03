@@ -76,7 +76,7 @@ module Control(
     wire zn_clr = cs_push; // if 'zn_we': clears the flags if it is a 'call'. has precedence over 'zn_sel' when 'zn_we'
 
     wire ram_we = op == OP_STORE; // connected to ram write enable input, enabled if 'store' instruction
-    wire [15:0] ram_dat_out; // connected to ram data output, data to be written to ram
+    wire [15:0] ram_dat_out; // connected to ram data output, data to be read from ram
 
     // enables write to registers if 'loadi' or 'load' or alu op
     wire regs_we = (is_loadi && do_loadi) || (is_do_op && (is_alu_op || op == OP_LOAD));
