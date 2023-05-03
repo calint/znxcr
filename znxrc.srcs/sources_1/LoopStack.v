@@ -18,7 +18,7 @@ module LoopStack(
     assign pc_out = stk_addr[idx];
 
     always @(posedge clk) begin
-        $display("  clk: LoopStack");
+        $display("  clk: LoopStack: %0t", $realtime);
         if (rst) begin
             idx <= 4'hf;
             done <= 0;

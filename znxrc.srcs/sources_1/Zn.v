@@ -15,7 +15,7 @@ module Zn(
     );
     
     always @(posedge clk) begin
-        $display("  clk: Zn");
+        $display("  clk: Zn: %0t", $realtime);
         if (rst) begin
             zf <= 0;
             nf <= 0;

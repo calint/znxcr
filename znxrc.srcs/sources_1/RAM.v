@@ -13,7 +13,7 @@ reg [15:0] mem [0:8191];
 assign dat_out = mem[addr];
 
 always @(posedge clk) begin
-    $display("  clk: RAM");
+    $display("  clk: RAM: %0t", $realtime);
     if (we)
         mem[addr] <= dat_in;
 end

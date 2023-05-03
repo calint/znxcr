@@ -1,0 +1,11 @@
+https://electronics.stackexchange.com/questions/91688/difference-between-blocking-and-nonblocking-assignment-verilog
+
+Blocking assignment executes "in series" because a blocking assignment blocks 
+execution of the next statement until it completes. Therefore the results of 
+the next statement may depend on the first one being completed.
+
+Non-blocking assignment executes in parallel because it describes assignments 
+that all occur at the same time. The result of a statement on the 2nd line 
+will not depend on the results of the statement on the 1st line. Instead, the 
+2nd line will execute as if the 1st line had not happened yet.
+
