@@ -15,13 +15,15 @@ module Zn(
     );
     
     always @(posedge clk) begin
-        $display("  clk: Zn");
+        `ifdef DBG
+            $display("  clk: Zn");
+        `endif
+
         if (rst) begin
             zf <= 0;
             nf <= 0;
         end else begin
             if (we) begin
-                $display("  clk: Zn: we");
                 if (clr) begin
                     zf <= 0;
                     nf <= 0;

@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+//`define DBG
 
 module TB_Control;
     reg clk = 0;

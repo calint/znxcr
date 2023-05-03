@@ -26,7 +26,10 @@ module CallStack(
     end
     
     always @(posedge clk) begin
-        $display("  clk: CallStack");
+        `ifdef DBG
+            $display("  clk: CallStack");
+        `endif
+
         if (rst) begin
             idx <= 4'hf;
         end else begin

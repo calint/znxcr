@@ -16,7 +16,10 @@ module LoopStack(
     reg [15:0] stk_cnt [0:15];
 
     always @(posedge clk) begin
-        $display("  clk: LoopStack");
+        `ifdef DBG
+            $display("  clk: LoopStack");
+        `endif
+
         if (rst) begin
             idx <= 4'hf;
             done <= 0;
