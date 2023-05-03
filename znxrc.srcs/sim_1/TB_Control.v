@@ -123,7 +123,7 @@ module TB_Control;
         if (dut.zf == 0 && dut.nf == 1) $display("case 20.1 passed");
         else $display("case 20.1 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
 
-        #clk_tk // 6018 // 25: loop r6 ; r6 => 4
+        #clk_tk // 601b // 25: loop r6 ; r6 => 4
         if (dut.ls.pc_out == 25) $display("case 21 passed");
         else $display("case 21 failed - expected 25, got %d", dut.ls.pc_out);
         if (!dut.ls.done) $display("case 22 passed");
@@ -200,7 +200,7 @@ module TB_Control;
         
         #clk_tk // 1058 // 48: loadi r1
         #clk_tk // 0002 // 49: 0x002
-        #clk_tk // 1018 // 50: loopi r1
+        #clk_tk // 101b // 50: loop r1
         #clk_tk // 1f8f // 51: addi r1 -1 next return (cnt==2)
         if (dut.pc_nxt == 51) $display("case 38 passed");
         else $display("case 38 failed - expected 51, got %d", dut.pc_nxt);
@@ -228,7 +228,7 @@ module TB_Control;
         if (dut.regs.mem[3] == 1) $display("case 43 passed");
         else $display("case 43 failed - expected 1, got %d", dut.regs.mem[3]);
 
-        #clk_tk // 3018 // 59: loopi r3 ; r3==1
+        #clk_tk // 301b // 59: loop r3 ; r3==1
         #clk_tk // 3f83 // 60: addi r3 -1 next
         if (dut.pc_nxt == 61) $display("case 44 passed");
         else $display("case 44 failed - expected 61, got %d", dut.pc_nxt);
@@ -242,11 +242,11 @@ module TB_Control;
         if (dut.regs.mem[3] == 0) $display("case 47 passed");
         else $display("case 47 failed - expected 0, got %d", dut.regs.mem[3]);
 
-        #clk_tk // 201a // 59: ifn loopi r2 ; r2==1, nf=0, zf=1
+        #clk_tk // 201a // 59: ifn loop r2 ; r2==1, nf=0, zf=1
         if (dut.ls.idx == 15) $display("case 48 passed");
         else $display("case 48 failed - expected 15, got %d", dut.ls.idx);
 
-        #clk_tk // 2019 // 59: ifz loopi r2 ; r2==1, nf=0, zf=1
+        #clk_tk // 2019 // 59: ifz loop r2 ; r2==1, nf=0, zf=1
         if (dut.ls.done) $display("case 49 passed");
         else $display("case 49 failed - expected 0, got %d", dut.ls.done);
         

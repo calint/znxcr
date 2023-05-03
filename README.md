@@ -29,7 +29,7 @@ under construction, probably buggy, first try at fpga with vivado and verilog
           / . / . / . / . / 0 / 1 1 0 / addr / dst  /  load
          / . / . / . / . / 0 / 1 1 1 / addr / src  /  store
         / . / . / 0 / 0 / 1 / immediate 11 << 3   /  call
-       / 0 / 0 / 0 / 1 / 1 / 0 0 0 / 0000 / .... /  loop
+       / . / . / 0 / 1 / 1 / 0 0 0 / 0000 / .... /  loop
       / . / . / 0 / 1 / 1 / 1 0 0 / immediate 8 /  skip
      / . / . / 0 / 1 / 1 / 0 1 0 / 0000 / .... /  loadi
 
