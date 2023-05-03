@@ -91,8 +91,8 @@ module TB_Control;
         else $display("case 14 failed - expected 4, got %d", dut.regs.mem[3]);
         
         #clk_tk // 023b // 20: skip 2
-        if (dut.pc == 23) $display("case 15 passed");
-        else $display("case 15 failed - expected 23, got %d", dut.pc);
+        if (dut.pc_nxt == 23) $display("case 15 passed");
+        else $display("case 15 failed - expected 23, got %d", dut.pc_nxt);
         
         // ffff // 21: 
         // ffff // 22: 
@@ -102,8 +102,8 @@ module TB_Control;
         else $display("case 16 failed - expected 4, got %d", dut.regs.mem[4]);
 
         #clk_tk // 0093 // 24: call 32 ; encoded (32>>2)|1 => 0x9
-        if (dut.pc == 32) $display("case 17 passed");
-        else $display("case 17 failed - expected 32, got %d", dut.pc);
+        if (dut.pc_nxt == 32) $display("case 17 passed");
+        else $display("case 17 failed - expected 32, got %d", dut.pc_nxt);
         if (dut.cs.mem[0][15:0] == 24) $display("case 17.1 passed");
         else $display("case 17.1 failed - expected 24, got %d", dut.cs.mem[0][15:0]);
 
@@ -117,8 +117,8 @@ module TB_Control;
         #clk_tk // 616b // 33: load r6 r1 return ; ram[4] => 4
         if (dut.regs.mem[6] == 4) $display("case 19 passed");
         else $display("case 19 failed - expected 4, got %d", dut.regs.mem[6]);       
-        if (dut.pc == 25) $display("case 20 passed");
-        else $display("case 20 failed - expected 25, got %d", dut.pc);
+        if (dut.pc_nxt == 25) $display("case 20 passed");
+        else $display("case 20 failed - expected 25, got %d", dut.pc_nxt);
         // check that zf and nf is popped. instruction 10: did set nf=1 zf=0
         if (dut.zf == 0 && dut.nf == 1) $display("case 20.1 passed");
         else $display("case 20.1 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
@@ -142,8 +142,8 @@ module TB_Control;
         #clk_tk // => cnt==1, done==true
         #clk_tk // => cnt==0, next loop
         
-        if (dut.pc == 27) $display("case 26 passed");
-        else $display("case 26 failed - expected 27, got %d", dut.pc);
+        if (dut.pc_nxt == 27) $display("case 26 passed");
+        else $display("case 26 failed - expected 27, got %d", dut.pc_nxt);
         if (dut.regs.mem[6] == 12) $display("case 27 passed");
         else $display("case 27 failed - expected 12, got %d", dut.regs.mem[6]);
         
@@ -159,25 +159,25 @@ module TB_Control;
         else $display("case 29.1 failed - expected 1,0, got %d,%d", dut.zf, dut.nf);
         
         #clk_tk // 033a // 30: ifn skip 3
-        if (dut.pc == 31) $display("case 30 passed");
-        else $display("case 30 failed - expected 31, got %d", dut.pc);
+        if (dut.pc_nxt == 31) $display("case 30 passed");
+        else $display("case 30 failed - expected 31, got %d", dut.pc_nxt);
         
         #clk_tk // 0339 // 31: ifz skip 3
-        if (dut.pc == 35) $display("case 31 passed");
-        else $display("case 31 failed - expected 35, got %d", dut.pc);
+        if (dut.pc_nxt == 35) $display("case 31 passed");
+        else $display("case 31 failed - expected 35, got %d", dut.pc_nxt);
         
         #clk_tk // 5f83 // 35: addi r5 -1
         #clk_tk // 013a // 36: ifn skip 1
-        if (dut.pc == 38) $display("case 32 passed");
-        else $display("case 32 failed - expected 38, got %d", dut.pc);
+        if (dut.pc_nxt == 38) $display("case 32 passed");
+        else $display("case 32 failed - expected 38, got %d", dut.pc_nxt);
         
         #clk_tk // 5283 // 38: addi r5 2
         if (dut.regs.mem[5] == 1) $display("case 33 passed");
         else $display("case 33 failed - expected 1, got %d", dut.regs.mem[5]);
         
         #clk_tk // 0238 // 39: ifp skip 2
-        if (dut.pc == 42) $display("case 34 passed");
-        else $display("case 34 failed - expected 42, got %d", dut.pc);
+        if (dut.pc_nxt == 42) $display("case 34 passed");
+        else $display("case 34 failed - expected 42, got %d", dut.pc_nxt);
 
         // 0000 // 40:
         // 0000 // 41: 
@@ -195,21 +195,21 @@ module TB_Control;
         if (dut.zf == 0 && dut.nf == 1) $display("case 37 passed");
         else $display("case 37 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
         #clk_tk // 00d3 // 46: call 52 ; encoded (48>>2)|1 => 0xd
-        if (dut.pc == 48) $display("case 37.1 passed");
-        else $display("case 37.1 failed - expected 48, got %d", dut.pc);
+        if (dut.pc_nxt == 48) $display("case 37.1 passed");
+        else $display("case 37.1 failed - expected 48, got %d", dut.pc_nxt);
         
         #clk_tk // 1058 // 48: loadi r1
         #clk_tk // 0002 // 49: 0x002
         #clk_tk // 1018 // 50: loopi r1
         #clk_tk // 1f8f // 51: addi r1 -1 next return (cnt==2)
-        if (dut.pc == 51) $display("case 38 passed");
-        else $display("case 38 failed - expected 51, got %d", dut.pc);
+        if (dut.pc_nxt == 51) $display("case 38 passed");
+        else $display("case 38 failed - expected 51, got %d", dut.pc_nxt);
         if (dut.regs.mem[1] == 1) $display("case 39 passed");
         else $display("case 39 failed - expected 1, got %d", dut.regs.mem[1]);
         
         #clk_tk // 1f8f // 51: addi r1 -1 next return (cnt==1)
-        if (dut.pc == 47) $display("case 40 passed");
-        else $display("case 40 failed - expected 47, got %d", dut.pc);
+        if (dut.pc_nxt == 47) $display("case 40 passed");
+        else $display("case 40 failed - expected 47, got %d", dut.pc_nxt);
         if (dut.regs.mem[1] == 0) $display("case 41 passed");
         else $display("case 41 failed - expected 0, got %d", dut.regs.mem[1]);
          // check that zf and nf are same as before the call, see 'case 37'   
@@ -217,8 +217,8 @@ module TB_Control;
         else $display("case 42 failed - expected 0,1, got %d,%d", dut.zf, dut.nf);
         
         #clk_tk // 063b // 47: skip 6
-        if (dut.pc == 54) $display("case 42.1 passed");
-        else $display("case 42.1 failed - expected 54, got %d", dut.pc);
+        if (dut.pc_nxt == 54) $display("case 42.1 passed");
+        else $display("case 42.1 failed - expected 54, got %d", dut.pc_nxt);
         
         #clk_tk // 2058 // 54: loadi r2
         #clk_tk // 0001 // 55: 0x001

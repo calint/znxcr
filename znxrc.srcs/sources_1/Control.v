@@ -30,7 +30,6 @@ reg is_loadi; // enabled if instruction data copy to register 'reg_to_write'
 reg [15:0] pc; // program counter
 //assign pc_out = pc;
 reg [15:0] pc_nxt; // pc is set to pc_nxt at beginning of a cycle
-reg [15:0] cs_pc_in; // program counter as input to call stack
 wire [15:0] cs_pc_out; // program counter at top of the call stack
 reg [3:0] reg_to_write; // register to write when doing 'loadi'
 
@@ -54,7 +53,6 @@ wire cs_zf,cs_nf,alu_zf,alu_nf,zf,nf; // z- and n-flag connections between Zn, A
 wire ls_done; // loop stack enables this if it is the last iteration in current loop
 wire ls_new_loop = !is_loadi && instr[11:0] == OP_LOOP; // creates new loop with counter set from regs[regb]
 wire [15:0] ls_pc_out; // loop stack: address to set 'pc' to if loop is not done
-reg [15:0] ls_pc_in;
 
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other commands that can't piggy back 'return'
 wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n));
@@ -89,11 +87,18 @@ wire [15:0] regs_wd = is_loadi ? instr : // write instruction into registers
 
 assign debug1 = alu_zf;
 
+always @(negedge clk) begin
+    if (rst) begin
+        pc <= 0;
+    end else begin
+        pc <= pc_nxt;
+    end
+end
+
 always @(posedge clk) begin
     $display("  clk: Control");
     if (rst) begin
         is_loadi <= 0;
-        pc <= 0;
         pc_nxt <= 0;
     end else begin
         case(is_loadi)
@@ -102,7 +107,6 @@ always @(posedge clk) begin
         //---------------------------------------------------------------------
         begin
             if (cs_push) begin // 'call': calls imm11<<3
-                cs_pc_in = pc;
                 pc_nxt = {2'b00, (imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
             end else if (cs_pop) begin // 'ret' flag
                 pc_nxt = cs_pc_out; // set pc to top of call stack, will be incremented by 1
@@ -142,9 +146,7 @@ always @(posedge clk) begin
             is_loadi = 0;
         end
         endcase
-        ls_pc_in = pc;
         pc_nxt = pc_nxt + 1;
-        pc <= pc_nxt;
     end
 end
 
@@ -158,7 +160,7 @@ LoopStack ls(
     .clk(clk),
     .new(ls_new_loop),
     .cnt_in(regb_dat),
-    .pc_in(ls_pc_in),
+    .pc_in(pc),
     .nxt(instr_x),
     .pc_out(ls_pc_out),
     .done(ls_done)
@@ -167,7 +169,7 @@ LoopStack ls(
 CallStack cs(
     .rst(rst),
     .clk(clk),
-    .pc_in(cs_pc_in),
+    .pc_in(pc),
     .zf_in(zf),
     .nf_in(nf),
     .push(cs_push),

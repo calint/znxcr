@@ -10,6 +10,8 @@
         different order
         assume that the fpga layout of components are the same
         as in the simulator and racing does not occur
+
+[x]   Control.pc racing
 [ ]   Control vs CallStack
 [ ]   Control vs LoopStack
 [o] review non-blocking assignments vs blocking assignments
