@@ -89,11 +89,7 @@ wire [15:0] regs_wd = is_loadi ? instr : // write instruction into registers
 assign debug1 = alu_zf;
 
 always @(negedge clk) begin
-    if (rst) begin
-        pc <= 0;
-    end else begin
-        pc <= pc_nxt;
-    end
+    pc <= pc_nxt;
 end
 
 always @(posedge clk) begin
