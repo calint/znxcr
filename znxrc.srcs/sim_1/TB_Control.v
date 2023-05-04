@@ -274,15 +274,15 @@ initial begin
     if (dut.pc_nxt == 73) $display("case 54 passed");
     else $display("case 54 failed - expected 73, got %d", dut.pc_nxt);
     if (dut.cs.idx == 0) $display("case 55 passed");
-    else $display("case 55 failed - expected 0, got %d", dut.cs.idx);
+    else $display("case 55 failed - expected 0, got %0d", dut.cs.idx);
     
     #clk_tk // 008b // 73: addi r0 0 return
     if (dut.pc_nxt == 68) $display("case 56 passed");
-    else $display("case 56 failed - expected 68, got %d", dut.pc_nxt);
+    else $display("case 56 failed - expected 68, got %0d", dut.pc_nxt);
     
     #clk_tk // 0c3b // 68: skip 12
     if (dut.pc_nxt == 81) $display("case 57 passed");
-    else $display("case 57 failed - expected 81, got %d", dut.pc_nxt);
+    else $display("case 57 failed - expected 81, got %0d", dut.pc_nxt);
     
     #clk_tk // a05b // 81: loadi r10
     #clk_tk // 0003 // 82: 0x0003
@@ -290,7 +290,7 @@ initial begin
     #clk_tk // 0003 // 84: 0x0003
     #clk_tk // 4403 // 85: xor r4 r4 (r4==4)
     if (dut.regs.mem[4] == 0) $display("case 58 passed");
-    else $display("case 58 failed - expected 0, got %d", dut.regs.mem[4]);
+    else $display("case 58 failed - expected 0, got %0d", dut.regs.mem[4]);
 
     #clk_tk // 2203 // 86: xor r2 r2
     #clk_tk // a01b // 87: loop r10
@@ -325,13 +325,13 @@ initial begin
     #clk_tk // 2f87 // 90: addi r2 -1 next
 
     if (dut.regs.mem[1] == 9) $display("case 59 passed");
-    else $display("case 59 failed - expected 9, got %d", dut.regs.mem[1]);
+    else $display("case 59 failed - expected 9, got %0d", dut.regs.mem[1]);
     if (dut.regs.mem[2] == -3) $display("case 60 passed");
-    else $display("case 60 failed - expected -3, got %d", dut.regs.mem[2]);
+    else $display("case 60 failed - expected -3, got %0d", dut.regs.mem[2]);
     if (dut.pc_nxt == 91) $display("case 61 passed");
-    else $display("case 61 failed - expected 91, got %d", dut.pc_nxt);
+    else $display("case 61 failed - expected 91, got %0d", dut.pc_nxt);
     if (dut.ls.idx == 15) $display("case 62 passed");
-    else $display("case 62 failed - expected 15, got %d", dut.ls.idx);
+    else $display("case 62 failed - expected 15, got %0d", dut.ls.idx);
 
     #clk_tk // a01b // 91: loop r10
 
@@ -374,6 +374,10 @@ initial begin
     if (dut.ls.idx == 15) $display("case 66 passed");
     else $display("case 66 failed - expected 15, got %0d", dut.ls.idx);
 
+    #clk_tk // ff3b // 96: skip -1 ; skips -1+1==0 => hangs
+    if (dut.pc_nxt == 96) $display("case 67 passed");
+    else $display("case 67 failed - expected 96, got %0d", dut.pc_nxt);
+ 
     $finish;
 end
 
