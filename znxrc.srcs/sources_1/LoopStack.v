@@ -39,7 +39,7 @@ always @(posedge clk) begin
             done = cnt == 1; // if this was the last iteration
             if (done) begin
                 idx = idx - 1; // pop values from the stacks
-                cnt <= stk_cnt[idx];
+                cnt = stk_cnt[idx]; // NBA gives synthesis warning
                 pc_out <= stk_addr[idx];
             end
         end
