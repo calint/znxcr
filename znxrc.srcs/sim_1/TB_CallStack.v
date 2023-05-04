@@ -47,20 +47,20 @@ initial begin
     pop = 0;
     #clk_tk;
 
-    push = 0;        
-    pop = 1;
-
+    #(clk_tk/4) // tick to negedge of clock for data to be available
+    
     if (pc_out == 2 && zf_out == 0 && nf_out == 0) $display("case 1 passed");
     else  $display("case 1 failed - Expected 2, 0, 0, got %d, %d, %d", pc_out, zf_out, nf_out);
 
-    #clk_tk;
-    
     push = 0;        
     pop = 1;
-    
+    #clk_tk;
+        
     if (pc_out == 1 && zf_out == 1 && nf_out == 1) $display("case 2 passed");
     else $display("case 2 failed - Expected 1, 1, 1, got %d, %d, %d", pc_out, zf_out, nf_out);
 
+    push = 0;        
+    pop = 1;
     #clk_tk;        
 
     $finish;

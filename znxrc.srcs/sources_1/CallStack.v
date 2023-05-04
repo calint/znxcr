@@ -39,7 +39,7 @@ always @(posedge clk) begin
             zf_out_nxt <= zf_in;
             nf_out_nxt <= nf_in;
             pc_out_nxt <= pc_in;
-            end else if (pop) begin
+        end else if (pop) begin
             idx = idx - 1;
             zf_out_nxt <= mem[idx][17];
             nf_out_nxt <= mem[idx][16];
