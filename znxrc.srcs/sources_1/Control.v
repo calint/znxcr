@@ -71,8 +71,8 @@ wire [15:0] alu_operand_a = op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} 
                             op == OP_ADDI ? {{12{rega[3]}}, rega} : // 'addi' is add with signed immediate value 'rega'
                             rega_dat; // otherwise regs[rega]
 
-wire zn_we = is_do_op && (is_alu_op || cs_pop || cs_push); // update flags if alu op or 'call' or 'return'
-wire zn_sel = !cs_pop; // if 'zn_we': if not 'return' then assume alu
+wire zn_we = is_do_op && (is_alu_op || cs_pop || cs_push); // update flags if alu op, 'call' or 'return'
+wire zn_sel = !cs_pop; // if 'zn_we': if not 'return' then select flags from alu otherwise from CallStack
 wire zn_clr = cs_push; // if 'zn_we': clears the flags if it is a 'call'. has precedence over 'zn_sel' when 'zn_we'
 
 wire ram_we = op == OP_STORE; // connected to ram write enable input, enabled if 'store' instruction
@@ -82,9 +82,9 @@ wire [15:0] ram_dat_out; // connected to ram data output, data to be read from r
 wire regs_we = (is_loadi && do_loadi) || (is_do_op && (is_alu_op || op == OP_LOAD));
 // data written to 'regb' if 'regs_we' is enabled
 wire [15:0] regs_wd = is_loadi ? instr : // write instruction into register
-                    is_alu_op ? alu_res : // write alu result to register
-                    op == OP_LOAD ? ram_dat_out : // write ram output to register
-                    0; // otherwise 'regs_we' is disabled
+                      is_alu_op ? alu_res : // write alu result to register
+                      op == OP_LOAD ? ram_dat_out : // write ram output to register
+                      0; // otherwise 'regs_we' is disabled
 
 assign debug1 = alu_zf;
 
