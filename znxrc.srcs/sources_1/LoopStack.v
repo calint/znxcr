@@ -27,24 +27,20 @@ always @(posedge clk) begin
         done <= 0;
     end else begin
         if (new) begin
-            done = cnt_in == 1; // if first last and only iteration
-            if (!done) begin
-                idx = idx + 1;
-                stk_addr[idx] <= pc_in;
-                stk_cnt[idx] <= cnt_in;
-                cnt <= cnt_in;
-                pc_out <= pc_in;
-            end
+            done <= cnt_in == 1; // if first last and only iteration
+            idx = idx + 1;
+            stk_addr[idx] <= pc_in;
+            stk_cnt[idx] <= cnt_in;
+            cnt <= cnt_in;
+            pc_out <= pc_in;
         end else if (nxt) begin
             cnt = cnt - 1;
             done = cnt == 1; // if this was the last iteration
-            if (done) begin
-                idx = idx - 1; // pop values from the stacks
-                cnt = stk_cnt[idx];
-                stk_cnt[idx] = cnt - 1;
-                pc_out <= stk_addr[idx];
-            end
         end else if (done_ack) begin
+            idx = idx - 1; // pop values from the stacks
+            cnt = stk_cnt[idx];
+            stk_cnt[idx] = cnt - 1;
+            pc_out <= stk_addr[idx];
             done = cnt == 1;
         end
     end
