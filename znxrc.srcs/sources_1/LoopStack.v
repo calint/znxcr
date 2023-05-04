@@ -26,7 +26,7 @@ module LoopStack(
             done <= 0;
         end else begin
             if (new) begin
-                done = cnt_in == 1;
+                done = cnt_in == 1; // if first last and only iteration
                 if (!done) begin
                     idx = idx + 1;
                     stk_addr[idx] <= pc_in;
@@ -36,9 +36,9 @@ module LoopStack(
                 end
             end else if (nxt) begin
                 cnt = cnt - 1;
-                done = cnt == 1;
+                done = cnt == 1; // if this was the last iteration
                 if (done) begin
-                    idx = idx - 1;
+                    idx = idx - 1; // pop values from the stacks
                     cnt <= stk_cnt[idx];
                     pc_out <= stk_addr[idx];
                 end
