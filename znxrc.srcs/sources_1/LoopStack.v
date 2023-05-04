@@ -44,7 +44,7 @@ always @(posedge clk) begin
                 pc_out <= stk_addr[idx];
             end
         end else begin
-            done = cnt == 1;
+            done = cnt == 1; // !! does not work
         end
     end
 end

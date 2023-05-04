@@ -132,8 +132,8 @@ always @(posedge clk) begin
                     //-------------------------------------------------------------
                     OP_SKIP: begin
                         is_loadi <= 0; // reset flag that triggers write instruction to register
-                        if (is_do_op) begin // only do if zn-flags match instruction zn-flags or always if (z,n)=(1,1)
-                            pc_nxt = pc + {8'd0, imm8}; // skip instructions, 'pc_nxt' will be incremented by 1
+                        if (is_do_op) begin
+                            pc_nxt = pc + {{8{imm8[7]}}, imm8}; // skip instructions, 'pc_nxt' will be incremented by 1
                         end
                     end
                     //-------------------------------------------------------------
