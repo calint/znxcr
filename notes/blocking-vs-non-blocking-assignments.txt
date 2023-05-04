@@ -33,3 +33,19 @@ Guideline #8: Do not make assignments using #0 delays.
 
 -------------------------------------------------------------------------------
 
+It is better to develop the habit of coding all sequential always blocks, even simple single-block
+modules, using nonblocking assignments as shown in Example 14.
+
+-------------------------------------------------------------------------------
+
+Verilog permits blocking and nonblocking assignments to be freely mixed inside of an always
+block. In general, mixing blocking and nonblocking assignments in the same always block is a
+poor coding style, even if Verilog permits it.
+
+-------------------------------------------------------------------------------
+
+Making multiple assignments to the same variable from more than one always block is a Verilog
+race condition, even when using nonblocking assignments.
+
+-------------------------------------------------------------------------------
+

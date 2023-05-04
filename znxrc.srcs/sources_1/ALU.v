@@ -16,20 +16,20 @@ always @(*) begin
     `endif
 
     case(op)
-    3'b010: result <= a;
-    3'b101: result <= b + a;
-    3'b001: result <= b - a;
-    3'b111: result <= ~b;
+    3'b010: result = a;
+    3'b101: result = b + a;
+    3'b001: result = b - a;
+    3'b111: result = ~b;
     3'b110: 
         if (a < 0) 
-            result <= b <<< -a;
+            result = b <<< -a;
         else
-            result <= b >>> a;
-    default: result <= 0;
+            result = b >>> a;
+    default: result = 0;
     endcase
     
-    zf <= (result == 0);
-    nf <= result[15];
+    zf = (result == 0);
+    nf = result[15];
 end
 
 endmodule
