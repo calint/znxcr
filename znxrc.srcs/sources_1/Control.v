@@ -81,11 +81,10 @@ wire [15:0] ram_dat_out; // connected to ram data output, data to be read from r
 
 // enables write to registers if 'loadi' or 'load' or alu op
 wire regs_we = (is_loadi && do_loadi) || (is_do_op && (is_alu_op || op == OP_LOAD));
-// data written to 'regb' if 'regs_we' is enabled
-wire [15:0] regs_wd = is_loadi ? instr : // write instruction into register
-                      is_alu_op ? alu_res : // write alu result to register
-                      op == OP_LOAD ? ram_dat_out : // write ram output to register
-                      0; // otherwise 'regs_we' is disabled
+// data written to 'regb' when 'regs_we' is enabled
+wire [15:0] regs_wd = is_loadi ? instr : // select instruction data
+                      op == OP_LOAD ? ram_dat_out : // select ram output
+                      alu_res; // otherwise select alu result
 
 assign debug1 = alu_zf;
 
