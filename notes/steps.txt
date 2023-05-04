@@ -1,17 +1,17 @@
-clk     rom   ctrl   cs   ls   alu   zn   ram    
-|     
-|___  
-    | 
- ___| 
-|     
-|___  
-    |
- ___|
-|
-|___
-    |
- ___|
-|
+clk     rom   ctrl   regs   cs   ls   alu   zn   ram    
+|       set    |      |      |    |    |     |    |
+|___     |     |      |      |    |    |     |    |
+    |   do     |      |      |    |    |     |    |
+ ___|         set     |      |    |    |     |    |
+|             do      |     set  set   |     |    |
+|___                 set     |    |    |     |    |
+    |                do     do   do    |     |    |
+ ___|                                 set    |   set
+|                                     do     |   do
+|___                                        set
+    |                                       do  
+ ___|                                  
+|                                           
 |___
     |
     |
