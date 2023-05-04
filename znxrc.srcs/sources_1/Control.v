@@ -199,15 +199,15 @@ ALU alu(
     .result(alu_res),
     .zf(alu_zf),
     .nf(alu_nf)
-);
+    );
 
 RAM ram(
-.clk(clk),
-.addr(rega_dat),
-.we(ram_we),
-.dat_in(regb_dat),
-.dat_out(ram_dat_out)
-);
+    .clk(clk),
+    .addr(rega_dat),
+    .we(ram_we),
+    .dat_in(regb_dat),
+    .dat_out(ram_dat_out)
+    );
 
 Zn zn(
     .rst(rst),
@@ -221,6 +221,6 @@ Zn zn(
     .we(zn_we),
     .sel(zn_sel),
     .clr(zn_clr)
-);
+    );
 
 endmodule
