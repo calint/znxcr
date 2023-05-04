@@ -3,7 +3,8 @@
 [x] op 'copy'
 [x] solve "ifX [op] next return"
 [ ] op 'skip' signed value
-[ ] refactor operations encoding to align op with alu-op
+[ ] Registers: inca
+[x] refactor operations encoding to align op with alu-op
 [x] review racing conditions
 [x]   Control.pc vs CallStack, LoopStack
 [x]   CallStack.(pc_out, zf_out, nf_out) vs Control
