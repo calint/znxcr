@@ -14,25 +14,25 @@ module Zn(
     input clr // clears the flags
     );
     
-    always @(posedge clk) begin
-        `ifdef DBG
-            $display("  clk: Zn");
-        `endif
+always @(posedge clk) begin
+    `ifdef DBG
+        $display("  clk: Zn");
+    `endif
 
-        if (rst) begin
-            zf <= 0;
-            nf <= 0;
-        end else begin
-            if (we) begin
-                if (clr) begin
-                    zf <= 0;
-                    nf <= 0;
-                end else begin
-                    zf <= sel ? alu_zf : cs_zf;
-                    nf <= sel ? alu_nf : cs_nf;
-                end
+    if (rst) begin
+        zf <= 0;
+        nf <= 0;
+    end else begin
+        if (we) begin
+            if (clr) begin
+                zf <= 0;
+                nf <= 0;
+            end else begin
+                zf <= sel ? alu_zf : cs_zf;
+                nf <= sel ? alu_nf : cs_nf;
             end
         end
-    end    
+    end
+end    
     
 endmodule

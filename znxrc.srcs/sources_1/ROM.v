@@ -5,12 +5,12 @@ module ROM (
     output [15:0] data // data at address
 );
 
-    reg [15:0] mem [0:8191];
+reg [15:0] mem [0:8191];
 
-    initial begin
-        $readmemh("rom.hex", mem);
-    end
-    
-    assign data = mem[addr];
+initial begin
+    $readmemh("rom.hex", mem);
+end
+
+assign data = mem[addr];
 
 endmodule

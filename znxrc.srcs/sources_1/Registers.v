@@ -10,18 +10,18 @@ module Registers(
     output [15:0] rd2 // register data 2
     );
 
-    reg signed [15:0] mem [0:15];
+reg signed [15:0] mem [0:15];
 
-    assign rd1 = mem[ra1];
-    assign rd2 = mem[ra2];
+assign rd1 = mem[ra1];
+assign rd2 = mem[ra2];
 
-    always @(posedge clk) begin
-        `ifdef DBG
-            $display("  clk: Registers");
-        `endif
+always @(posedge clk) begin
+    `ifdef DBG
+        $display("  clk: Registers");
+    `endif
 
-        if (we)
-            mem[ra2] <= wd;
+    if (we)
+        mem[ra2] <= wd;
 end
 
 endmodule

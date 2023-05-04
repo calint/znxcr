@@ -8,17 +8,17 @@ module RAM (
     output [15:0] dat_out
 );
 
-    reg [15:0] mem [0:8191];
+reg [15:0] mem [0:8191];
 
-    assign dat_out = mem[addr];
+assign dat_out = mem[addr];
 
-    always @(posedge clk) begin
-        `ifdef DBG
-            $display("  clk: RAM");
-        `endif
+always @(posedge clk) begin
+    `ifdef DBG
+        $display("  clk: RAM");
+    `endif
 
-        if (we)
-            mem[addr] <= dat_in;
+    if (we)
+        mem[addr] <= dat_in;
 end
 
 endmodule
