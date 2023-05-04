@@ -6,6 +6,7 @@
 *.sim/
 *.gen/
 znxrc.srcs/utils_1/imports/synth_1/top.dcp
+znxrc.srcs/utils_1/imports/synth_1/Control.dcp
 
 # iverilog files
 cpu

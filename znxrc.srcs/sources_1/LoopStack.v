@@ -11,9 +11,10 @@ module LoopStack(
     output reg done // enabled if loop is at last iteration, stable during negative edge
     );
     
-    reg [3:0] idx;
-    reg [15:0] stk_addr [0:15];
-    reg [15:0] stk_cnt [0:15];
+    reg [15:0] stk_addr [0:15]; // stack of loop begin addresses
+    reg [15:0] stk_cnt [0:15]; // stack of loop counters
+    reg [3:0] idx; // index in the stack
+    reg [15:0] cnt; // current loop counter
 
     always @(posedge clk) begin
         `ifdef DBG
@@ -30,14 +31,16 @@ module LoopStack(
                     idx = idx + 1;
                     stk_addr[idx] <= pc_in;
                     stk_cnt[idx] <= cnt_in;
+                    cnt <= cnt_in;
                     pc_out <= pc_in;
                 end
             end else if (nxt) begin
-                stk_cnt[idx] = stk_cnt[idx] - 1;
-                done = stk_cnt[idx] == 1;
-                pc_out = stk_addr[idx];
+                cnt = cnt - 1;
+                done = cnt == 1;
                 if (done) begin
                     idx = idx - 1;
+                    cnt <= stk_cnt[idx];
+                    pc_out <= stk_addr[idx];
                 end
             end
         end
