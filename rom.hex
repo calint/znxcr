@@ -83,10 +83,15 @@ a05b // 81: loadi r10
 0003 // 82: 0x0003
 b05b // 83: loadi r11
 0003 // 84: 0x0003
-4403 // 85: xor r4 r4 ; (r4==4)
+4403 // 85: xor r4 r4 ; r4==4
 2203 // 86: xor r2 r2
 a01b // 87: loop r10
 b01b // 88: loop r11
 1187 // 89: addi r1 1 next
 2f87 // 90: addi r2 -1 next
-0000 // 88: 
+a01b // 91: loop r10
+b01b // 92: loop r11
+1183 // 93: addi r1 1
+1187 // 94: addi r1 1 next
+2f87 // 95: addi r2 -1 next
+0000 // 96: 

@@ -53,6 +53,7 @@ wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zn_zf==instr_z && zn_nf==
 // LoopStack related wiring
 wire ls_new_loop = is_do_op && instr[11:2] == OP_LOOP; // creates new loop with counter set from regs[regb]
 wire ls_done; // LoopStack enables this if it is the last iteration in current loop, stable during negative edge
+wire ls_done_ack = is_do_op && instr_x && ls_done; // if current loop is in final iteration and 'next' instruction then acknowledge to LoopStack that loop has been exited
 wire is_ls_nxt = is_do_op && instr_x && !ls_done; // enabled if instruction has 'next' and loop is not finished
 wire [15:0] ls_pc_out; // wired to LoopStack: address to set 'pc' to if loop is not done
 
@@ -174,6 +175,7 @@ LoopStack ls(
     .cnt_in(regb_dat),
     .pc_in(pc),
     .nxt(is_ls_nxt),
+    .done_ack(ls_done_ack),
     .pc_out(ls_pc_out),
     .done(ls_done)
     );

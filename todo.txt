@@ -1,8 +1,8 @@
-[ ] fix CallStack
 [ ] Registers: inca
 [ ] assembler
 [ ] emulator
 -----------------------------------------------------------------
+[x] fix CallStack
 [x] zn
 [x]   at 'call' after push reset zn
 [x] op 'copy'
