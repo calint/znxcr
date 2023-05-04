@@ -50,7 +50,7 @@ wire [3:0] regb = is_loadi ? loadi_reg : instr[15:12];
 wire [7:0] imm8 = instr[15:8];
 wire [10:0] imm11 = instr[15:5];
 
-wire cs_zf,cs_nf,alu_zf,alu_nf,zf,nf; // z- and n-flag connections between Zn, ALU and CallStack
+wire cs_zf, cs_nf, alu_zf, alu_nf, zf, nf; // z- and n-flag connections between Zn, ALU and CallStack
 
 wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zf==instr_z && nf==instr_n)); // enabled if instruction will execute
 
