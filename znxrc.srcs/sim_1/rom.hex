@@ -58,12 +58,12 @@ ffff // 43: 0xffff
 0002 // 57: 0x002
 3223 // 58: sub r2 r3
 301b // 59: loop r3 ; r3==1
-3f83 // 60: addi r3 -1 next
+3f87 // 60: addi r3 -1 next
 305a // 61: ifn loadi r3
 0002 // 62: 0x002
 201a // 63: ifn loop r2 ; r2==1, zf,!nf
 2019 // 64: ifz loop r2 ; r2==1, zf,!nf
-2f83 // 65: addi r2 -1 next ; r2=>0, zf, !nf
+2f87 // 65: addi r2 -1 next ; r2=>0, zf, !nf
 0132 // 66: ifn call 72 ; encoded (72>>2)|1 => 0x13
 0131 // 67: ifz call 72 ; encoded (72>>2)|1 => 0x13
 0c3b // 68: skip 12
@@ -79,11 +79,14 @@ ffff // 43: 0xffff
 0000 // 78: 
 0000 // 79:
 008b // 80: addi r0 0 return
-0000 // 81: x
-0000 // 82: 
-0000 // 83: 
-0000 // 84: 
-0000 // 85: 
-0000 // 86: 
-0000 // 87: 
-0000 // 88:  
+a05b // 81: loadi r10
+0003 // 82: 0x0003
+b05b // 83: loadi r11
+0003 // 84: 0x0003
+4403 // 85: xor r4 r4 ; r4==4
+2203 // 86: xor r2 r2
+a01b // 87: loop r10
+b01b // 88: loop r11
+1187 // 89: addi r1 1 next
+2f87 // 90: addi r2 -1 next
+0000 // 88: 

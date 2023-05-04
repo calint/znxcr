@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+//`define DBG
 
 module Control(
     input rst,
@@ -8,6 +9,7 @@ module Control(
     );
 
 // c,r != 1,1
+localparam OP_XOR = 3'b000;
 localparam OP_ADDI = 3'b100;
 localparam OP_COPY = 3'b010;
 localparam OP_ADD = 3'b101;
@@ -66,7 +68,7 @@ wire [15:0] rega_dat; // operand a data
 wire [15:0] regb_dat; // operand b dat
 
 // ALU related wiring
-wire is_alu_op = !is_loadi && !is_cr && !cs_push && (op == OP_ADD || op == OP_SUB || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT);
+wire is_alu_op = !is_loadi && !is_cr && !cs_push && (op == OP_ADD || op == OP_SUB || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT || op == OP_XOR);
 wire [2:0] alu_op = op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as 'not'
                     op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega'
                     op; // same as op

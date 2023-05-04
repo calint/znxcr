@@ -18,7 +18,7 @@ reg [15:0] cnt; // current loop counter
 
 always @(posedge clk) begin
     `ifdef DBG
-        $display("  clk: LoopStack");
+        $display("  clk: LoopStack:  cnt=%0d,idx=%0d,done=%d",cnt,idx,done);
     `endif
 
     if (rst) begin
@@ -39,9 +39,12 @@ always @(posedge clk) begin
             done = cnt == 1; // if this was the last iteration
             if (done) begin
                 idx = idx - 1; // pop values from the stacks
-                cnt = stk_cnt[idx]; // NBA gives synthesis warning
+                cnt = stk_cnt[idx];
+                stk_cnt[idx] = cnt - 1;
                 pc_out <= stk_addr[idx];
             end
+        end else begin
+            done = cnt == 1;
         end
     end
 end

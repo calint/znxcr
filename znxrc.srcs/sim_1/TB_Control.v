@@ -284,6 +284,53 @@ initial begin
     if (dut.pc_nxt == 81) $display("case 57 passed");
     else $display("case 57 failed - expected 81, got %d", dut.pc_nxt);
     
+    #clk_tk // a05b // 81: loadi r10
+    #clk_tk // 0003 // 82: 0x0003
+    #clk_tk // b05b // 83: loadi r11
+    #clk_tk // 0003 // 84: 0x0003
+    #clk_tk // 4403 // 85: xor r4 r4 (r4==4)
+    if (dut.regs.mem[4] == 0) $display("case 58 passed");
+    else $display("case 58 failed - expected 0, got %d", dut.regs.mem[4]);
+
+    #clk_tk // 2203 // 86: xor r2 r2
+    #clk_tk // a01b // 87: loop r10
+
+    #clk_tk // b01b // 88: loop r11
+    // loop r11: cnt==3
+    #clk_tk // 1187 // 89: addi r1 1 next
+    // loop r11: cnt==2
+    #clk_tk // 1187 // 89: addi r1 1 next
+    // loop r11: cnt==1, last iteration
+    #clk_tk // 1187 // 89: addi r1 1 next
+    // loop r10: cnt==2
+    #clk_tk // 2f87 // 90: addi r2 -1 next
+
+    #clk_tk // b01b // 88: loop r11
+    // loop r11: cnt==3
+    #clk_tk // 1187 // 89: addi r1 1 next
+    // loop r11: cnt==2
+    #clk_tk // 1187 // 89: addi r1 1 next
+    // loop r11: cnt==1, last iteration
+    #clk_tk // 1187 // 89: addi r1 1 next
+    // loop r10: cnt==2
+    #clk_tk // 2f87 // 90: addi r2 -1 next
+
+    #clk_tk // b01b // 88: loop r11
+    // loop r11: cnt==3
+    #clk_tk // 1187 // 89: addi r1 1 next
+    // loop r11: cnt==2
+    #clk_tk // 1187 // 89: addi r1 1 next
+    // loop r11: cnt==1, last iteration
+    #clk_tk // 1187 // 89: addi r1 1 next
+    #clk_tk // 2f87 // 90: addi r2 -1 next
+
+    if (dut.regs.mem[1] == 9) $display("case 59 passed");
+    else $display("case 59 failed - expected 9, got %d", dut.regs.mem[1]);
+    if (dut.regs.mem[2] == -3) $display("case 60 passed");
+    else $display("case 60 failed - expected -3, got %d", dut.regs.mem[2]);
+    if (dut.pc_nxt == 91) $display("case 61 passed");
+    else $display("case 61 failed - expected 91, got %d", dut.pc_nxt);
+
     $finish;
 end
 

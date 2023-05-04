@@ -16,15 +16,12 @@ always @(*) begin
     `endif
 
     case(op)
+    3'b000: result = b ^ a;
     3'b010: result = a;
     3'b101: result = b + a;
     3'b001: result = b - a;
     3'b111: result = ~b;
-    3'b110: 
-        if (a < 0) 
-            result = b <<< -a;
-        else
-            result = b >>> a;
+    3'b110: result = a < 0 ? b <<< -a : b >>> a;
     default: result = 0;
     endcase
     

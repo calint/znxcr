@@ -19,7 +19,7 @@ under construction, first try at fpga with vivado and verilog
                  |---|---|---|---|---|-------|------|------|
                  | z | n | x | r | c | o p   | rega | regb |
                  |---|---|---|---|---|-------|------|------|
-                 / . / . / . / . / 0 / 0 0 0 / .... / .... /  
+                 / . / . / . / . / 0 / 0 0 0 / .... / .... /  xor
                 / . / . / . / . / 0 / 0 0 1 / imm4 / .... /  addi
                / . / . / . / . / 0 / 0 1 0 / src  / dst  /  copy
               / . / . / . / . / 0 / 0 1 1 / 0000 / .... /  not
@@ -35,7 +35,7 @@ under construction, first try at fpga with vivado and verilog
 
     op :       :
    ----:-------:-----------------------------------------------------
-   000 :       : 
+   000 : xor   : reg[b]=~reg[a] 
    100 : addi  : reg[b]+=imm4
    010 : copy  : reg[b]=reg[a]
    110 : not   : reg[b]=~reg[b]
@@ -58,3 +58,4 @@ under construction, first try at fpga with vivado and verilog
    110 :       :
    111 :       :
 ```
+
