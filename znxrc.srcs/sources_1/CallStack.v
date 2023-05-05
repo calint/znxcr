@@ -1,28 +1,28 @@
 `timescale 1ns / 1ps
 
-module CallStack #(parameter ADDR_WIDTH = 4, parameter WIDTH = 16) (
+module CallStack #(parameter ADDR_WIDTH = 4, parameter ROM_ADDR_WIDTH = 16) (
     input rst,
     input clk,
-    input [WIDTH-1:0] pc_in, // current program counter
+    input [ROM_ADDR_WIDTH-1:0] pc_in, // current program counter
     input zf_in, // current zero flag
     input nf_in, // current negative flag
     input push,
     input pop,
-    output reg [WIDTH-1:0] pc_out, // top of stack program counter
+    output reg [ROM_ADDR_WIDTH-1:0] pc_out, // top of stack program counter
     output reg zf_out, // top of stack zero flag
     output reg nf_out // top of stack negative flag
     );
 
 reg [ADDR_WIDTH-1:0] idx;
-reg [WIDTH+1:0] mem [0:2**ADDR_WIDTH-1];
-reg [WIDTH-1:0] pc_out_nxt;
+reg [ROM_ADDR_WIDTH+1:0] mem [0:2**ADDR_WIDTH-1]; // {nf, zf, addr}
+reg [ROM_ADDR_WIDTH-1:0] pc_out_nxt;
 reg zf_out_nxt;
 reg nf_out_nxt;
 
 integer i;
 initial begin
     for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
-        mem[i] = {(WIDTH+2){1'b0}};
+        mem[i] = {(ROM_ADDR_WIDTH+2){1'b0}}; // {nf, zf, addr}
     end
 end
 
@@ -48,9 +48,9 @@ always @(posedge clk) begin
             pc_out_nxt <= pc_in;
         end else if (pop) begin
             idx = idx - 1;
-            zf_out_nxt <= mem[idx][WIDTH+1];
-            nf_out_nxt <= mem[idx][WIDTH];
-            pc_out_nxt <= mem[idx][WIDTH-1:0];
+            zf_out_nxt <= mem[idx][ROM_ADDR_WIDTH+1];
+            nf_out_nxt <= mem[idx][ROM_ADDR_WIDTH];
+            pc_out_nxt <= mem[idx][ROM_ADDR_WIDTH-1:0];
         end
     end
 end

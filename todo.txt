@@ -2,6 +2,7 @@
 [ ] assembler
 [ ] emulator
 -----------------------------------------------------------------
+[x] parameterize
 [x] fix CallStack
 [x] zn
 [x]   at 'call' after push reset zn
