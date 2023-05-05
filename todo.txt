@@ -7,7 +7,7 @@
 [x]   at 'call' after push reset zn
 [x] op 'copy'
 [x] solve "ifX [op] next return"
-[o] op 'skip' signed value
+[x] op 'skip' signed value
 [x] refactor operations encoding to align op with alu-op
 [x] review racing conditions
 [x]   Control.pc vs CallStack, LoopStack
