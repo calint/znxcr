@@ -14,7 +14,7 @@ module CallStack #(parameter ADDR_WIDTH = 4, parameter ROM_ADDR_WIDTH = 16) (
     );
 
 reg [ADDR_WIDTH-1:0] idx;
-reg [ROM_ADDR_WIDTH+1:0] mem [0:2**ADDR_WIDTH-1]; // {nf, zf, addr}
+reg [ROM_ADDR_WIDTH+1:0] mem [0:2**ADDR_WIDTH-1]; // {zf, nf, addr}
 reg [ROM_ADDR_WIDTH-1:0] pc_out_nxt;
 reg zf_out_nxt;
 reg nf_out_nxt;
@@ -22,7 +22,7 @@ reg nf_out_nxt;
 integer i;
 initial begin
     for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
-        mem[i] = {(ROM_ADDR_WIDTH+2){1'b0}}; // {nf, zf, addr}
+        mem[i] = {(ROM_ADDR_WIDTH+2){1'b0}}; // {zf, nf, addr}
     end
 end
 

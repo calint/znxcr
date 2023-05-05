@@ -20,7 +20,7 @@ reg [WIDTH-1:0] cnt; // current loop counter
 integer i;
 initial begin
     for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
-        stk_addr[i] = {WIDTH{1'b0}};
+        stk_addr[i] = {ROM_ADDR_WIDTH{1'b0}};
         stk_cnt[i] = {WIDTH{1'b0}};
     end
 end
