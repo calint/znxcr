@@ -9,10 +9,10 @@ module Control(
     );
 
 localparam ROM_ADDR_WIDTH = 14; // 2**14 instructions
-localparam RAM_ADDR_WIDTH = 8; // 2**14 data addresses
+localparam RAM_ADDR_WIDTH = 14; // 2**14 data addresses
 localparam REGISTERS_ADDR_WIDTH = 4; // 2**4 registers
-localparam LOOP_STACK_ADDR_WIDTH = 5; // 2**4 stack
-localparam CALL_STACK_ADDR_WIDTH = 5; // 2**4 stack
+localparam LOOP_STACK_ADDR_WIDTH = 4; // 2**4 stack
+localparam CALL_STACK_ADDR_WIDTH = 4; // 2**4 stack
 localparam REGISTERS_WIDTH = 16; // 16 bit
 
 // c,r != 1,1
@@ -77,12 +77,13 @@ wire [REGISTERS_WIDTH-1:0] regb_dat; // operand b dat
 
 // ALU related wiring
 wire is_alu_op = !is_loadi && !is_cr && !cs_push && (op == OP_ADD || op == OP_SUB || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT || op == OP_XOR);
-wire [2:0] alu_op = op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as 'not'
-                    op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega'
-                    op; // same as op
+wire [2:0] alu_op = 
+    op == OP_SHIFT && rega == 0 ? ALU_NOT : // 'shift' 0 interpreted as 'not'
+    op == OP_ADDI ? ALU_ADD : // 'addi' is add with signed immediate value 'rega'
+    op; // same as op
 wire [REGISTERS_WIDTH-1:0] alu_operand_a = 
-    op == OP_SHIFT && rega != 0 ? {{12{rega[3]}}, rega} : // 'shift' with signed immediate value 'rega'
-    op == OP_ADDI ? {{12{rega[3]}}, rega} : // 'addi' is add with signed immediate value 'rega'
+    op == OP_SHIFT && rega != 0 ? {{(REGISTERS_WIDTH-4){rega[3]}}, rega} : // 'shift' with signed immediate value 'rega'
+    op == OP_ADDI ? {{(REGISTERS_WIDTH-4){rega[3]}}, rega} : // 'addi' is add with signed immediate value 'rega'
     rega_dat; // otherwise regs[rega]
 wire [REGISTERS_WIDTH-1:0] alu_res; // result from alu
 
