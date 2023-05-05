@@ -1,4 +1,6 @@
-[ ] Registers: inca
+[ ] ALU 'and'
+[ ] ALU 'or'
+[ ] Registers: inca ?
 [ ] assembler
 [ ] emulator
 -----------------------------------------------------------------
