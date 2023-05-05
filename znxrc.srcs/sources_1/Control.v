@@ -9,10 +9,10 @@ module Control(
     );
 
 localparam ROM_ADDR_WIDTH = 14; // 2**14 instructions
-localparam RAM_ADDR_WIDTH = 14; // 2**14 data addresses
+localparam RAM_ADDR_WIDTH = 8; // 2**14 data addresses
 localparam REGISTERS_ADDR_WIDTH = 4; // 2**4 registers
-localparam LOOP_STACK_ADDR_WIDTH = 4; // 2**4 stack
-localparam CALL_STACK_ADDR_WIDTH = 4; // 2**4 stack
+localparam LOOP_STACK_ADDR_WIDTH = 5; // 2**4 stack
+localparam CALL_STACK_ADDR_WIDTH = 5; // 2**4 stack
 localparam REGISTERS_WIDTH = 16; // 16 bit
 
 // c,r != 1,1
@@ -126,7 +126,7 @@ always @(posedge clk) begin
         //---------------------------------------------------------------------
         begin
             if (cs_push) begin // 'call': calls imm11<<3
-                if (ROM_ADDR_WIDTH-11-3 == 0) begin
+                if (ROM_ADDR_WIDTH-11-3 <= 0) begin
                     pc_nxt = {(imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
                 end else begin
                     pc_nxt = {{(ROM_ADDR_WIDTH-11-3){1'b0}}, (imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
@@ -147,7 +147,11 @@ always @(posedge clk) begin
                     OP_SKIP: begin
                         is_loadi <= 0; // reset flag that triggers write instruction to register
                         if (is_do_op) begin
-                            pc_nxt = pc + {{(ROM_ADDR_WIDTH-8){imm8[7]}}, imm8}; // skip instructions, 'pc_nxt' will be incremented by 1
+                            if (ROM_ADDR_WIDTH-8 <= 0) begin
+                                pc_nxt = pc + imm8; // skip instructions, 'pc_nxt' will be incremented by 1
+                            end else begin
+                                pc_nxt = pc + {{(ROM_ADDR_WIDTH-8){imm8[7]}}, imm8}; // skip instructions, 'pc_nxt' will be incremented by 1
+                            end
                         end
                     end
                     //-------------------------------------------------------------
@@ -227,7 +231,7 @@ ALU #(REGISTERS_WIDTH) alu(
 
 RAM #(RAM_ADDR_WIDTH, REGISTERS_WIDTH) ram(
     .clk(clk),
-    .addr(rega_dat[ROM_ADDR_WIDTH-1:0]),
+    .addr(rega_dat[RAM_ADDR_WIDTH-1:0]),
     .we(ram_we),
     .dat_in(regb_dat),
     .dat_out(ram_dat_out)
