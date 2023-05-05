@@ -218,6 +218,3 @@ set_property CONFIG_MODE SPIx4 [current_design]
 ## used the internal reference is set to half that value (i.e. 0.675v). Note that
 ## this property must be set even if SW3 is not used in the design.
 set_property INTERNAL_VREF 0.675 [get_iobanks 34]
-
-set_input_delay -min 0.000 [get_ports rst]
-set_input_delay -max 0.000 [get_ports rst]
