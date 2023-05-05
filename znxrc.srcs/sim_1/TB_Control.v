@@ -106,7 +106,7 @@ initial begin
     #clk_tk // 0093 // 24: call 32 ; encoded (32>>2)|1 => 0x9
     if (dut.pc_nxt == 32) $display("case 17 passed");
     else $display("case 17 failed - expected 32, got %d", dut.pc_nxt);
-    if (dut.cs.mem[0][15:0] == 24) $display("case 17.1 passed");
+    if (dut.cs.mem[0][13:0] == 24) $display("case 17.1 passed");
     else $display("case 17.1 failed - expected 24, got %d", dut.cs.mem[0][15:0]);
 
     #clk_tk // 5163 // 32: load r5 r1 ; ram[4] => 4

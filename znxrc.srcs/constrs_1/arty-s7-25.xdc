@@ -16,16 +16,9 @@ create_clock -period 83.333 -name sys_clk_pin -waveform {0.000 41.667} -add [get
 
 # reset button
 set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports rst]
-# to avoid the warning in "Check Timing" "no_input_delay"
-set_input_delay -min 0 [get_ports rst]
-set_input_delay -max 0 [get_ports rst]
 
 # debug led
 set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS33} [get_ports debug1]
-# to avoid the warning in "Check Timing" "no_output_delay"
-set_output_delay -min 0 [get_ports debug1]
-set_output_delay -max 0 [get_ports debug1]
-
 
 
 # from https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Arty-S7-25-Master.xdc

@@ -126,7 +126,11 @@ always @(posedge clk) begin
         //---------------------------------------------------------------------
         begin
             if (cs_push) begin // 'call': calls imm11<<3
-                pc_nxt = {{(ROM_ADDR_WIDTH-11-3){1'b0}}, (imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
+                if (ROM_ADDR_WIDTH-11-3 == 0) begin
+                    pc_nxt = {(imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
+                end else begin
+                    pc_nxt = {{(ROM_ADDR_WIDTH-11-3){1'b0}}, (imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
+                end
             end else if (cs_pop) begin // 'ret' flag
                 pc_nxt = cs_pc_out; // set pc to top of call stack, will be incremented by 1
             end else begin // operation
@@ -143,7 +147,7 @@ always @(posedge clk) begin
                     OP_SKIP: begin
                         is_loadi <= 0; // reset flag that triggers write instruction to register
                         if (is_do_op) begin
-                            pc_nxt = pc + {{8{imm8[7]}}, imm8}; // skip instructions, 'pc_nxt' will be incremented by 1
+                            pc_nxt = pc + {{(ROM_ADDR_WIDTH-8){imm8[7]}}, imm8}; // skip instructions, 'pc_nxt' will be incremented by 1
                         end
                     end
                     //-------------------------------------------------------------
@@ -223,7 +227,7 @@ ALU #(REGISTERS_WIDTH) alu(
 
 RAM #(RAM_ADDR_WIDTH, REGISTERS_WIDTH) ram(
     .clk(clk),
-    .addr(rega_dat),
+    .addr(rega_dat[ROM_ADDR_WIDTH-1:0]),
     .we(ram_we),
     .dat_in(regb_dat),
     .dat_out(ram_dat_out)
