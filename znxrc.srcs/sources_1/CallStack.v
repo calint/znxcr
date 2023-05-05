@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module CallStack #(parameter SIZE = 16, parameter ADDR_WIDTH = 4, parameter WIDTH = 16) (
+module CallStack #(parameter ADDR_WIDTH = 4, parameter WIDTH = 16) (
     input rst,
     input clk,
     input [WIDTH-1:0] pc_in, // current program counter
@@ -14,14 +14,14 @@ module CallStack #(parameter SIZE = 16, parameter ADDR_WIDTH = 4, parameter WIDT
     );
 
 reg [ADDR_WIDTH-1:0] idx;
-reg [WIDTH+1:0] mem [0:SIZE-1];
+reg [WIDTH+1:0] mem [0:2**ADDR_WIDTH-1];
 reg [WIDTH-1:0] pc_out_nxt;
 reg zf_out_nxt;
 reg nf_out_nxt;
 
 integer i;
 initial begin
-    for (i = 0; i < SIZE; i = i + 1) begin
+    for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
         mem[i] = {(WIDTH+2){1'b0}};
     end
 end

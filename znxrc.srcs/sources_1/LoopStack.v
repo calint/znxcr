@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module LoopStack #(parameter SIZE = 16, parameter ADDR_WIDTH = 4, parameter WIDTH = 16) (
+module LoopStack #(parameter ADDR_WIDTH = 4, parameter WIDTH = 16) (
     input rst,
     input clk,
     input new, // enabled to create a new loop using 'pc_in' and 'cnt_in'
@@ -12,14 +12,14 @@ module LoopStack #(parameter SIZE = 16, parameter ADDR_WIDTH = 4, parameter WIDT
     output reg done // enabled if loop is at last iteration, stable during negative edge
     );
 
-reg [WIDTH-1:0] stk_addr [0:SIZE-1]; // stack of loop begin addresses
-reg [WIDTH-1:0] stk_cnt [0:SIZE-1]; // stack of loop counters
+reg [WIDTH-1:0] stk_addr [0:2**ADDR_WIDTH-1]; // stack of loop begin addresses
+reg [WIDTH-1:0] stk_cnt [0:2**ADDR_WIDTH-1]; // stack of loop counters
 reg [ADDR_WIDTH-1:0] idx; // index in the stack
 reg [WIDTH-1:0] cnt; // current loop counter
 
 integer i;
 initial begin
-    for (i = 0; i < SIZE; i = i + 1) begin
+    for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
         stk_addr[i] = {WIDTH{1'b0}};
         stk_cnt[i] = {WIDTH{1'b0}};
     end

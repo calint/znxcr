@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module RAM #(parameter SIZE = 4096, parameter ADDR_WIDTH = 16, parameter WIDTH = 16) (
+module RAM #(parameter ADDR_WIDTH = 16, parameter WIDTH = 16) (
     input clk,
     input [ADDR_WIDTH-1:0] addr,
     input we,
@@ -8,13 +8,13 @@ module RAM #(parameter SIZE = 4096, parameter ADDR_WIDTH = 16, parameter WIDTH =
     output [WIDTH-1:0] dat_out
 );
 
-reg [WIDTH-1:0] mem [0:SIZE-1];
+reg [WIDTH-1:0] mem [0:2**ADDR_WIDTH-1];
 
 assign dat_out = mem[addr];
 
 integer i;
 initial begin
-    for (i = 0; i < SIZE; i = i + 1) begin
+    for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
         mem[i] = {WIDTH{1'b0}};
     end
 end
