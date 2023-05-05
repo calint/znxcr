@@ -14,6 +14,7 @@ localparam REGISTERS_ADDR_WIDTH = 4; // 2**4 registers
 localparam LOOP_STACK_ADDR_WIDTH = 4; // 2**4 stack
 localparam CALL_STACK_ADDR_WIDTH = 4; // 2**4 stack
 localparam REGISTERS_WIDTH = 16; // 16 bit
+localparam INSTRUCTION_WIDTH = 16; // 16 bit
 
 // c,r != 1,1
 localparam OP_XOR = 3'b000;
@@ -38,42 +39,45 @@ reg [ROM_ADDR_WIDTH-1:0] pc; // program counter
 reg [ROM_ADDR_WIDTH-1:0] pc_nxt; // 'pc' is set to 'pc_nxt' at beginning of a cycle
 
 // LOADI related registers
-reg is_loadi; // enabled if instruction data copy to register 'loadi_reg'
+reg is_loadi; // enabled if register 'loadi_reg' loads data from current instruction
 reg do_loadi; // enabled if the 'loadi' was a 'is_do_op'
 reg [REGISTERS_ADDR_WIDTH-1:0] loadi_reg; // register to write when doing 'loadi'
 
-wire [15:0] instr; // instruction
+wire [INSTRUCTION_WIDTH-1:0] instr; // instruction
 wire instr_z = instr[0]; // if enabled execute instruction if z-flag is on (also considering instr_n)
 wire instr_n = instr[1]; // if enabled execute instruction if n-flag is on (also considering instr_z)
-wire instr_x = instr[2]; // if enabled execute instruction and step an iteration in current loop
-wire instr_r = instr[3]; // if enabled execute instruction and return from current sub-routine (if instr_x and loop not finished then ignored)
-wire instr_c = instr[4]; // if enabled call a sub-routine (instr_r && instr_c is illegal and instead enables more instructions)
+wire instr_x = instr[2]; // if enabled steps an iteration in current loop
+wire instr_r = instr[3]; // if enabled returns from current 'call' (if instr_x and loop not finished then ignored)
+wire instr_c = instr[4]; // if enabled 'call' (instr_r && instr_c is illegal and instead enables more instructions)
 wire [3:0] op = instr[7:5];
-wire [REGISTERS_ADDR_WIDTH-1:0] rega = instr[11:8];
-wire [REGISTERS_ADDR_WIDTH-1:0] regb = is_loadi ? loadi_reg : instr[15:12];
+wire [REGISTERS_ADDR_WIDTH-1:0] rega = instr[11:8]; // address of 'rega'
+wire [REGISTERS_ADDR_WIDTH-1:0] regb = is_loadi ? loadi_reg : instr[15:12]; // address of 'regb'
 wire [7:0] imm8 = instr[15:8];
 wire [10:0] imm11 = instr[15:5];
 
+// Zb related wiring (part 1)
 wire zn_zf, zn_nf; // zero- and negative flags wired to Zn
-wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zn_zf==instr_z && zn_nf==instr_n)); // enabled if instruction will execute
+
+// if enabled instruction will execute
+wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zn_zf==instr_z && zn_nf==instr_n));
 
 // LoopStack related wiring
 wire ls_new_loop = is_do_op && instr[11:2] == OP_LOOP; // creates new loop with counter set from regs[regb]
 wire ls_done; // LoopStack enables this if it is the last iteration in current loop, stable during negative edge
 wire ls_done_ack = is_do_op && instr_x && ls_done; // if current loop is in final iteration and 'next' instruction then acknowledge to LoopStack that loop has been exited
 wire is_ls_nxt = is_do_op && instr_x && !ls_done; // enabled if instruction has 'next' and loop is not finished
-wire [ROM_ADDR_WIDTH-1:0] ls_pc_out; // wired to LoopStack: address to set 'pc' to if loop is not done
+wire [ROM_ADDR_WIDTH-1:0] ls_pc_out; // address to set 'pc' to if loop is not done
 
 // CallStack related wiring
 wire is_cr = instr_c && instr_r; // enabled if illegal c && r op => enables 8 other instructions that can't piggy back 'return'
 wire is_cs_op = is_do_op && !is_cr && (instr_c ^ instr_r); // enabled if instruction operates on CallStack
 wire cs_push = is_cs_op && instr_c; // enabled if instruction is 'call'
 wire cs_pop = is_cs_op && instr_r && !(is_ls_nxt && !ls_done); // enabled if 'return', disabled if also 'next' and loop not finished
-wire [ROM_ADDR_WIDTH-1:0] cs_pc_out; // wired to program counter at top of the CallStack
+wire [ROM_ADDR_WIDTH-1:0] cs_pc_out; // address to 'pc' if 'return'
 
 // Register related wiring (part 1)
 wire [REGISTERS_WIDTH-1:0] rega_dat; // operand a data
-wire [REGISTERS_WIDTH-1:0] regb_dat; // operand b dat
+wire [REGISTERS_WIDTH-1:0] regb_dat; // operand b data
 
 // ALU related wiring
 wire is_alu_op = !is_loadi && !is_cr && !cs_push && (op == OP_ADD || op == OP_SUB || op == OP_ADDI || op == OP_COPY || op == OP_SHIFT || op == OP_XOR);
@@ -87,18 +91,18 @@ wire [REGISTERS_WIDTH-1:0] alu_operand_a =
     rega_dat; // otherwise regs[rega]
 wire [REGISTERS_WIDTH-1:0] alu_res; // result from alu
 
-// Zn related wiring
+// Zn related wiring (part 2)
 wire zn_we = is_do_op && (is_alu_op || cs_pop || cs_push); // update flags if alu op, 'call' or 'return'
-wire zn_sel = !cs_pop; // if 'zn_we': if not 'return' then select flags from alu otherwise from CallStack
-wire zn_clr = cs_push; // if 'zn_we': clears the flags if it is a 'call'. has precedence over 'zn_sel' when 'zn_we'
+wire zn_sel = !cs_pop; // if 'zn_we': if 'return' select flags from from CallStack otherwise ALU 
+wire zn_clr = cs_push; // if 'zn_we': clears the flags if it is a 'call'. has precedence over 'zn_sel'
 wire cs_zf, cs_nf, alu_zf, alu_nf; // z- and n-flag wires between Zn, ALU and CallStack
 
 // RAM related wiring
-wire ram_we = op == OP_STORE; // wired to ram write enable input, enabled if 'store' instruction
-wire [REGISTERS_WIDTH-1:0] ram_dat_out; // wired to ram data output, data to be read from ram
+wire ram_we = op == OP_STORE; // enabled if ram write triggered by 'store' instruction
+wire [REGISTERS_WIDTH-1:0] ram_dat_out; // ram output, data read from ram address 'rega'
 
 // Registers related wiring (part 2)
-// enables write to registers if 'loadi' or 'load' or alu op
+// enables write to registers if 'loadi' or 'load' or ALU operation
 wire regs_we = (is_loadi && do_loadi) || (is_do_op && (is_alu_op || op == OP_LOAD));
 // data written to 'regb' when 'regs_we' is enabled
 wire [REGISTERS_WIDTH-1:0] regs_wd =
@@ -126,13 +130,13 @@ always @(posedge clk) begin
         0: // instruction
         //---------------------------------------------------------------------
         begin
-            if (cs_push) begin // 'call': calls imm11<<3
+            if (cs_push) begin // 'call' address imm11<<3
                 if (ROM_ADDR_WIDTH-11-3 <= 0) begin
                     pc_nxt = {(imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
                 end else begin
                     pc_nxt = {{(ROM_ADDR_WIDTH-11-3){1'b0}}, (imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
                 end
-            end else if (cs_pop) begin // 'ret' flag
+            end else if (cs_pop) begin // 'return'
                 pc_nxt = cs_pc_out; // set pc to top of call stack, will be incremented by 1
             end else begin // operation
                 if (is_cr) begin // if instruction bits c and r are 11 then select the second page of operations
@@ -181,7 +185,7 @@ always @(posedge clk) begin
     end
 end
 
-ROM #(ROM_ADDR_WIDTH) rom (
+ROM #(ROM_ADDR_WIDTH, INSTRUCTION_WIDTH) rom (
     .addr(pc),
     .data(instr)
     );
