@@ -163,12 +163,12 @@ always @(posedge clk) begin
     end
 end
 
-ROM rom(
+ROM #(16*1024, 16) rom (
     .addr(pc),
     .data(instr)
     );
 
-LoopStack ls(
+LoopStack #(16, 4) ls(
     .rst(rst),
     .clk(clk),
     .new(ls_new_loop),
@@ -180,7 +180,7 @@ LoopStack ls(
     .done(ls_done)
     );
 
-CallStack cs(
+CallStack #(16, 4) cs(
     .rst(rst),
     .clk(clk),
     .pc_in(pc),
@@ -193,7 +193,7 @@ CallStack cs(
     .nf_out(cs_nf)
     );
 
-Registers regs(
+Registers  #(16, 4) regs(
     .clk(clk),
     .ra1(rega),
     .ra2(regb),
@@ -212,7 +212,7 @@ ALU alu(
     .nf(alu_nf)
     );
 
-RAM ram(
+RAM #(16*1024, 16) ram(
     .clk(clk),
     .addr(rega_dat),
     .we(ram_we),

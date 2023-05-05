@@ -1,16 +1,23 @@
 `timescale 1ns / 1ps
 
-module RAM (
+module RAM #(parameter SIZE = 4096, parameter ADDR_WIDTH = 16, parameter WIDTH = 16) (
     input clk,
-    input [15:0] addr,
+    input [ADDR_WIDTH-1:0] addr,
     input we,
-    input [15:0] dat_in,
-    output [15:0] dat_out
+    input [WIDTH-1:0] dat_in,
+    output [WIDTH-1:0] dat_out
 );
 
-reg [15:0] mem [0:8191];
+reg [WIDTH-1:0] mem [0:SIZE-1];
 
 assign dat_out = mem[addr];
+
+integer i;
+initial begin
+    for (i = 0; i < SIZE; i = i + 1) begin
+        mem[i] = {WIDTH{1'b0}};
+    end
+end
 
 always @(posedge clk) begin
     `ifdef DBG

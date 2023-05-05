@@ -1,19 +1,26 @@
 `timescale 1ns / 1ps
 
-module Registers(
+module Registers #(parameter SIZE = 16, parameter ADDR_WIDTH = 4, parameter WIDTH = 16) (
     input clk,
-    input [3:0] ra1, // register address 1
-    input [3:0] ra2, // register address 2
+    input [ADDR_WIDTH-1:0] ra1, // register address 1
+    input [ADDR_WIDTH-1:0] ra2, // register address 2
     input we, // write 'wd' to address 'ra2'
-    input [15:0] wd, // data to write to register 'ra2' when 'we' is enabled
-    output [15:0] rd1, // register data 1
-    output [15:0] rd2 // register data 2
+    input [WIDTH-1:0] wd, // data to write to register 'ra2' when 'we' is enabled
+    output [WIDTH-1:0] rd1, // register data 1
+    output [WIDTH-1:0] rd2 // register data 2
     );
 
-reg signed [15:0] mem [0:15];
+reg signed [WIDTH-1:0] mem [0:SIZE-1];
 
 assign rd1 = mem[ra1];
 assign rd2 = mem[ra2];
+
+integer i;
+initial begin
+    for (i = 0; i < 16; i = i + 1) begin
+        mem[i] = {WIDTH{1'b0}};
+    end
+end
 
 always @(posedge clk) begin
     `ifdef DBG

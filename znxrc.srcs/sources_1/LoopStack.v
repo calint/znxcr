@@ -1,21 +1,29 @@
 `timescale 1ns / 1ps
 
-module LoopStack(
+module LoopStack #(parameter SIZE = 16, parameter ADDR_WIDTH = 4, parameter WIDTH = 16) (
     input rst,
     input clk,
     input new, // enabled to create a new loop using 'pc_in' and 'cnt_in'
-    input [15:0] cnt_in, // number of iterations in loop created when 'new'
-    input [15:0] pc_in, // the program counter at 'loop' op
+    input [WIDTH-1:0] cnt_in, // number of iterations in loop created when 'new'
+    input [WIDTH-1:0] pc_in, // the program counter at 'loop' op
     input nxt, // enabled if instruction is also 'next'
     input done_ack, // enabled if cpu acknowledged the 'done' at current 'next' instruction
-    output reg [15:0] pc_out, // the 'pc_in' when the loop was created, stable during negative edge
+    output reg [WIDTH-1:0] pc_out, // the 'pc_in' when the loop was created, stable during negative edge
     output reg done // enabled if loop is at last iteration, stable during negative edge
     );
 
-reg [15:0] stk_addr [0:15]; // stack of loop begin addresses
-reg [15:0] stk_cnt [0:15]; // stack of loop counters
-reg [3:0] idx; // index in the stack
-reg [15:0] cnt; // current loop counter
+reg [WIDTH-1:0] stk_addr [0:SIZE-1]; // stack of loop begin addresses
+reg [WIDTH-1:0] stk_cnt [0:SIZE-1]; // stack of loop counters
+reg [ADDR_WIDTH-1:0] idx; // index in the stack
+reg [WIDTH-1:0] cnt; // current loop counter
+
+integer i;
+initial begin
+    for (i = 0; i < SIZE; i = i + 1) begin
+        stk_addr[i] = {WIDTH{1'b0}};
+        stk_cnt[i] = {WIDTH{1'b0}};
+    end
+end
 
 always @(posedge clk) begin
     `ifdef DBG
@@ -23,8 +31,7 @@ always @(posedge clk) begin
     `endif
 
     if (rst) begin
-        idx <= 4'hf;
-        done <= 0;
+        idx <= {ADDR_WIDTH{1'b1}};
     end else begin
         if (new) begin
             idx = idx + 1; // push stack

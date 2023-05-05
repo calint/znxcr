@@ -1,10 +1,10 @@
 `timescale 1ns / 1ps
 
-module ALU(
+module ALU #(parameter WIDTH = 16) (
   input [2:0] op, // operation
-  input signed [15:0] a, // first operand
-  input signed [15:0] b, // second operand
-  output reg [15:0] result, // result of a op b
+  input signed [WIDTH-1:0] a, // first operand
+  input signed [WIDTH-1:0] b, // second operand
+  output reg [WIDTH-1:0] result, // result of a op b
   output reg zf, // enabled if result is zero
   output reg nf // enabled if result is negative
 );
@@ -26,7 +26,7 @@ always @(*) begin
     endcase
     
     zf = (result == 0);
-    nf = result[15];
+    nf = result[WIDTH-1];
 end
 
 endmodule
