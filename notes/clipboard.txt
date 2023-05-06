@@ -2,7 +2,8 @@
 TAG=2023-05-02--2 && git tag $TAG && git push origin $TAG
 git reset --hard HEAD
 -------------------------------------------------------------
-
+(* ram_style = "block" *) 
+-------------------------------------------------------------
 `timescale 1ns / 1ps
 
 module Stepper(

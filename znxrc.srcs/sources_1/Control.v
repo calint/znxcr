@@ -126,11 +126,9 @@ always @(posedge clk) begin
         is_loadi <= 0;
         pc_nxt <= 0;
     end else begin
-        case(is_loadi)
-        //---------------------------------------------------------------------
-        0: // instruction
-        //---------------------------------------------------------------------
-        begin
+        if (is_loadi) begin
+            is_loadi <= 0; // reset to regular instruction
+        end else begin
             if (cs_push) begin // 'call' address imm11<<3
                 if (ROM_ADDR_WIDTH-11-3 <= 0) begin
                     pc_nxt = {(imm11<<3) - 11'd1}; // -1 because pc will be incremented by 1
@@ -174,13 +172,6 @@ always @(posedge clk) begin
                 end  
             end
         end
-        //---------------------------------------------------------------------
-        1: // writes instruction data to 'loadi_reg'
-        //---------------------------------------------------------------------
-        begin
-            is_loadi <= 0; // reset to regular instruction
-        end
-        endcase
         // next instruction
         pc_nxt = pc_nxt + 1;
     end
