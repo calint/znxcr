@@ -51,7 +51,7 @@ wire instr_z = instr[0]; // if enabled execute instruction if z-flag matches 'zn
 wire instr_n = instr[1]; // if enabled execute instruction if n-flag matches 'zn_nf' (also considering instr_z)
 // both 'instr_z' and 'instr_n' enabled means execute instruction without considering flags 
 wire instr_x = instr[2]; // if enabled steps an iteration in current loop
-wire instr_r = instr[3]; // if enabled returns from current 'call' (if instr_x and loop not finished then ignored)
+wire instr_r = instr[3]; // if enabled returns from current 'call', if 'instr_x' and loop not finished then ignored
 wire instr_c = instr[4]; // if enabled 'call'
 // note. instr_r && instr_c is illegal and instead enables another page of operations
 wire [3:0] op = instr[7:5]; // operation
