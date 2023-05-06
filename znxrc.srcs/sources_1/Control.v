@@ -56,7 +56,7 @@ wire [REGISTERS_ADDR_WIDTH-1:0] regb = is_loadi ? loadi_reg : instr[15:12]; // a
 wire [7:0] imm8 = instr[15:8];
 wire [10:0] imm11 = instr[15:5];
 
-// Zb related wiring (part 1)
+// Zn related wiring (part 1)
 wire zn_zf, zn_nf; // zero- and negative flags wired to Zn
 
 // if enabled instruction will execute
