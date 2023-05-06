@@ -1,18 +1,10 @@
-# from https://digilent.com/reference/programmable-logic/arty-s7/reference-manual
-
-# switch
-#set_property -dict {PACKAGE_PIN H14 IOSTANDARD LVCMOS33} [get_ports sw]
-
-# led
-#set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS33} [get_ports ld]
-
 # clock 100 Mhz
-#set_property -dict { PACKAGE_PIN R2    IOSTANDARD SSTL135 } [get_ports { clk }]; #IO_L12P_T1_MRCC_34 Sch=ddr3_clk[200]
-#create_clock -add -name sys_clk_pin -period 10.000 -waveform {0 5.000}  [get_ports { clk }];
+set_property -dict { PACKAGE_PIN R2    IOSTANDARD SSTL135 } [get_ports { clk_100MHz }]; #IO_L12P_T1_MRCC_34 Sch=ddr3_clk[200]
+#create_clock -add -name sys_clk_pin -period 10.000 -waveform {0 5.000}  [get_ports { clk_100MHz }];
 
 # clock 12 Mhz
-set_property -dict {PACKAGE_PIN F14 IOSTANDARD LVCMOS33} [get_ports clk]
-create_clock -period 83.333 -name sys_clk_pin -waveform {0.000 41.667} -add [get_ports clk]
+#set_property -dict {PACKAGE_PIN F14 IOSTANDARD LVCMOS33} [get_ports clk]
+#create_clock -period 83.333 -name sys_clk_pin -waveform {0.000 41.667} -add [get_ports clk]
 
 # reset button
 set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports rst]

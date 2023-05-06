@@ -11,7 +11,7 @@ under construction, first try at fpga with vivado and verilog
                       r g   l t     16K 16 bit instructions
                       o a   l u     16K 16 bit data
                         t     r     16  16 bit registers
-                        i     n     12  MHz
+                        i     n     25  MHz
                         v
                         e
 
