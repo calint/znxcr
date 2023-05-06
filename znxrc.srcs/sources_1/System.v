@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
 module System(
-    input rst,
-    input clk_100MHz,
+    input reset,
+    input clk_in1,
     output debug1
     );
 
@@ -10,9 +10,9 @@ wire clk_out;
 wire clk_locked;
 
 Clock clk(
-    .reset(rst),
+    .reset(reset),
     .locked(clk_locked),
-    .clk_in1(clk_100MHz),
+    .clk_in1(clk_in1),
     .clk_out1(clk_out)
 );
 
