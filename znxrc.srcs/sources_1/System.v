@@ -6,22 +6,17 @@ module System(
     output debug1
     );
 
-wire clk_div_out;
+wire clk_out;
 
-ClockWize clkwiz(
+Clock clk(
     .reset(rst),
     .clk_in1(clk_100MHz),
-    .clk_out1(clk_div_out)
+    .clk_out1(clk_out)
 );
-/*
-ClockDivider clkdiv(
-    .clk(clk),
-    .clk_out(clk_div_out)
-);
-*/
+
 Control ctrl(
     .rst(rst),
-    .clk(clk_div_out),
+    .clk(clk_out),
     .debug1(debug1)
 );
 
