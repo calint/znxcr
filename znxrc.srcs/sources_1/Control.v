@@ -53,7 +53,7 @@ wire instr_n = instr[1]; // if enabled execute instruction if n-flag matches 'zn
 wire instr_x = instr[2]; // if enabled steps an iteration in current loop
 wire instr_r = instr[3]; // if enabled returns from current 'call', if 'instr_x' and loop not finished then ignored
 wire instr_c = instr[4]; // if enabled 'call'
-// note. instr_r && instr_c is illegal and instead enables another page of operations
+// note. instr_r && instr_c is illegal and instead enables another page of operations that can't 'return' during same operation
 wire [3:0] op = instr[7:5]; // operation
 wire [REGISTERS_ADDR_WIDTH-1:0] rega = instr[11:8]; // address of 'rega'
 wire [REGISTERS_ADDR_WIDTH-1:0] regb = is_loadi ? loadi_reg : instr[15:12]; // address of 'regb'
