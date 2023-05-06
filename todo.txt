@@ -1,6 +1,7 @@
 [ ] ALU 'and'
 [ ] ALU 'or'
 [ ] make first loop on stack infinite ?
+[ ] Arty S7 100MHz clock and timining constraints: try 50 and 25 MHz then 12 MHz
 [ ] Registers: inca ?
 [ ] assembler
 [ ] emulator
