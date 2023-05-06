@@ -10,7 +10,7 @@ module Zn(
     output reg zf,
     output reg nf,
     input we, // depending on 'sel' copy 'CallStack' or 'ALU' zn flags
-    input sel, // selector when 'we', enabled alu_*, disabled cs_*
+    input sel, // selector when 'we', enabled cs_*, disabled alu_* 
     input clr // selector when 'we', clears the flags, has precedence over 'sel'
     );
     
@@ -28,8 +28,8 @@ always @(posedge clk) begin
                 zf <= 0;
                 nf <= 0;
             end else begin
-                zf <= sel ? alu_zf : cs_zf;
-                nf <= sel ? alu_nf : cs_nf;
+                zf <= sel ? cs_zf : alu_zf;
+                nf <= sel ? cs_nf : alu_nf;
             end
         end
     end

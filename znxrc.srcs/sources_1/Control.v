@@ -57,9 +57,9 @@ wire [7:0] imm8 = instr[15:8];
 wire [10:0] imm11 = instr[15:5];
 
 // Zn related wiring (part 1)
-wire zn_zf, zn_nf; // zero- and negative flags wired to Zn
+wire zn_zf, zn_nf; // zero- and negative flags wired to Zn outputs
 
-// if enabled instruction will execute
+// enabled if instruction will execute
 wire is_do_op = !is_loadi && ((instr_z && instr_n) || (zn_zf==instr_z && zn_nf==instr_n));
 
 // LoopStack related wiring
@@ -94,7 +94,7 @@ wire [REGISTERS_WIDTH-1:0] alu_res; // result from alu
 
 // Zn related wiring (part 2)
 wire zn_we = is_do_op && (is_alu_op || cs_pop || cs_push); // update flags if alu op, 'call' or 'return'
-wire zn_sel = !cs_pop; // if 'zn_we': if 'return' select flags from from CallStack otherwise ALU 
+wire zn_sel = cs_pop; // if 'zn_we': if 'return' select flags from from CallStack otherwise ALU 
 wire zn_clr = cs_push; // if 'zn_we': clears the flags if it is a 'call'. has precedence over 'zn_sel'
 wire cs_zf, cs_nf, alu_zf, alu_nf; // z- and n-flag wires between Zn, ALU and CallStack
 
