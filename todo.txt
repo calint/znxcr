@@ -1,5 +1,6 @@
 [ ] ALU 'and'
 [ ] ALU 'or'
+[ ] make first loop on stack infinite ?
 [ ] Registers: inca ?
 [ ] assembler
 [ ] emulator
