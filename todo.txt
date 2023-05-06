@@ -1,12 +1,12 @@
 [ ] ALU 'and'
 [ ] ALU 'or'
 [ ] make first loop on stack infinite ?
-[ ] Arty S7 100MHz clock and timining constraints: try 50 and 25 MHz then 12 MHz
-[ ]   'top' module with clock divider
 [ ] Registers: inca ?
 [ ] assembler
 [ ] emulator
 -----------------------------------------------------------------
+[x] Arty S7 100MHz clock and timining constraints => 33 MHz
+[x]   'top' module with clock divider => module System using IP "Clocking Wizard"
 [x] parameterize
 [x] fix CallStack
 [x] zn
