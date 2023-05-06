@@ -38,14 +38,18 @@ localparam ALU_NOT = 3'b111;
 reg [ROM_ADDR_WIDTH-1:0] pc; // program counter
 reg [ROM_ADDR_WIDTH-1:0] pc_nxt; // 'pc' is set to 'pc_nxt' at beginning of a cycle
 
-// LOADI related registers
-reg is_loadi; // enabled if register 'loadi_reg' loads data from current instruction
-reg do_loadi; // enabled if the 'loadi' was a 'is_do_op'
+// OP_LOADI related registers
+reg is_loadi; // enabled if data from current instruction is written to register 'loadi_reg'
+reg do_loadi; // enabled if 'loadi' was set during a 'is_do_op' operation, if disabled ignore the instruction
 reg [REGISTERS_ADDR_WIDTH-1:0] loadi_reg; // register to write when doing 'loadi'
 
-wire [INSTRUCTION_WIDTH-1:0] instr; // instruction
-wire instr_z = instr[0]; // if enabled execute instruction if z-flag is on (also considering instr_n)
-wire instr_n = instr[1]; // if enabled execute instruction if n-flag is on (also considering instr_z)
+// ROM related wiring
+wire [INSTRUCTION_WIDTH-1:0] instr; // current instruction from ROM
+
+// instruction break down
+wire instr_z = instr[0]; // if enabled execute instruction if z-flag matches 'zn_zf' (also considering instr_n)
+wire instr_n = instr[1]; // if enabled execute instruction if n-flag matches 'zn_nf' (also considering instr_z)
+// both 'instr_z' and 'instr_n' enabled means execute instruction without considering flags 
 wire instr_x = instr[2]; // if enabled steps an iteration in current loop
 wire instr_r = instr[3]; // if enabled returns from current 'call' (if instr_x and loop not finished then ignored)
 wire instr_c = instr[4]; // if enabled 'call'
