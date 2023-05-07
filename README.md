@@ -1,7 +1,9 @@
 # znxcr
-experimental retro 16 bit cpu written in verilog xilinix vivado intended for fpga Cmod S7 from Digilent
+experimental retro 16 bit cpu written in verilog xilinx vivado intended for fpga Cmod S7 from Digilent
 
-under construction, first try at fpga with vivado and verilog
+rom and ram implemented in lut
+
+1 cycle / instruction
 
 ```
                           n
