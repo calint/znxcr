@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module TB_Registers;
 
@@ -52,3 +53,5 @@ initial begin
 end
 
 endmodule
+
+`default_nettype wire

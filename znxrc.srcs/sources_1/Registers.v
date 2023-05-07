@@ -1,13 +1,14 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module Registers #(parameter ADDR_WIDTH = 4, parameter WIDTH = 16) (
-    input clk,
-    input [ADDR_WIDTH-1:0] ra1, // register address 1
-    input [ADDR_WIDTH-1:0] ra2, // register address 2
-    input we, // write 'wd' to address 'ra2'
-    input [WIDTH-1:0] wd, // data to write to register 'ra2' when 'we' is enabled
-    output [WIDTH-1:0] rd1, // register data 1
-    output [WIDTH-1:0] rd2 // register data 2
+    input wire clk,
+    input wire [ADDR_WIDTH-1:0] ra1, // register address 1
+    input wire [ADDR_WIDTH-1:0] ra2, // register address 2
+    input wire we, // write 'wd' to address 'ra2'
+    input wire [WIDTH-1:0] wd, // data to write to register 'ra2' when 'we' is enabled
+    output wire [WIDTH-1:0] rd1, // register data 1
+    output wire [WIDTH-1:0] rd2 // register data 2
     );
 
 reg signed [WIDTH-1:0] mem [0:2**ADDR_WIDTH-1];
@@ -32,3 +33,5 @@ always @(posedge clk) begin
 end
 
 endmodule
+
+`default_nettype wire

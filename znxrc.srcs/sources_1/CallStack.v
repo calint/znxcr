@@ -1,13 +1,14 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module CallStack #(parameter ADDR_WIDTH = 4, parameter ROM_ADDR_WIDTH = 16) (
-    input rst,
-    input clk,
-    input [ROM_ADDR_WIDTH-1:0] pc_in, // current program counter
-    input zf_in, // current zero flag
-    input nf_in, // current negative flag
-    input push,
-    input pop,
+    input wire rst,
+    input wire clk,
+    input wire [ROM_ADDR_WIDTH-1:0] pc_in, // current program counter
+    input wire zf_in, // current zero flag
+    input wire nf_in, // current negative flag
+    input wire push,
+    input wire pop,
     output reg [ROM_ADDR_WIDTH-1:0] pc_out, // top of stack program counter
     output reg zf_out, // top of stack zero flag
     output reg nf_out // top of stack negative flag
@@ -56,3 +57,5 @@ always @(posedge clk) begin
 end
 
 endmodule
+
+`default_nettype wire

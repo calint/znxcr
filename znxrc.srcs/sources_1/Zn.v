@@ -1,17 +1,18 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module Zn(
-    input rst,
-    input clk,
-    input cs_zf,
-    input cs_nf,
-    input alu_zf,
-    input alu_nf,
+    input wire rst,
+    input wire clk,
+    input wire cs_zf,
+    input wire cs_nf,
+    input wire alu_zf,
+    input wire alu_nf,
+    input wire we, // depending on 'sel' copy 'CallStack' or 'ALU' zn flags
+    input wire sel, // selector when 'we', enabled cs_*, disabled alu_* 
+    input wire clr, // selector when 'we', clears the flags, has precedence over 'sel'
     output reg zf,
-    output reg nf,
-    input we, // depending on 'sel' copy 'CallStack' or 'ALU' zn flags
-    input sel, // selector when 'we', enabled cs_*, disabled alu_* 
-    input clr // selector when 'we', clears the flags, has precedence over 'sel'
+    output reg nf
     );
     
 always @(posedge clk) begin
@@ -36,3 +37,5 @@ always @(posedge clk) begin
 end    
     
 endmodule
+
+`default_nettype wire

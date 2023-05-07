@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module TB_CallStack;
 
@@ -67,3 +68,5 @@ initial begin
 end
     
 endmodule
+
+`default_nettype wire

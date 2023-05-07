@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`default_nettype none
 //`define DBG
 
 module TB_Control;
@@ -378,3 +379,6 @@ initial begin
 end
 
 endmodule
+
+`default_nettype wire
+

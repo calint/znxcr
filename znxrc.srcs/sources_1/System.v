@@ -1,9 +1,10 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module System(
-    input reset,
-    input clk_in_12MHz,
-    output [3:0] led
+    input wire reset,
+    input wire clk_in_12MHz,
+    output wire [3:0] led
     );
 
 wire clk_locked;
@@ -23,3 +24,5 @@ Control ctrl(
 );
 
 endmodule
+
+`default_nettype wire

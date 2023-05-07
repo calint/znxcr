@@ -1,10 +1,11 @@
 `timescale 1ns / 1ps
+`default_nettype none
 //`define DBG
 
 module Control(
-    input rst,
-    input clk,
-    output [3:0] led
+    input wire rst,
+    input wire clk,
+    output wire [3:0] led
     );
 
 localparam ROM_ADDR_WIDTH = 14; // 2**14 instructions
@@ -252,3 +253,5 @@ Zn zn(
     );
 
 endmodule
+
+`default_nettype wire
