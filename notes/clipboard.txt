@@ -2,8 +2,6 @@
 TAG=2023-05-02--2 && git tag $TAG && git push origin $TAG
 git reset --hard HEAD
 -------------------------------------------------------------
-(* ram_style = "block" *) 
--------------------------------------------------------------
 `timescale 1ns / 1ps
 
 module Stepper(
@@ -25,3 +23,31 @@ module Stepper(
         end
     end
 endmodule
+
+-------------------------------------------------------------
+
+module block_mem_example (
+  input wire clk,
+  input wire [9:0] addr,
+  input wire we,
+  input wire [31:0] data_in,
+  output wire [31:0] data_out
+);
+
+  // Instantiate the block memory
+  (* ram_style = "block" *) reg [31:0] mem [0:1023];
+
+  // Read data from memory
+  assign data_out = mem[addr];
+
+  // Write data to memory
+  always @ (posedge clk) begin
+    if (we) begin
+      mem[addr] <= data_in;
+    end
+  end
+
+endmodule
+
+-------------------------------------------------------------
+
