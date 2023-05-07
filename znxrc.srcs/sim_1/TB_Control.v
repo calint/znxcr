@@ -8,14 +8,12 @@ parameter clk_tk = 10;
 always #(clk_tk/2) clk = ~clk;
 
 reg rst = 1;
-wire debug1;
-//    wire [15:0] pc_out;
+wire [3:0] led;
 
 Control dut(
     .rst(rst),
     .clk(clk),
-    .debug1(debug1) // ,
-//        .pc_out(pc_out)
+    .led(led)
 );
 
 initial begin
@@ -23,9 +21,6 @@ initial begin
     #100 // https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Using-Test-Benches-and-Stimulus-Files
     rst = 0;
 
-//        if (pc_out == 0) $display("case 1.1 passed");
-//        else $display("case 1.1 failed - expected 0, got %d", pc_out);
-            
     #clk_tk // 1058 // 00: loadi r1
     #clk_tk // 1234 // 01: 0x1234
     if (dut.regs.mem[1] == 16'h1234) $display("case 1 passed");

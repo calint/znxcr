@@ -4,8 +4,7 @@
 module Control(
     input rst,
     input clk,
-    output debug1 //,
-//    output [15:0] pc_out
+    output [3:0] led
     );
 
 localparam ROM_ADDR_WIDTH = 14; // 2**14 instructions
@@ -115,7 +114,7 @@ wire [REGISTERS_WIDTH-1:0] regs_wd =
     op == OP_LOAD ? ram_dat_out : // select ram output
     alu_res; // otherwise select alu result
 
-assign debug1 = alu_zf;
+assign led = pc[3:0];
 
 always @(negedge clk) begin
     pc <= pc_nxt; // this setup holds 'pc' stable during positive edge of clock
