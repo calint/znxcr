@@ -5,6 +5,8 @@ rom and ram implemented in lut
 
 1 cycle / instruction
 
+first try at fpga verilog vivado
+
 ```
                           n
                           e
