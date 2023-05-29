@@ -7,6 +7,8 @@ rom and ram implemented in lut
 
 first try at fpga verilog vivado
 
+development continued in project 'zen-x'
+
 ```
                           n
                           e
