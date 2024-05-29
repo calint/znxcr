@@ -1,4 +1,7 @@
 # znxcr
+
+> :bell: development continued in project [zen-x](https://github.com/calint/zen-x)
+
 experimental retro 16 bit cpu written in verilog xilinx vivado intended for fpga Cmod S7 from Digilent
 
 rom and ram implemented in lut
@@ -6,8 +9,6 @@ rom and ram implemented in lut
 1 cycle / instruction
 
 first try at fpga verilog vivado
-
-development continued in project 'zen-x'
 
 ```
                           n
